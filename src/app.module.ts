@@ -39,6 +39,7 @@ import { Stage } from './request/entities/stage.entity';
 import { Status } from './request/entities/status.entity';
 import { Mounting } from './equipment/entities/mounting.entity';
 import { Address } from './request/entities/address.entity';
+import { BaseModule } from './base/base.module';
 
 @Module({
   imports: [
@@ -96,6 +97,7 @@ import { Address } from './request/entities/address.entity';
     ScheduleModule,
     ToolModule,
     RoleModule,
+    BaseModule,
   ],
   controllers: [],
   providers: [
@@ -107,6 +109,7 @@ import { Address } from './request/entities/address.entity';
       provide: APP_FILTER,
       useClass: BadRequestExceptionFilter,
     },
+    Accessory,
   ],
 })
 export class AppModule {
