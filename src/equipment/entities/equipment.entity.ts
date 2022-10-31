@@ -10,10 +10,11 @@ import {
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { Mounting } from './mounting.entity';
 import { RequestEquipment } from '../../request/entities/request-equipment.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('Equipment_pkey', ['id'], { unique: true })
 @Entity('equipment', { schema: 'public' })
-export class Equipment {
+export class Equipment extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

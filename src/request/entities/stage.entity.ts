@@ -7,10 +7,11 @@ import {
 } from 'typeorm';
 import { Request } from './request.entity';
 import { Tool } from '../../tool/entities/tool.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('stage_pkey', ['id'], { unique: true })
 @Entity('stage', { schema: 'public' })
-export class Stage {
+export class Stage extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

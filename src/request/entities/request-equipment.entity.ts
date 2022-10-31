@@ -8,10 +8,11 @@ import {
 } from 'typeorm';
 import { Equipment } from '../../equipment/entities/equipment.entity';
 import { Request } from './request.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('request_equipment_pkey', ['id'], { unique: true })
 @Entity('request_equipment', { schema: 'public' })
-export class RequestEquipment {
+export class RequestEquipment extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

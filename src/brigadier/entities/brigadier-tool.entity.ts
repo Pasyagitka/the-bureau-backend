@@ -8,10 +8,11 @@ import {
 } from 'typeorm';
 import { Brigadier } from './brigadier.entity';
 import { Tool } from '../../tool/entities/tool.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('brigadier_tool_pkey', ['id'], { unique: true })
 @Entity('brigadier_tool', { schema: 'public' })
-export class BrigadierTool {
+export class BrigadierTool extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

@@ -6,10 +6,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('role_pkey', ['id'], { unique: true })
 @Entity('role', { schema: 'public' })
-export class Role {
+export class Role extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

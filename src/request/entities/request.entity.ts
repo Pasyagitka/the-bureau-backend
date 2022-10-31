@@ -5,7 +5,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Report } from './report.entity';
@@ -18,10 +17,11 @@ import { RequestAccessory } from './request-accessory.entity';
 import { RequestEquipment } from './request-equipment.entity';
 import { RequestTool } from './request-tool.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('request_pkey', ['id'], { unique: true })
 @Entity('request', { schema: 'public' })
-export class Request {
+export class Request extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

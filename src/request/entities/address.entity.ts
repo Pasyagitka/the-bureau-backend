@@ -6,10 +6,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Request } from './request.entity';
+import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('address_pkey', ['id'], { unique: true })
 @Entity('address', { schema: 'public' })
-export class Address {
+export class Address extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
