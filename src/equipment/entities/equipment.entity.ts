@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -13,7 +14,7 @@ import { RequestEquipment } from '../../request/entities/request-equipment.entit
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('Equipment_pkey', ['id'], { unique: true })
-@Entity('equipment', { schema: 'public' })
+@Entity('equipment')
 export class Equipment extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -21,15 +22,14 @@ export class Equipment extends BaseEntity {
   @Column('text', { name: 'type' })
   type: string;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @OneToMany(() => Accessory, (accessory) => accessory.equipment)
+  @OneToMany(() => Accessory, (accessory) => accessory.equipment, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   accessories: Accessory[];
 
   @ManyToOne(() => Mounting, (mounting) => mounting.equipment, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
+    eager: true,
   })
   @JoinColumn([{ name: 'mountingId', referencedColumnName: 'id' }])
   mounting: Mounting;
@@ -37,6 +37,12 @@ export class Equipment extends BaseEntity {
   @OneToMany(
     () => RequestEquipment,
     (requestEquipment) => requestEquipment.equipment,
+    {
+      cascade: true,
+    },
   )
   requestEquipment: RequestEquipment[];
+
+  @DeleteDateColumn()
+  public deletedAt?: Date;
 }
