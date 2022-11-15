@@ -1,26 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Schedule } from './entities/schedule.entity';
 
 @Injectable()
 export class ScheduleService {
-  create(createScheduleDto: CreateScheduleDto) {
-    return 'This action adds a new schedule';
+  constructor(
+    @InjectRepository(Schedule)
+    private scheduleRepository: Repository<Schedule>,
+  ) {}
+
+  //TODO retrieve all schedule history for admin
+
+  //TODO if is soft deleted children are inserted already soft deleted
+  async addRecord(createScheduleDto) {
+    const items = await this.scheduleRepository.find({
+      relations: { request: true, brigadier: true },
+      where: { request: { id: createScheduleDto.request } },
+    });
+    await this.scheduleRepository.softRemove(items);
+    return await this.scheduleRepository.save(createScheduleDto);
   }
 
-  findAll() {
-    return `This action returns all schedule`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} schedule`;
-  }
-
-  update(id: number, updateScheduleDto: UpdateScheduleDto) {
-    return `This action updates a #${id} schedule`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} schedule`;
+  async removeByRequestId(requestId: number) {
+    const items = await this.scheduleRepository.find({
+      relations: { request: true, brigadier: true },
+      where: { request: { id: requestId } },
+    });
+    return await this.scheduleRepository.softRemove(items);
   }
 }
