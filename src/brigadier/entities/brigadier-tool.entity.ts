@@ -11,7 +11,7 @@ import { Tool } from '../../tool/entities/tool.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('brigadier_tool_pkey', ['id'], { unique: true })
-@Entity('brigadier_tool', { schema: 'public' })
+@Entity('brigadier_tool')
 export class BrigadierTool extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { BrigadierService } from './brigadier.service';
 import { CreateBrigadierDto } from './dto/create-brigadier.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
@@ -16,18 +17,24 @@ export class BrigadierController {
   constructor(private readonly brigadierService: BrigadierService) {}
 
   @Post()
-  create(@Body() createBrigadierDto: CreateBrigadierDto) {
-    return this.brigadierService.create(createBrigadierDto);
+  create(
+    @Body() createBrigadierDto: CreateBrigadierDto,
+    @Body() CreateUserDto: CreateUserDto,
+  ) {
+    return this.brigadierService.createWithUser(
+      createBrigadierDto,
+      CreateUserDto,
+    );
   }
 
   @Get()
-  findAll() {
-    return this.brigadierService.findAll();
+  getAll() {
+    return this.brigadierService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.brigadierService.findOne(+id);
+  get(@Param('id') id: string) {
+    return this.brigadierService.get(+id);
   }
 
   @Patch(':id')
