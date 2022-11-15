@@ -10,7 +10,7 @@ import { Tool } from '../../tool/entities/tool.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('stage_pkey', ['id'], { unique: true })
-@Entity('stage', { schema: 'public' })
+@Entity('stage')
 export class Stage extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -18,9 +18,15 @@ export class Stage extends BaseEntity {
   @Column('text', { name: 'stage' })
   stage: string;
 
-  @OneToMany(() => Request, (request) => request.stage)
+  @OneToMany(() => Request, (request) => request.stage, {
+    cascade: true,
+    onDelete: 'RESTRICT',
+  })
   requests: Request[];
 
-  @OneToMany(() => Tool, (tool) => tool.stage)
+  @OneToMany(() => Tool, (tool) => tool.stage, {
+    cascade: true,
+    onDelete: 'RESTRICT',
+  })
   tools: Tool[];
 }

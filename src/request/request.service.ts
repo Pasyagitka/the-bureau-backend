@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRequestDto } from './dto/create-request.dto';
-import { UpdateRequestDto } from './dto/update-request.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BaseService } from 'src/base/base.service';
+import { Repository } from 'typeorm';
+import { Request, RequestStatus } from './entities/Request.entity';
 
 @Injectable()
-export class RequestService {
-  create(createRequestDto: CreateRequestDto) {
-    return 'This action adds a new request';
+export class RequestService extends BaseService<Request> {
+  constructor(
+    @InjectRepository(Request)
+    private requestRepository: Repository<Request>,
+  ) {
+    super(requestRepository);
   }
 
-  findAll() {
-    return `This action returns all request`;
+  //TODO add request tools, accessories
+
+  async setStatus(id: number, status: RequestStatus) {
+    const request = await this.requestRepository.findOneOrFail({
+      where: { id },
+    });
+    return await this.requestRepository.save({ ...request, status });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} request`;
+  async setBrigadier(id: number, brigadierId: number) {
+    const request = await this.requestRepository.findOneOrFail({
+      where: { id },
+    });
+    return await this.requestRepository.save({ ...request, brigadierId });
   }
 
-  update(id: number, updateRequestDto: UpdateRequestDto) {
-    return `This action updates a #${id} request`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} request`;
+  async remove(id: number) {
+    const item = await this.requestRepository.findOneOrFail({
+      where: { id },
+      relations: [
+        'address',
+        'reports',
+        'requestAccessories',
+        'requestEquipment',
+        'requestTools',
+        'schedules',
+      ],
+    });
+    return await this.requestRepository.softRemove(item);
   }
 }

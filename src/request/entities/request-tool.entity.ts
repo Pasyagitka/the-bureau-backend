@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -11,16 +12,13 @@ import { Tool } from '../../tool/entities/tool.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('request_tool_pkey', ['id'], { unique: true })
-@Entity('request_tool', { schema: 'public' })
+@Entity('request_tool')
 export class RequestTool extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
   @Column('integer', { name: 'quantity', default: () => '1' })
   quantity: number;
-
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
 
   @ManyToOne(() => Request, (request) => request.requestTools)
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
@@ -29,4 +27,7 @@ export class RequestTool extends BaseEntity {
   @ManyToOne(() => Tool, (tool) => tool.requestTools)
   @JoinColumn([{ name: 'toolId', referencedColumnName: 'id' }])
   tool: Tool;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
@@ -13,13 +21,13 @@ export class RequestController {
   }
 
   @Get()
-  findAll() {
-    return this.requestService.findAll();
+  getAll() {
+    return this.requestService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.requestService.findOne(+id);
+  get(@Param('id') id: string) {
+    return this.requestService.get(+id);
   }
 
   @Patch(':id')

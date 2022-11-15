@@ -6,7 +6,7 @@ export class BaseController<T extends BaseEntity> {
   constructor(private readonly IBaseService: IBaseService<T>) {}
 
   @Get()
-  async findAll(): Promise<T[]> {
+  async getAll(): Promise<T[]> {
     return this.IBaseService.getAll();
   }
 
@@ -26,7 +26,7 @@ export class BaseController<T extends BaseEntity> {
   }
 
   @Put()
-  async update(@Param('id') id: number, @Body() entity: T): Promise<T> {
-    return this.IBaseService.update(id, entity);
+  async update(@Param('id') id: string, @Body() entity: T): Promise<T> {
+    return this.IBaseService.update(+id, entity);
   }
 }

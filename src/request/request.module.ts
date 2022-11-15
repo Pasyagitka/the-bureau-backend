@@ -8,22 +8,20 @@ import { RequestAccessory } from './entities/request-accessory.entity';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { RequestTool } from './entities/request-tool.entity';
 import { Stage } from './entities/stage.entity';
-import { Status } from './entities/status.entity';
 import { Request } from './entities/request.entity';
 
 @Module({
-  // imports: [
-  //   TypeOrmModule.forFeature([
-  //     Request,
-  //     Address,
-  //     Report,
-  //     RequestAccessory,
-  //     RequestEquipment,
-  //     RequestTool,
-  //     Stage,
-  //     Status,
-  //   ]),
-  // ],
+  imports: [
+    TypeOrmModule.forFeature([
+      Request,
+      Address,
+      Report,
+      RequestAccessory,
+      RequestEquipment,
+      RequestTool,
+      Stage,
+    ]),
+  ],
   controllers: [RequestController],
   providers: [RequestService],
 })

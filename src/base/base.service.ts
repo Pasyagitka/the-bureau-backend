@@ -1,5 +1,4 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BadGatewayException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { BaseEntity } from './entities/base.entity';
 import { IBaseService } from './IBase.service';
@@ -68,3 +67,5 @@ export class BaseService<T extends BaseEntity> implements IBaseService<T> {
     }
   }
 }
+
+//TODO remove exceptioins from service
