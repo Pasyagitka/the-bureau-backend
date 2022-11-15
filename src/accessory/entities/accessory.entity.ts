@@ -17,7 +17,7 @@ export class Accessory {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('integer', { name: 'sku', nullable: true })
+  @Column('integer', { name: 'sku', nullable: true, unique: true })
   sku: string | null;
 
   @Column('text', { name: 'name' })
@@ -34,6 +34,7 @@ export class Accessory {
     (requestAccessory) => requestAccessory.accessory,
     {
       cascade: true,
+      onDelete: 'CASCADE',
     },
   )
   requestAccessories: RequestAccessory[];

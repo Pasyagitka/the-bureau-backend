@@ -39,10 +39,11 @@ export class Equipment extends BaseEntity {
     (requestEquipment) => requestEquipment.equipment,
     {
       cascade: true,
+      onDelete: 'CASCADE',
     },
   )
   requestEquipment: RequestEquipment[];
 
   @DeleteDateColumn()
-  public deletedAt?: Date;
+  deletedAt?: Date;
 }

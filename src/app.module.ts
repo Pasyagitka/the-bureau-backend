@@ -36,7 +36,6 @@ import { RequestAccessory } from './request/entities/request-accessory.entity';
 import { RequestEquipment } from './request/entities/request-equipment.entity';
 import { RequestTool } from './request/entities/request-tool.entity';
 import { Stage } from './request/entities/stage.entity';
-import { Status } from './request/entities/status.entity';
 import { Mounting } from './equipment/entities/mounting.entity';
 import { Address } from './request/entities/address.entity';
 import { BaseModule } from './base/base.module';
@@ -62,7 +61,6 @@ import { BaseModule } from './base/base.module';
         Client,
         Address,
         Stage,
-        Status,
         Tool,
         Brigadier,
         BrigadierTool,

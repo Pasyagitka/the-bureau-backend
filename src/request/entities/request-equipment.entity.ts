@@ -1,9 +1,10 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Equipment } from '../../equipment/entities/equipment.entity';
@@ -11,7 +12,7 @@ import { Request } from './request.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('request_equipment_pkey', ['id'], { unique: true })
-@Entity('request_equipment', { schema: 'public' })
+@Entity('request_equipment')
 export class RequestEquipment extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -19,14 +20,14 @@ export class RequestEquipment extends BaseEntity {
   @Column('integer', { name: 'quantity', default: () => '1' })
   quantity: number;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @OneToOne(() => Equipment, (equipment) => equipment.requestEquipment)
+  @ManyToOne(() => Equipment, (equipment) => equipment.requestEquipment)
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
 
-  @OneToOne(() => Request, (request) => request.requestEquipment)
+  @ManyToOne(() => Request, (request) => request.requestEquipment)
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
   request: Request;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

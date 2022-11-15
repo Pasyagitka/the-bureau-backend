@@ -8,7 +8,7 @@ import {
 import { Equipment } from './equipment.entity';
 
 @Index('Mounting_pkey', ['id'], { unique: true })
-@Entity('mounting', { schema: 'public' })
+@Entity('mounting')
 export class Mounting {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -16,6 +16,8 @@ export class Mounting {
   @Column('text', { name: 'mounting' })
   mounting: string;
 
-  @OneToMany(() => Equipment, (equipment) => equipment.mounting)
+  @OneToMany(() => Equipment, (equipment) => equipment.mounting, {
+    cascade: true,
+  })
   equipment: Equipment[];
 }

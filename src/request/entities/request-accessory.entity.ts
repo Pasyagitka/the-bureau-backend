@@ -11,16 +11,13 @@ import { Request } from './request.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('request_accessory_pkey', ['id'], { unique: true })
-@Entity('request_accessory', { schema: 'public' })
+@Entity('request_accessory')
 export class RequestAccessory extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
   @Column('integer', { name: 'quantity', default: () => '0' })
   quantity: number;
-
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
 
   @ManyToOne(() => Accessory, (accessory) => accessory.requestAccessories)
   @JoinColumn([{ name: 'accessoryId', referencedColumnName: 'id' }])

@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -13,7 +14,7 @@ import { Stage } from '../../request/entities/stage.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('tool_pkey', ['id'], { unique: true })
-@Entity('tool', { schema: 'public' })
+@Entity('tool')
 export class Tool extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -24,16 +25,22 @@ export class Tool extends BaseEntity {
   @Column('integer', { name: 'quantity', default: () => '0' })
   quantity: number;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.tool)
+  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.tool, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   brigadierTools: BrigadierTool[];
 
-  @OneToMany(() => RequestTool, (requestTool) => requestTool.tool)
+  @OneToMany(() => RequestTool, (requestTool) => requestTool.tool, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   requestTools: RequestTool[];
 
   @ManyToOne(() => Stage, (stage) => stage.tools)
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
