@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { Role } from './entities/role.entity';
+import { BaseController } from 'src/base/base.controller';
 
 @Controller('role')
-export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+export class RoleController extends BaseController<Role> {
+  constructor(private readonly roleService: RoleService) {
+    super(roleService);
+  }
 
   @Post()
   create(@Body() createRoleDto: CreateRoleDto) {
@@ -13,13 +25,13 @@ export class RoleController {
   }
 
   @Get()
-  findAll() {
-    return this.roleService.findAll();
+  getAll() {
+    return this.roleService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roleService.findOne(+id);
+  get(@Param('id') id: string) {
+    return this.roleService.get(+id);
   }
 
   @Patch(':id')

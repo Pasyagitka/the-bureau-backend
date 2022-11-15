@@ -21,13 +21,13 @@ export class AccessoryController {
   }
 
   @Get()
-  findAll() {
-    return this.accessoryService.findAll();
+  getAll() {
+    return this.accessoryService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accessoryService.findOne(+id);
+  get(@Param('id') id: string) {
+    return this.accessoryService.get(+id);
   }
 
   @Patch(':id')

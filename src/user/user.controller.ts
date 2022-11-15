@@ -25,17 +25,17 @@ export class UserController extends BaseController<User> {
   }
 
   @Get()
-  findAll() {
+  getAll() {
     return this.userService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  get(@Param('id') id: string) {
     return this.userService.get(+id);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 

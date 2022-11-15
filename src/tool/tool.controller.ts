@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ToolService } from './tool.service';
 import { CreateToolDto } from './dto/create-tool.dto';
 import { UpdateToolDto } from './dto/update-tool.dto';
+import { BaseController } from 'src/base/base.controller';
+import { Tool } from './entities/tool.entity';
 
 @Controller('tool')
-export class ToolController {
-  constructor(private readonly toolService: ToolService) {}
+export class ToolController extends BaseController<Tool> {
+  constructor(private readonly toolService: ToolService) {
+    super(toolService);
+  }
 
   @Post()
   create(@Body() createToolDto: CreateToolDto) {
@@ -13,13 +25,13 @@ export class ToolController {
   }
 
   @Get()
-  findAll() {
-    return this.toolService.findAll();
+  getAll() {
+    return this.toolService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.toolService.findOne(+id);
+  get(@Param('id') id: string) {
+    return this.toolService.get(+id);
   }
 
   @Patch(':id')

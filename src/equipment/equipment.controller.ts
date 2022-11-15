@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { EquipmentService } from './equipment.service';
 import { CreateEquipmentDto } from './dto/create-equipment.dto';
 import { UpdateEquipmentDto } from './dto/update-equipment.dto';
@@ -13,13 +21,13 @@ export class EquipmentController {
   }
 
   @Get()
-  findAll() {
-    return this.equipmentService.findAll();
+  getAll() {
+    return this.equipmentService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.equipmentService.findOne(+id);
+  get(@Param('id') id: string) {
+    return this.equipmentService.get(+id);
   }
 
   @Patch(':id')
