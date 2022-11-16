@@ -3,12 +3,10 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Role } from '../../role/entities/role.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
+import { Role } from 'src/auth/role.enum';
 
 @Index('user_pkey', ['id'], { unique: true })
 @Entity('user')
@@ -37,8 +35,11 @@ export class User extends BaseEntity {
   @Column('boolean', { name: 'isActivated', default: () => 'false' })
   isActivated: boolean;
 
-  @ManyToOne(() => Role, (role) => role.users)
-  @JoinColumn([{ name: 'roleId', referencedColumnName: 'id' }])
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.Client,
+  })
   role: Role;
 
   @DeleteDateColumn()

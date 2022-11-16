@@ -1,7 +1,7 @@
 import * as winston from 'winston';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   utilities as nestWinstonModuleUtilities,
@@ -38,6 +38,9 @@ import { RequestTool } from './request/entities/request-tool.entity';
 import { Stage } from './request/entities/stage.entity';
 import { Address } from './request/entities/address.entity';
 import { BaseModule } from './base/base.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { CaslModule } from './casl/casl.module';
+import { AbilitiesGuard } from './casl/abilities.guard';
 
 @Module({
   imports: [
@@ -71,6 +74,15 @@ import { BaseModule } from './base/base.module';
       ],
       //migrations: [__dirname + '/db-migrations/*{.ts,.js}'],
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+    }),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -95,6 +107,7 @@ import { BaseModule } from './base/base.module';
     ToolModule,
     RoleModule,
     BaseModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [
@@ -106,7 +119,6 @@ import { BaseModule } from './base/base.module';
       provide: APP_FILTER,
       useClass: BadRequestExceptionFilter,
     },
-    Accessory,
   ],
 })
 export class AppModule {

@@ -13,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [AuthController],
   imports: [
     ConfigModule.forRoot(),
-    //UserModule,
+    UserModule,
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

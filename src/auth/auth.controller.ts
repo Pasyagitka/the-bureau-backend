@@ -18,34 +18,30 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('login')
   async login(@Request() req) {
-    console.log(req);
     return this.authService.loginWithCredentials(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Post('registration')
   async register(@Body() registerUserDto: RegisterDto) {
     return this.authService.register(registerUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Get('activate/:link')
   async activate(@Param('link') activationLink: string) {
     return this.authService.activate(activationLink);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Post('reset-password')
   async sendReset(@Body('email') email: string) {
     return this.authService.sendResetPassword(email);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Get('reset-password/:login/:link')
   async resetConfirm(
@@ -53,9 +49,9 @@ export class AuthController {
     @Param('link') link: string,
   ) {
     const isReset = await this.authService.resetConfirm(login, link);
-    // if (isReset) {
-    //   return 'Success reset';
-    // }
+    if (isReset) {
+      return 'Success reset';
+    }
     return 'Failure reset';
   }
 }
