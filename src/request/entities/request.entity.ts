@@ -20,7 +20,7 @@ import { RequestTool } from './request-tool.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
 
-export enum RequestStatus { //todo move to file
+export enum RequestStatus { //TODO move to file
   INPROCESSING = 'InProcessing',
   COMPLETED = 'Completed',
   APPROVED = 'Approved',

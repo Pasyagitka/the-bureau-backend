@@ -3,15 +3,17 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Accessory } from '../../accessory/entities/accessory.entity';
-import { Mounting } from './mounting.entity';
 import { RequestEquipment } from '../../request/entities/request-equipment.entity';
 import { BaseEntity } from 'src/base/entities/base.entity';
+
+export enum Mounting { //TODO move to file
+  FLOOR = 'Пол',
+  WALL = 'Стена',
+}
 
 @Index('Equipment_pkey', ['id'], { unique: true })
 @Entity('equipment')
@@ -28,10 +30,11 @@ export class Equipment extends BaseEntity {
   })
   accessories: Accessory[];
 
-  @ManyToOne(() => Mounting, (mounting) => mounting.equipment, {
-    eager: true,
+  @Column({
+    type: 'enum',
+    enum: Mounting,
+    default: Mounting.FLOOR,
   })
-  @JoinColumn([{ name: 'mountingId', referencedColumnName: 'id' }])
   mounting: Mounting;
 
   @OneToMany(
