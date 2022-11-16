@@ -20,13 +20,11 @@ import { ClientModule } from './client/client.module';
 import { EquipmentModule } from './equipment/equipment.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ToolModule } from './tool/tool.module';
-import { RoleModule } from './role/role.module';
 import { User } from './user/entities/user.entity';
 import { Accessory } from './accessory/entities/accessory.entity';
 import { Brigadier } from './brigadier/entities/brigadier.entity';
 import { Client } from './client/entities/client.entity';
 import { Equipment } from './equipment/entities/equipment.entity';
-import { Role } from './role/entities/role.entity';
 import { Schedule } from './schedule/entities/schedule.entity';
 import { Tool } from './tool/entities/tool.entity';
 import { Request } from './request/entities/request.entity';
@@ -40,7 +38,6 @@ import { Address } from './request/entities/address.entity';
 import { BaseModule } from './base/base.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { CaslModule } from './casl/casl.module';
-import { AbilitiesGuard } from './casl/abilities.guard';
 
 @Module({
   imports: [
@@ -57,7 +54,6 @@ import { AbilitiesGuard } from './casl/abilities.guard';
       entities: [
         Equipment,
         Accessory,
-        Role,
         User,
         Client,
         Address,
@@ -105,7 +101,6 @@ import { AbilitiesGuard } from './casl/abilities.guard';
     EquipmentModule,
     ScheduleModule,
     ToolModule,
-    RoleModule,
     BaseModule,
     CaslModule,
   ],
