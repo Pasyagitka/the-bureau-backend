@@ -6,7 +6,7 @@ import {
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { Accessory } from 'src/accessory/entities/accessory.entity';
-import { Role } from 'src/auth/role.enum';
+import { Role } from 'src/auth/enum/role.enum';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { Client } from 'src/client/entities/client.entity';
 import { Request } from 'src/request/entities/request.entity';

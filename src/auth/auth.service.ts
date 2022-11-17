@@ -11,7 +11,7 @@ import {
   WrongPasswordError,
 } from 'src/common/exceptions';
 import { UserService } from '../user/user.service';
-import { MailService } from './mail.service';
+import { MailService } from './mail/mail.service';
 
 @Injectable()
 export class AuthService {

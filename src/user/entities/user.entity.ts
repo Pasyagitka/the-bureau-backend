@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BaseEntity } from 'src/base/entities/base.entity';
-import { Role } from 'src/auth/role.enum';
+import { Role } from 'src/auth/enum/role.enum';
 
 @Index('user_pkey', ['id'], { unique: true })
 @Entity('user')

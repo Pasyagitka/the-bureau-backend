@@ -6,7 +6,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/auth/auth.decorator';
+import { IS_PUBLIC_KEY } from 'src/auth/decorators/auth.decorator';
 import { CHECK_ABILITY, RequiredRule } from './abilities.decorator';
 import { CaslAbilityFactory } from './casl-ability.factory';
 
