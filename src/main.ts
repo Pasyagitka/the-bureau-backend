@@ -15,6 +15,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.setGlobalPrefix('/api');
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.useGlobalGuards(new AbilitiesGuard(reflector, new CaslAbilityFactory()));
   await app.listen(process.env.PORT);

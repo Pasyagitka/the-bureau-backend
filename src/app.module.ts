@@ -1,7 +1,7 @@
 import * as winston from 'winston';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   utilities as nestWinstonModuleUtilities,
@@ -41,7 +41,7 @@ import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot(), //todo move configs
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -67,8 +67,7 @@ import { CaslModule } from './casl/casl.module';
         RequestTool,
         Report,
         Schedule,
-      ],
-      //migrations: [__dirname + '/db-migrations/*{.ts,.js}'],
+      ], //TODO add migrations
     }),
     MailerModule.forRoot({
       transport: {
