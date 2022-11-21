@@ -1,26 +1,71 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
+import { Equipment } from 'src/equipment/entities/equipment.entity';
+import { Repository } from 'typeorm';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
+import { Accessory } from './entities/accessory.entity';
 
 @Injectable()
 export class AccessoryService {
-  create(createAccessoryDto: CreateAccessoryDto) {
-    return 'This action adds a new accessory';
+  constructor(
+    @InjectRepository(Accessory)
+    private accessoryRepository: Repository<Accessory>,
+    @InjectRepository(Equipment)
+    private equipmentRepository: Repository<Equipment>,
+  ) {}
+
+  async getAll(): Promise<Accessory[]> {
+    return this.accessoryRepository.find();
   }
 
-  findAll() {
-    return `This action returns all accessory`;
+  async get(id: number): Promise<Accessory> {
+    const item = await this.accessoryRepository.findOne({ where: { id } });
+    if (!item) {
+      throw new NotExistsError('accessory');
+    }
+    return item;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} accessory`;
+  async create(createAccessoryDto: CreateAccessoryDto): Promise<Accessory> {
+    const accessory = await this.accessoryRepository.findOne({
+      where: { sku: createAccessoryDto.sku },
+    });
+    if (accessory && createAccessoryDto.sku)
+      throw new AlreadyExistsError('accessory');
+    //TODO if sku is null??
+
+    const equipment = await this.equipmentRepository.findOne({
+      where: { id: createAccessoryDto.equipmentId },
+    });
+    if (!equipment) throw new NotExistsError('equipment');
+
+    const item = this.accessoryRepository.create(createAccessoryDto);
+    await this.accessoryRepository.save(item);
+    return item;
   }
 
-  update(id: number, updateAccessoryDto: UpdateAccessoryDto) {
-    return `This action updates a #${id} accessory`;
+  async update(
+    id: number,
+    updateAccessoryDto: UpdateAccessoryDto,
+  ): Promise<Accessory> {
+    const accessory = await this.accessoryRepository.findOne({ where: { id } });
+    if (!accessory) throw new NotExistsError('accessory');
+
+    const equipment = await this.equipmentRepository.findOne({
+      where: { id: updateAccessoryDto.equipmentId },
+    });
+    if (!equipment) throw new NotExistsError('equipment');
+    return this.accessoryRepository.save({ id, ...updateAccessoryDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} accessory`;
+  async remove(id: number): Promise<Accessory> {
+    const item = await this.accessoryRepository.findOne({
+      where: { id },
+      relations: ['requestAccessories'],
+    });
+    if (!item) throw new NotExistsError('accessory');
+    return await this.accessoryRepository.softRemove(item);
   }
 }

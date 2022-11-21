@@ -11,11 +11,10 @@ import {
 import { BrigadierTool } from '../../brigadier/entities/brigadier-tool.entity';
 import { RequestTool } from '../../request/entities/request-tool.entity';
 import { Stage } from '../../request/entities/stage.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('tool_pkey', ['id'], { unique: true })
 @Entity('tool')
-export class Tool extends BaseEntity {
+export class Tool {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
