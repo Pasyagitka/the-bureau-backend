@@ -3,21 +3,17 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ToolService } from './tool.service';
 import { CreateToolDto } from './dto/create-tool.dto';
 import { UpdateToolDto } from './dto/update-tool.dto';
-import { BaseController } from 'src/base/base.controller';
-import { Tool } from './entities/tool.entity';
 
 @Controller('tool')
-export class ToolController extends BaseController<Tool> {
-  constructor(private readonly toolService: ToolService) {
-    super(toolService);
-  }
+export class ToolController {
+  constructor(private readonly toolService: ToolService) {}
 
   @Post()
   create(@Body() createToolDto: CreateToolDto) {
@@ -34,7 +30,7 @@ export class ToolController extends BaseController<Tool> {
     return this.toolService.get(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateToolDto: UpdateToolDto) {
     return this.toolService.update(+id, updateToolDto);
   }
