@@ -29,10 +29,6 @@ export class BrigadierService {
   }
 
   async create(createBrigadierDto: CreateBrigadierDto): Promise<Brigadier> {
-    const userByLogin = await this.userRepository.findOne({
-      where: { login: createBrigadierDto.login },
-    });
-    if (userByLogin) throw new AlreadyExistsError('user with login');
     const userByEmail = await this.userRepository.findOne({
       where: { email: createBrigadierDto.email },
     });
@@ -40,9 +36,8 @@ export class BrigadierService {
 
     const brigadier = this.brigadierRepository.create(createBrigadierDto);
     const user = this.userRepository.create({
-      login: createBrigadierDto.login,
       email: createBrigadierDto.email,
-      password: 
+      //password: 
     }); //register ith password
     brigadier.user = user;
     await this.brigadierRepository.save(brigadier);

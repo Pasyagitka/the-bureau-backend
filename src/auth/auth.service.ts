@@ -62,7 +62,7 @@ export class AuthService {
       email: user.email,
       login: user.login,
       password: hashPassword,
-      activationLink,
+      //activationLink,
     });
     await this.mailService.sendActivationMail(
       newUser.email,

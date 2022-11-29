@@ -9,6 +9,7 @@ import { RequestEquipment } from './entities/request-equipment.entity';
 import { RequestTool } from './entities/request-tool.entity';
 import { Stage } from './entities/stage.entity';
 import { Request } from './entities/request.entity';
+import { AbilityModule } from 'src/ability/ability.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Request } from './entities/request.entity';
       RequestTool,
       Stage,
     ]),
+    AbilityModule,
   ],
   controllers: [RequestController],
   providers: [RequestService],

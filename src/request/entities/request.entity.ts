@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Index,
@@ -32,7 +33,7 @@ export class Request extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('date', { name: 'registerDate' })
+  @CreateDateColumn({ name: 'registerDate' })
   registerDate: Date;
 
   @Column('date', { name: 'clientDateStart', nullable: true })

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { RegisterUserDto } from 'src/user/dto/register-user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateClientDto } from './dto/create-client.dto';
@@ -19,7 +19,7 @@ export class ClientService extends BaseService<Client> {
 
   async createWithUser(
     createClientDto: CreateClientDto,
-    createUserDto: CreateUserDto,
+    createUserDto: RegisterUserDto,
   ) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

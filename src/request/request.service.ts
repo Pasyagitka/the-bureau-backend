@@ -13,6 +13,21 @@ export class RequestService extends BaseService<Request> {
     super(requestRepository);
   }
 
+  async getAll(): Promise<Request[]> {
+    return this.requestRepository.find({
+      //TODO do not return creds
+      relations: ['client.user'],
+    });
+  }
+
+  async get(id: number): Promise<Request> {
+    const item = await this.requestRepository.findOne({
+      where: { id },
+      relations: ['client.user'],
+    });
+    return item;
+  }
+
   //TODO add request tools, accessories
 
   async setStatus(id: number, status: RequestStatus) {

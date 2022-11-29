@@ -1,7 +1,7 @@
 import * as winston from 'winston';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   utilities as nestWinstonModuleUtilities,
@@ -37,7 +37,9 @@ import { Stage } from './request/entities/stage.entity';
 import { Address } from './request/entities/address.entity';
 import { BaseModule } from './base/base.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { CaslModule } from './casl/casl.module';
+import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
+import { AbilityModule } from './ability/ability.module';
+import { AbilitiesGuard } from './ability/guards/abilities.guard';
 
 @Module({
   imports: [
@@ -101,10 +103,18 @@ import { CaslModule } from './casl/casl.module';
     ScheduleModule,
     ToolModule,
     BaseModule,
-    CaslModule,
+    AbilityModule,
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ForbiddenAbilityFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AbilitiesGuard,
+    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

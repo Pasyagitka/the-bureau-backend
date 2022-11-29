@@ -18,6 +18,8 @@ export class ScheduleController {
     // super(scheduleService);
   }
 
+  //casl
+
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
     return this.scheduleService.addRecord(createScheduleDto);

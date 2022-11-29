@@ -15,7 +15,7 @@ export class CreateUserDto {
   @Length(6, 50)
   password: string;
 
-  @IsNotEmpty()
-  @IsString()
-  activationLink: string; //TODO activation link??
+  // @IsNotEmpty()
+  // @IsString()
+  // activationLink: string; //TODO activation link??
 }
