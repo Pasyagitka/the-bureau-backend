@@ -16,18 +16,9 @@ import { Tool } from 'src/tool/entities/tool.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Action } from './actions.enum';
 
-export type Subjects =
-  | InferSubjects<
-      | typeof Accessory
-      | typeof Equipment
-      | typeof Brigadier
-      | typeof Client
-      | typeof Request
-      | typeof Schedule
-      | typeof Tool
-      | typeof User
-    >
-  | 'all';
+export type Subjects = InferSubjects<
+  Accessory | Equipment | Brigadier | Client | Request | Schedule | Tool | User
+>;
 
 export type AppAbility = Ability<[Action, Subjects]>;
 
@@ -36,16 +27,20 @@ export class CaslAbilityFactory {
   defineAbility(user: User) {
     const builder = new AbilityBuilder(Ability);
 
+    //todo define rules
     console.log('CaslAbilityFactory', user);
     switch (user.role) {
       case Role.Admin: {
         builder.can(Action.Manage, 'all'); //read-write access to everything
+        break;
       }
       case Role.Brigadier: {
-        builder.can(Action.Read, 'all'); // read-only access to everything
+        builder.can(Action.Manage, 'all'); // read-only access to everything
+        break;
       }
       default: {
-        builder.can(Action.Read, 'all'); // read-only access to everything
+        builder.can(Action.Manage, 'all'); // read-only access to everything
+        break;
       }
     }
 

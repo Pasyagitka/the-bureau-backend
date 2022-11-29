@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsPhoneNumber, IsString, Length } from 'class-validator';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
-export class CreateBrigadierDto {
+export class CreateBrigadierDto extends CreateUserDto {
   @IsString()
   @Length(3, 30)
   firstname: string;

@@ -1,55 +1,68 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from 'src/base/base.service';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Brigadier } from './entities/brigadier.entity';
 import { CreateBrigadierDto } from './dto/create-brigadier.dto';
+import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
 import { User } from 'src/user/entities/user.entity';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 
-//TODO where to use dto??
 @Injectable()
-export class BrigadierService extends BaseService<Brigadier> {
+export class BrigadierService {
   constructor(
-    private dataSource: DataSource,
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
-  ) {
-    super(brigadierRepository);
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+
+  async getAll(): Promise<Brigadier[]> {
+    return this.brigadierRepository.find();
   }
-  //TODO move dto
-  async createWithUser(
-    createBrigadierDto: CreateBrigadierDto,
-    createUserDto: CreateUserDto,
-  ) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
 
-    try {
-      const user = await queryRunner.manager
-        .getRepository(User)
-        .save(createUserDto);
-
-      const brigadier = await queryRunner.manager
-        .getRepository(Brigadier)
-        .save({
-          ...createBrigadierDto,
-          user,
-        });
-      await queryRunner.commitTransaction();
-      return brigadier;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
+  async get(id: number): Promise<Brigadier> {
+    const item = await this.brigadierRepository.findOne({ where: { id } });
+    if (!item) {
+      throw new NotExistsError('brigadier');
     }
+    return item;
+  }
+
+  async create(createBrigadierDto: CreateBrigadierDto): Promise<Brigadier> {
+    const userByLogin = await this.userRepository.findOne({
+      where: { login: createBrigadierDto.login },
+    });
+    if (userByLogin) throw new AlreadyExistsError('user with login');
+    const userByEmail = await this.userRepository.findOne({
+      where: { email: createBrigadierDto.email },
+    });
+    if (userByEmail) throw new AlreadyExistsError('user with email');
+
+    const brigadier = this.brigadierRepository.create(createBrigadierDto);
+    const user = this.userRepository.create({
+      login: createBrigadierDto.login,
+      email: createBrigadierDto.email,
+      password: 
+    }); //register ith password
+    brigadier.user = user;
+    await this.brigadierRepository.save(brigadier);
+    return brigadier;
+  }
+
+  async update(
+    id: number,
+    updateBrigadierDto: UpdateBrigadierDto,
+  ): Promise<Brigadier> {
+    const brigadier = await this.brigadierRepository.findOne({ where: { id } });
+    if (!brigadier) throw new NotExistsError('brigadier');
+  //TODO d
+    return this.brigadierRepository.save({ id, ...updateBrigadierDto });
   }
 
   async remove(id: number) {
     const item = await this.brigadierRepository.findOneOrFail({
       where: { id },
-      relations: ['brigadier_tool', 'schedule', 'user'],
+      relations: ['brigadierTools', 'schedules', 'user'],
     });
     return await this.brigadierRepository.softRemove(item);
   }
