@@ -1,21 +1,27 @@
-import {
-  Ability,
-  AbilityBuilder,
-  AbilityClass,
-  ExtractSubjectType,
-} from '@casl/ability';
+import { Ability, AbilityBuilder, AbilityClass, ExtractSubjectType } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { Role } from 'src/auth/enum/role.enum';
-import { UserDto } from 'src/user/dto/user.dto';
+import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { Client } from 'src/client/entities/client.entity';
 import { User } from 'src/user/entities/user.entity';
 import { AppAbility, Action, Subjects } from './types';
+
+type BrigadierUser = Brigadier & {
+  'user.id': Brigadier['user']['id'];
+};
+
+// type BrigadierRequest = Brigadier & {
+//   'request.id': Brigadier['requests']['id'];
+// };
+
+type ClientUser = Client & {
+  'user.id': Client['user']['id'];
+};
 
 @Injectable()
 export class AbilityFactory {
   defineAbility(user: User) {
-    const { can, cannot, build } = new AbilityBuilder(
-      Ability as AbilityClass<AppAbility>,
-    );
+    const { can, cannot, build } = new AbilityBuilder(Ability as AbilityClass<AppAbility>);
 
     console.log('AbilityFactory', user);
 
@@ -25,12 +31,23 @@ export class AbilityFactory {
         break;
       }
       case Role.Brigadier: {
+        can([Action.Read, Action.Update], Brigadier);
+        can([Action.Read, Action.Update], User);
+        cannot<BrigadierUser>(Action.Update, Brigadier, { 'user.id': { $ne: user.id } }).because(
+          'You are not allowed to update other brigadiers.',
+        );
+        cannot(Action.Update, User, { id: { $ne: user.id } }).because(
+          'You are not allowed to update other users.',
+        );
         break;
       }
       default: {
+        can(Action.Read, Brigadier);
+        can([Action.Read, Action.Update], Client);
         can([Action.Read, Action.Update], User);
-        cannot([Action.Create, Action.Delete], User).because(
-          'You are not the admin!',
+        // cannot([Action.Create, Action.Delete], User).because('You are not the admin!');
+        cannot<ClientUser>(Action.Update, Client, { 'user.id': { $ne: user.id } }).because(
+          'You are not allowed to update other clients.',
         );
         cannot(Action.Update, User, { id: { $ne: user.id } }).because(
           'You are not allowed to update other users.',
@@ -40,8 +57,7 @@ export class AbilityFactory {
     }
 
     return build({
-      detectSubjectType: (subject) =>
-        subject.constructor as ExtractSubjectType<Subjects>,
+      detectSubjectType: (subject) => subject.constructor as ExtractSubjectType<Subjects>,
     });
   }
 }

@@ -39,7 +39,6 @@ import { BaseModule } from './base/base.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
 import { AbilityModule } from './ability/ability.module';
-import { AbilitiesGuard } from './ability/guards/abilities.guard';
 
 @Module({
   imports: [

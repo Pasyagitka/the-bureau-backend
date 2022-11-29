@@ -1,46 +1,40 @@
+import { ForbiddenError } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from 'src/base/base.service';
-import { RegisterUserDto } from 'src/user/dto/register-user.dto';
+import { AbilityFactory } from 'src/ability/ability.factory';
+import { Action } from 'src/ability/types';
+import { NotExistsError } from 'src/common/exceptions';
 import { User } from 'src/user/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
-import { CreateClientDto } from './dto/create-client.dto';
+import { Repository } from 'typeorm';
+import { UpdateClientDto } from './dto/update-client.dto';
 import { Client } from './entities/client.entity';
 
 @Injectable()
-export class ClientService extends BaseService<Client> {
+export class ClientService {
   constructor(
-    private dataSource: DataSource,
     @InjectRepository(Client)
     private clientRepository: Repository<Client>,
-  ) {
-    super(clientRepository);
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
+
+  async getAll(): Promise<Client[]> {
+    return this.clientRepository.find();
   }
 
-  async createWithUser(
-    createClientDto: CreateClientDto,
-    createUserDto: RegisterUserDto,
-  ) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+  async get(id: number): Promise<Client> {
+    return await this.clientRepository.findOne({ where: { id } });
+  }
 
-    try {
-      const user = await queryRunner.manager
-        .getRepository(User)
-        .save(createUserDto);
+  async update(id: number, updateClientDto: UpdateClientDto, user: User): Promise<Client> {
+    const client = await this.get(id);
+    if (!client) throw new NotExistsError('client');
 
-      const client = await queryRunner.manager.getRepository(Client).save({
-        ...createClientDto,
-        user,
-      });
-      await queryRunner.commitTransaction();
-      return client;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
-    }
+    console.log(client, user);
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Update, client);
+
+    return this.clientRepository.save({ id, ...updateClientDto });
   }
 
   //and request nested request.address and so on

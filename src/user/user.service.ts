@@ -1,14 +1,17 @@
 import { ForbiddenError } from '@casl/ability';
-import { Injectable, UseGuards } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { throws } from 'assert';
 import { AbilityFactory } from 'src/ability/ability.factory';
 import { Action } from 'src/ability/types';
+import { Role } from 'src/auth/enum/role.enum';
+import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
+import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { CreateClientDto } from 'src/client/dto/create-client.dto';
+import { Client } from 'src/client/entities/client.entity';
+import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
 import { Repository } from 'typeorm';
 import { ActivateUserDto } from './dto/activate-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -16,11 +19,47 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Brigadier)
+    private brigadierRepository: Repository<Brigadier>,
+    @InjectRepository(Client)
+    private clientRepository: Repository<Client>,
     private readonly abilityFactory: AbilityFactory,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    return await this.usersRepository.save(createUserDto);
+  async createClient(createClientDto: CreateClientDto) {
+    const user = this.usersRepository.create({
+      login: createClientDto.login,
+      email: createClientDto.email,
+      password: createClientDto.password,
+      role: Role.Client,
+      activationLink: createClientDto.activationLink,
+    });
+    const client = this.clientRepository.create({
+      firstname: createClientDto.firstname,
+      surname: createClientDto.surname,
+      patronymic: createClientDto.patronymic,
+      contactNumber: createClientDto.contactNumber,
+    });
+    client.user = user;
+    return await this.clientRepository.save(client);
+  }
+
+  async createBrigadier(createBrigadierDto: CreateBrigadierDto) {
+    const user = this.usersRepository.create({
+      login: createBrigadierDto.login,
+      email: createBrigadierDto.email,
+      password: createBrigadierDto.password,
+      role: Role.Brigadier,
+      activationLink: createBrigadierDto.activationLink,
+    });
+    const brigadier = this.brigadierRepository.create({
+      firstname: createBrigadierDto.firstname,
+      surname: createBrigadierDto.surname,
+      patronymic: createBrigadierDto.patronymic,
+      contactNumber: createBrigadierDto.contactNumber,
+    });
+    brigadier.user = user;
+    return await this.brigadierRepository.save(brigadier);
   }
 
   //TODO do not return users pd
@@ -35,10 +74,18 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto, user: User) {
     const item = await this.get(+id);
+    if (!item) throw new NotExistsError('user');
+
     const ability = this.abilityFactory.defineAbility(user);
     ForbiddenError.from(ability).throwUnlessCan(Action.Update, item);
 
-    return `This action updates a #${id} user`;
+    const userbyLogin = await this.findByUsername(updateUserDto.login);
+    if (userbyLogin && userbyLogin.id !== id) throw new AlreadyExistsError('login');
+
+    const userbyEmail = await this.findByEmail(updateUserDto.email);
+    if (userbyEmail && userbyEmail.id !== id) throw new AlreadyExistsError('email');
+
+    return this.usersRepository.save({ id, ...updateUserDto });
   }
 
   async findByUsername(login: string) {
@@ -67,11 +114,7 @@ export class UserService {
     return await this.usersRepository.save(user);
   }
 
-  async resetPasswordSend(
-    email: string,
-    resetPasswordLink: string,
-    temporaryPassword: string,
-  ) {
+  async resetPasswordSend(email: string, resetPasswordLink: string, temporaryPassword: string) {
     const user = await this.findByEmail(email);
     user.resetPasswordLink = resetPasswordLink;
     user.temporaryPassword = temporaryPassword;
@@ -90,7 +133,7 @@ export class UserService {
     const item = await this.get(+id);
     const ability = this.abilityFactory.defineAbility(user);
     ForbiddenError.from(ability).throwUnlessCan(Action.Delete, item);
-    
+
     return await this.usersRepository.softRemove(item);
   }
 }

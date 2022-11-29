@@ -2,18 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Brigadier } from './entities/brigadier.entity';
-import { CreateBrigadierDto } from './dto/create-brigadier.dto';
-import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
-import { User } from 'src/user/entities/user.entity';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
+import { NotExistsError } from 'src/common/exceptions';
+import { AbilityFactory } from 'src/ability/ability.factory';
+import { Action } from 'src/ability/types';
+import { ForbiddenError } from '@casl/ability';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class BrigadierService {
   constructor(
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly abilityFactory: AbilityFactory,
   ) {}
 
   async getAll(): Promise<Brigadier[]> {
@@ -21,36 +22,16 @@ export class BrigadierService {
   }
 
   async get(id: number): Promise<Brigadier> {
-    const item = await this.brigadierRepository.findOne({ where: { id } });
-    if (!item) {
-      throw new NotExistsError('brigadier');
-    }
-    return item;
+    return await this.brigadierRepository.findOne({ where: { id } });
   }
 
-  async create(createBrigadierDto: CreateBrigadierDto): Promise<Brigadier> {
-    const userByEmail = await this.userRepository.findOne({
-      where: { email: createBrigadierDto.email },
-    });
-    if (userByEmail) throw new AlreadyExistsError('user with email');
-
-    const brigadier = this.brigadierRepository.create(createBrigadierDto);
-    const user = this.userRepository.create({
-      email: createBrigadierDto.email,
-      //password: 
-    }); //register ith password
-    brigadier.user = user;
-    await this.brigadierRepository.save(brigadier);
-    return brigadier;
-  }
-
-  async update(
-    id: number,
-    updateBrigadierDto: UpdateBrigadierDto,
-  ): Promise<Brigadier> {
-    const brigadier = await this.brigadierRepository.findOne({ where: { id } });
+  async update(id: number, updateBrigadierDto: UpdateBrigadierDto, user: User): Promise<Brigadier> {
+    const brigadier = await this.get(id);
     if (!brigadier) throw new NotExistsError('brigadier');
-  //TODO d
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Update, brigadier);
+
     return this.brigadierRepository.save({ id, ...updateBrigadierDto });
   }
 

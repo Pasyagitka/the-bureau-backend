@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
@@ -18,12 +8,6 @@ import { Action } from 'src/ability/types';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  @CheckAbilities({ action: Action.Create, subject: User })
-  create(@Body() createUserDto: RegisterUserDto) {
-    return this.userService.create(createUserDto);
-  }
 
   @Get()
   @CheckAbilities({ action: Action.Read, subject: User })
@@ -39,11 +23,7 @@ export class UserController {
 
   @Put(':id')
   @CheckAbilities({ action: Action.Update, subject: User })
-  update(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-    @Req() req,
-  ) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Req() req) {
     return this.userService.update(+id, updateUserDto, req.user);
   }
 

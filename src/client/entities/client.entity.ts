@@ -32,6 +32,7 @@ export class Client extends BaseEntity {
 
   @OneToOne(() => User, {
     cascade: true,
+    eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' } ])

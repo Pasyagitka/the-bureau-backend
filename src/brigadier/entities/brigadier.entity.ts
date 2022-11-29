@@ -39,6 +39,7 @@ export class Brigadier extends BaseEntity {
   isApproved: boolean;
 
   @OneToOne(() => User, {
+    cascade: true,
     eager: true,
     onDelete: 'CASCADE',
   })

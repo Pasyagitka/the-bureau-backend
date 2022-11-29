@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsEmail, IsEmpty, IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
+import { Role } from 'src/auth/enum/role.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -15,7 +16,9 @@ export class CreateUserDto {
   @Length(6, 50)
   password: string;
 
-  // @IsNotEmpty()
-  // @IsString()
-  // activationLink: string; //TODO activation link??
+  //@IsEnum(Role)
+  role?: Role;
+
+  //@IsString()
+  activationLink?: string;
 }

@@ -12,6 +12,8 @@ import {
 } from 'src/common/exceptions';
 import { UserService } from '../user/user.service';
 import { MailService } from './mail/mail.service';
+import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
+import { CreateClientDto } from 'src/client/dto/create-client.dto';
 
 @Injectable()
 export class AuthService {
@@ -47,34 +49,54 @@ export class AuthService {
     };
   }
 
-  async register(user: any) {
-    const findByEmail = await this.usersService.findByEmail(user.email);
+  async register(createClientDto: CreateClientDto) {
+    const findByEmail = await this.usersService.findByEmail(createClientDto.email);
     if (findByEmail) {
       throw new AlreadyExistsError('email');
     }
-    const findByUsername = await this.usersService.findByUsername(user.login);
+    const findByUsername = await this.usersService.findByUsername(createClientDto.login);
     if (findByUsername) {
       throw new AlreadyExistsError('login');
     }
-    const hashPassword = await bcrypt.hash(user.password, 3);
+    const hashPassword = await bcrypt.hash(createClientDto.password, 3);
     const activationLink = uuid.v4();
-    const newUser = await this.usersService.create({
-      email: user.email,
-      login: user.login,
+    await this.usersService.createClient({
+      ...createClientDto,
       password: hashPassword,
-      //activationLink,
+      activationLink,
     });
-    await this.mailService.sendActivationMail(
-      newUser.email,
-      `${process.env.API_URL}/auth/activate/${activationLink}`, //TODO store all links as const...
-    );
-    this.loginWithCredentials(user);
+    // await this.mailService.sendActivationMail(
+    //   newUser.email,
+    //   `${process.env.API_URL}/auth/activate/${activationLink}`, //TODO store all links as const...
+    // );
+    this.loginWithCredentials(createClientDto);
+  }
+
+  async registerBrigadier(brigadierUser: CreateBrigadierDto) {
+    const findByEmail = await this.usersService.findByEmail(brigadierUser.email);
+    if (findByEmail) {
+      throw new AlreadyExistsError('email');
+    }
+    const findByUsername = await this.usersService.findByUsername(brigadierUser.login);
+    if (findByUsername) {
+      throw new AlreadyExistsError('login');
+    }
+    const hashPassword = await bcrypt.hash(brigadierUser.password, 3);
+    const activationLink = uuid.v4();
+    await this.usersService.createBrigadier({
+      ...brigadierUser,
+      password: hashPassword,
+      activationLink,
+    });
+    // await this.mailService.sendActivationMail(
+    //   brigadierUser.email,
+    //   `${process.env.API_URL}/auth/activate/${activationLink}`, //TODO store all links as const...
+    // );
+    this.loginWithCredentials(brigadierUser);
   }
 
   async activate(activationLink) {
-    const findUser = await this.usersService.findByActivationLink(
-      activationLink,
-    );
+    const findUser = await this.usersService.findByActivationLink(activationLink);
     if (!findUser) {
       throw new BadActivationLinkError();
     }
@@ -111,10 +133,7 @@ export class AuthService {
     if (resetPasswordLink !== findUser.resetPasswordLink) {
       throw new BadResetPasswordLinkError();
     }
-    await this.usersService.resetPasswordConfirm(
-      login,
-      findUser.temporaryPassword,
-    );
+    await this.usersService.resetPasswordConfirm(login, findUser.temporaryPassword);
     await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
     return true;
   }

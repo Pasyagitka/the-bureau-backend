@@ -1,16 +1,9 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { Public } from './decorators/auth.decorator';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
+import { CreateClientDto } from 'src/client/dto/create-client.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,8 +18,14 @@ export class AuthController {
 
   @Public()
   @Post('registration')
-  async register(@Body() registerUserDto: RegisterDto) {
+  async register(@Body() registerUserDto: CreateClientDto) {
     return this.authService.register(registerUserDto);
+  }
+
+  @Public()
+  @Post('brigadier/registration')
+  async registerBrigadier(@Body() registerUserDto: CreateBrigadierDto) {
+    return this.authService.registerBrigadier(registerUserDto);
   }
 
   @Public()
@@ -43,10 +42,7 @@ export class AuthController {
 
   @Public()
   @Get('reset-password/:login/:link')
-  async resetConfirm(
-    @Param('login') login: string,
-    @Param('link') link: string,
-  ) {
+  async resetConfirm(@Param('login') login: string, @Param('link') link: string) {
     const isReset = await this.authService.resetConfirm(login, link);
     if (isReset) {
       return 'Success reset';
