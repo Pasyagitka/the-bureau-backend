@@ -4,6 +4,7 @@ import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { Client } from 'src/client/entities/client.entity';
 import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Schedule } from 'src/schedule/entities/schedule.entity';
+import { Request } from 'src/request/entities/request.entity';
 import { Tool } from 'src/tool/entities/tool.entity';
 import { User } from 'src/user/entities/user.entity';
 

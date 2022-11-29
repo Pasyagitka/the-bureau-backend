@@ -29,8 +29,6 @@ export class ClientService {
     const client = await this.get(id);
     if (!client) throw new NotExistsError('client');
 
-    console.log(client, user);
-
     const ability = this.abilityFactory.defineAbility(user);
     ForbiddenError.from(ability).throwUnlessCan(Action.Update, client);
 

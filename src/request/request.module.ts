@@ -10,6 +10,7 @@ import { RequestTool } from './entities/request-tool.entity';
 import { Stage } from './entities/stage.entity';
 import { Request } from './entities/request.entity';
 import { AbilityModule } from 'src/ability/ability.module';
+import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AbilityModule } from 'src/ability/ability.module';
       RequestEquipment,
       RequestTool,
       Stage,
+      Brigadier,
     ]),
     AbilityModule,
   ],

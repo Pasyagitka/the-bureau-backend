@@ -56,12 +56,13 @@ export class Request extends BaseEntity {
 
   @OneToOne(() => Address, {
     cascade: true,
+    eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'addressId', referencedColumnName: 'id' }])
   address: Address;
 
-  @ManyToOne(() => Brigadier, (brigadier) => brigadier.requests)
+  @ManyToOne(() => Brigadier, (brigadier) => brigadier.requests, { eager: true })
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
   brigadier: Brigadier;
 
@@ -80,24 +81,16 @@ export class Request extends BaseEntity {
   })
   status: RequestStatus;
 
-  @OneToMany(
-    () => RequestAccessory,
-    (requestAccessory) => requestAccessory.request,
-    {
-      cascade: true,
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany(() => RequestAccessory, (requestAccessory) => requestAccessory.request, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   requestAccessories: RequestAccessory[];
 
-  @OneToMany(
-    () => RequestEquipment,
-    (requestEquipment) => requestEquipment.request,
-    {
-      cascade: true,
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany(() => RequestEquipment, (requestEquipment) => requestEquipment.request, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   requestEquipment: RequestEquipment[];
 
   @OneToMany(() => RequestTool, (requestTool) => requestTool.request, {
