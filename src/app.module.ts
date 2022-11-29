@@ -112,10 +112,6 @@ import { AbilitiesGuard } from './ability/guards/abilities.guard';
       useClass: ForbiddenAbilityFilter,
     },
     {
-      provide: APP_GUARD,
-      useClass: AbilitiesGuard,
-    },
-    {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },

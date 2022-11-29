@@ -9,7 +9,6 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const reflector = app.get(Reflector);
-  //const moduleRef = app.get(ModuleRef);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.useGlobalPipes(
     new ValidationPipe({
