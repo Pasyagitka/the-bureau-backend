@@ -29,13 +29,6 @@ export class AccessoryService {
   }
 
   async create(createAccessoryDto: CreateAccessoryDto): Promise<Accessory> {
-    const accessory = await this.accessoryRepository.findOne({
-      where: { sku: createAccessoryDto.sku },
-    });
-    if (accessory && createAccessoryDto.sku)
-      throw new AlreadyExistsError('accessory');
-    //TODO if sku is null??
-
     const equipment = await this.equipmentRepository.findOne({
       where: { id: createAccessoryDto.equipmentId },
     });
@@ -46,10 +39,7 @@ export class AccessoryService {
     return item;
   }
 
-  async update(
-    id: number,
-    updateAccessoryDto: UpdateAccessoryDto,
-  ): Promise<Accessory> {
+  async update(id: number, updateAccessoryDto: UpdateAccessoryDto): Promise<Accessory> {
     const accessory = await this.accessoryRepository.findOne({ where: { id } });
     if (!accessory) throw new NotExistsError('accessory');
 

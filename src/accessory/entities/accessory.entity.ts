@@ -25,18 +25,14 @@ export class Accessory {
 
   @ManyToOne(() => Equipment, (equipment) => equipment.accessories, {
     eager: true,
-  }) //TODO one or many?
+  })
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
 
-  @OneToMany(
-    () => RequestAccessory,
-    (requestAccessory) => requestAccessory.accessory,
-    {
-      cascade: true,
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany(() => RequestAccessory, (requestAccessory) => requestAccessory.accessory, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   requestAccessories: RequestAccessory[];
 
   @DeleteDateColumn()
