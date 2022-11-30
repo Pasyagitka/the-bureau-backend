@@ -25,6 +25,10 @@ export class ClientService {
     return await this.clientRepository.findOne({ where: { id } });
   }
 
+  // async getByUserId(id: number): Promise<Client> {
+  //   return await this.clientRepository.findOne({ where: { user: { id } } });
+  // }
+
   async update(id: number, updateClientDto: UpdateClientDto, user: User): Promise<Client> {
     const client = await this.get(id);
     if (!client) throw new NotExistsError('client');
@@ -36,11 +40,11 @@ export class ClientService {
   }
 
   //and request nested request.address and so on
-  async remove(id: number) {
-    const item = await this.clientRepository.findOneOrFail({
-      where: { id },
-      relations: ['requests', 'user'],
-    });
-    return await this.clientRepository.softRemove(item);
-  }
+  // async remove(id: number) {
+  //   const item = await this.clientRepository.findOneOrFail({
+  //     where: { id },
+  //     relations: ['requests', 'user'],
+  //   });
+  //   return await this.clientRepository.softRemove(item);
+  // }
 }

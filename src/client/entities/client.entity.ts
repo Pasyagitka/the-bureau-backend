@@ -10,11 +10,10 @@ import {
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Request } from '../../request/entities/request.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('client_pkey', ['id'], { unique: true })
 @Entity('client')
-export class Client extends BaseEntity {
+export class Client {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

@@ -1,5 +1,5 @@
 import { IsString, MaxLength, IsNotEmpty, IsEnum } from 'class-validator';
-import { Mounting } from '../entities/equipment.entity';
+import { Mounting } from '../types/mounting.enum';
 
 export class CreateEquipmentDto {
   @IsString()
@@ -7,6 +7,6 @@ export class CreateEquipmentDto {
   @IsNotEmpty()
   type: string;
 
-  @IsEnum(Mounting) //TODO check case sensitive
+  @IsEnum(Mounting)
   mounting: Mounting;
 }

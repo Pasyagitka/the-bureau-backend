@@ -12,11 +12,10 @@ import { User } from '../../user/entities/user.entity';
 import { BrigadierTool } from './brigadier-tool.entity';
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('brigadier_pkey', ['id'], { unique: true })
 @Entity('brigadier')
-export class Brigadier extends BaseEntity {
+export class Brigadier {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

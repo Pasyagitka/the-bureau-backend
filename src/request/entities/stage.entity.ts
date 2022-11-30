@@ -1,17 +1,10 @@
-import {
-  Column,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Request } from './request.entity';
 import { Tool } from '../../tool/entities/tool.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('stage_pkey', ['id'], { unique: true })
 @Entity('stage')
-export class Stage extends BaseEntity {
+export class Stage {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

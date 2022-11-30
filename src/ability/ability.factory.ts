@@ -29,6 +29,7 @@ export class AbilityFactory {
     switch (user.role) {
       case Role.Admin: {
         can(Action.Manage, 'all');
+        cannot(Action.Create, Request).because('Only clients can create requests. You are admin.');
         break;
       }
       case Role.Brigadier: {
@@ -47,6 +48,7 @@ export class AbilityFactory {
         break;
       }
       default: {
+        can(Action.Create, Request);
         can(Action.Read, Brigadier);
         can([Action.Read, Action.Update], Client);
         can([Action.Update], User);

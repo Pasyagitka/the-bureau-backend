@@ -19,17 +19,11 @@ import { RequestAccessory } from './request-accessory.entity';
 import { RequestEquipment } from './request-equipment.entity';
 import { RequestTool } from './request-tool.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
-
-export enum RequestStatus { //TODO move to file
-  INPROCESSING = 'InProcessing',
-  COMPLETED = 'Completed',
-  APPROVED = 'Approved',
-}
+import { RequestStatus } from '../types/request-status.enum';
 
 @Index('request_pkey', ['id'], { unique: true })
 @Entity('request')
-export class Request extends BaseEntity {
+export class Request {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

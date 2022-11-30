@@ -1,18 +1,10 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { Request } from './request.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('request_accessory_pkey', ['id'], { unique: true })
 @Entity('request_accessory')
-export class RequestAccessory extends BaseEntity {
+export class RequestAccessory {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

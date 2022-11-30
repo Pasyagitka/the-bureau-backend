@@ -9,11 +9,10 @@ import {
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Request } from '../../request/entities/request.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
 
 @Index('schedule_pkey', ['id'], { unique: true })
 @Entity('schedule')
-export class Schedule extends BaseEntity {
+export class Schedule {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

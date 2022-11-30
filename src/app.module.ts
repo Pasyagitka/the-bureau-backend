@@ -32,7 +32,6 @@ import { RequestEquipment } from './request/entities/request-equipment.entity';
 import { RequestTool } from './request/entities/request-tool.entity';
 import { Stage } from './request/entities/stage.entity';
 import { Address } from './request/entities/address.entity';
-import { BaseModule } from './base/base.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
 import { AbilityModule } from './ability/ability.module';
@@ -98,7 +97,6 @@ import { AbilityModule } from './ability/ability.module';
     EquipmentModule,
     ScheduleModule,
     ToolModule,
-    BaseModule,
     AbilityModule,
   ],
   controllers: [],

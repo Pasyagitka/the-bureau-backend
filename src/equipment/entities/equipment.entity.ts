@@ -8,16 +8,11 @@ import {
 } from 'typeorm';
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { RequestEquipment } from '../../request/entities/request-equipment.entity';
-import { BaseEntity } from 'src/base/entities/base.entity';
-
-export enum Mounting { //TODO move to file
-  FLOOR = 'Пол',
-  WALL = 'Стена',
-}
+import { Mounting } from '../types/mounting.enum';
 
 @Index('Equipment_pkey', ['id'], { unique: true })
 @Entity('equipment')
-export class Equipment extends BaseEntity {
+export class Equipment {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
@@ -37,14 +32,10 @@ export class Equipment extends BaseEntity {
   })
   mounting: Mounting;
 
-  @OneToMany(
-    () => RequestEquipment,
-    (requestEquipment) => requestEquipment.equipment,
-    {
-      cascade: true,
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany(() => RequestEquipment, (requestEquipment) => requestEquipment.equipment, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   requestEquipment: RequestEquipment[];
 
   @DeleteDateColumn()

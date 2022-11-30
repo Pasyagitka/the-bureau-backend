@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
-import { UpdateRequestDto } from './dto/update-request.dto';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Request } from './entities/request.entity';
 import { Action } from 'src/ability/types';
@@ -14,8 +13,8 @@ export class RequestController {
 
   @Post()
   @CheckAbilities({ action: Action.Create, subject: Request })
-  create(@Body() createRequestDto: CreateRequestDto) {
-    return this.requestService.create(createRequestDto);
+  create(@Body() createRequestDto: CreateRequestDto, @Req() req) {
+    return this.requestService.create(createRequestDto, req.user);
   }
 
   @Get()

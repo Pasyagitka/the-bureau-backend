@@ -1,24 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { Schedule } from './entities/schedule.entity';
-import { BaseController } from 'src/base/base.controller';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 
 @Controller('schedule')
 export class ScheduleController {
-  constructor(private readonly scheduleService: ScheduleService) {
-    // super(scheduleService);
-  }
-
-  //casl
+  constructor(private readonly scheduleService: ScheduleService) {}
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {

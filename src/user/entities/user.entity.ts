@@ -1,16 +1,9 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { BaseEntity } from 'src/base/entities/base.entity';
+import { Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from 'src/auth/enum/role.enum';
 
 @Index('user_pkey', ['id'], { unique: true })
 @Entity('user')
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

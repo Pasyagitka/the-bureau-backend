@@ -11,6 +11,8 @@ import { Stage } from './entities/stage.entity';
 import { Request } from './entities/request.entity';
 import { AbilityModule } from 'src/ability/ability.module';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { Equipment } from 'src/equipment/entities/equipment.entity';
+import { Client } from 'src/client/entities/client.entity';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
       Request,
       Address,
       Report,
+      Equipment,
+      Client,
       RequestAccessory,
       RequestEquipment,
       RequestTool,

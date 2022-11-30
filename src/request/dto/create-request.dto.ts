@@ -77,10 +77,10 @@ export class CreateRequestDto {
   @IsPositive()
   stage: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  client: number;
+  // @IsNotEmpty()
+  // @IsNumber()
+  // @IsPositive()
+  // client: number;
 
   @IsNotEmpty()
   @Type(() => AddressDto)

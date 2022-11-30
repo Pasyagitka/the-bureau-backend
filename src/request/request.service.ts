@@ -3,8 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbilityFactory } from 'src/ability/ability.factory';
 import { Action } from 'src/ability/types';
-import { BaseService } from 'src/base/base.service';
-import { UpdateBrigadierDto } from 'src/brigadier/dto/update-brigadier.dto';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { NotExistsError } from 'src/common/exceptions';
 import { User } from 'src/user/entities/user.entity';
@@ -12,24 +10,71 @@ import { Repository } from 'typeorm';
 import { UpdateRequestBrigadierDto } from './dto/update-request-brigadier.dto';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { RequestEquipment } from './entities/request-equipment.entity';
-import { Request, RequestStatus } from './entities/request.entity';
+import { Request } from './entities/request.entity';
 import { DataSource } from 'typeorm';
 import { Tool } from 'src/tool/entities/tool.entity';
+import { CreateRequestDto } from './dto/create-request.dto';
 import { Stage } from './entities/stage.entity';
+import { Equipment } from 'src/equipment/entities/equipment.entity';
+import { Client } from 'src/client/entities/client.entity';
+import { Address } from './entities/address.entity';
 
 @Injectable()
-export class RequestService extends BaseService<Request> {
+export class RequestService {
   constructor(
     private dataSource: DataSource,
     @InjectRepository(Request)
     private requestRepository: Repository<Request>,
     @InjectRepository(RequestEquipment)
     private requestEquipmentRepository: Repository<RequestEquipment>,
+    @InjectRepository(Equipment)
+    private equipmentRepository: Repository<Equipment>,
+    @InjectRepository(Client)
+    private clientRepository: Repository<Client>,
+    @InjectRepository(Address)
+    private addressRepository: Repository<Address>,
+    @InjectRepository(Stage)
+    private stageRepository: Repository<Stage>,
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
     private readonly abilityFactory: AbilityFactory,
-  ) {
-    super(requestRepository);
+  ) {}
+
+  async create(createRequestDto: CreateRequestDto, user: User): Promise<any> {
+    const stage = await this.stageRepository.findOne({
+      where: { id: createRequestDto.stage },
+    });
+    if (!stage) throw new NotExistsError('stage');
+
+    const requestEquipment: Array<RequestEquipment> = [];
+
+    const reqEq = createRequestDto.requestEquipment;
+    for (let i = 0; i < reqEq.length; i++) {
+      if (!(await this.equipmentRepository.findOne({ where: { id: reqEq[i].equipment } })))
+        throw new NotExistsError(`equipment ${reqEq[i].equipment}`);
+      requestEquipment.push(
+        this.requestEquipmentRepository.create({
+          equipment: { id: reqEq[i].equipment },
+          quantity: reqEq[i].quantity,
+        }),
+      );
+    }
+
+    const client = await this.clientRepository.findOne({ where: { user: { id: user.id } } });
+    if (!client) throw new NotExistsError('client');
+    console.log(user, client);
+
+    const request = this.requestRepository.create({
+      clientDateStart: createRequestDto.clientDateStart,
+      clientDateEnd: createRequestDto.clientDateEnd,
+      comment: createRequestDto.comment,
+      stage: stage,
+      client: client,
+      address: createRequestDto.address,
+      requestEquipment: requestEquipment,
+    });
+
+    return await this.requestRepository.save(request);
   }
 
   async getAll(): Promise<Request[]> {

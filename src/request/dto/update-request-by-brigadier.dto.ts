@@ -1,5 +1,5 @@
 import { IsEnum, NotEquals } from 'class-validator';
-import { RequestStatus } from '../entities/request.entity';
+import { RequestStatus } from '../types/request-status.enum';
 
 export class UpdateRequestByBrigadierDto {
   @IsEnum(RequestStatus)

@@ -1,15 +1,8 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { BaseEntity } from 'src/base/entities/base.entity';
+import { Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('address_pkey', ['id'], { unique: true })
 @Entity('address')
-export class Address extends BaseEntity {
+export class Address {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

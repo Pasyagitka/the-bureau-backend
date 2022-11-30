@@ -18,11 +18,7 @@ export class EquipmentService {
   }
 
   async get(id: number): Promise<Equipment> {
-    const item = await this.equipmentRepository.findOne({ where: { id } });
-    if (!item) {
-      throw new NotExistsError('equipment');
-    }
-    return item;
+    return await this.equipmentRepository.findOne({ where: { id } });
   }
 
   async create(createEquipmentDto: CreateEquipmentDto): Promise<Equipment> {
@@ -35,10 +31,7 @@ export class EquipmentService {
     return item;
   }
 
-  async update(
-    id: number,
-    updateEquipmentDto: UpdateEquipmentDto,
-  ): Promise<Equipment> {
+  async update(id: number, updateEquipmentDto: UpdateEquipmentDto): Promise<Equipment> {
     const equipment = await this.equipmentRepository.findOne({ where: { id } });
     if (!equipment) throw new NotExistsError('equipment');
     return this.equipmentRepository.save({ id, ...updateEquipmentDto });
@@ -47,7 +40,7 @@ export class EquipmentService {
   async remove(id: number) {
     const item = await this.equipmentRepository.findOne({
       where: { id },
-      relations: ['accessories', 'accessories.requestAccessories'], //and nest request accessories??
+      relations: ['accessories', 'accessories.requestAccessories'],
     });
     if (!item) throw new NotExistsError('equipment');
     return await this.equipmentRepository.softRemove(item);
