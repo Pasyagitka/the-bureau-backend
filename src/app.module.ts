@@ -35,6 +35,7 @@ import { Address } from './request/entities/address.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
 import { AbilityModule } from './ability/ability.module';
+import { RequestSubscriber } from './request/subscribers/request.subscriber';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { AbilityModule } from './ability/ability.module';
         Report,
         Schedule,
       ], //TODO add migrations
+      // subscribers: [RequestSubscriber],
     }),
     MailerModule.forRoot({
       transport: {

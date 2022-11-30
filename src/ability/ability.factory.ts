@@ -4,6 +4,7 @@ import { Role } from 'src/auth/enum/role.enum';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { Client } from 'src/client/entities/client.entity';
 import { Request } from 'src/request/entities/request.entity';
+import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { User } from 'src/user/entities/user.entity';
 import { AppAbility, Action, Subjects } from './types';
 
@@ -23,6 +24,10 @@ type ClientUser = Client & {
   'user.id': Client['user']['id'];
 };
 
+type ScheduleBrigadier = Schedule & {
+  'brigadier.user.id': Schedule['brigadier']['user']['id'];
+};
+
 @Injectable()
 export class AbilityFactory {
   defineAbility(user: User) {
@@ -40,6 +45,9 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], Brigadier);
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], User);
+        cannot<ScheduleBrigadier>(Action.Read, Schedule, {
+          'brigadier.user.id': { $ne: user.id },
+        }).because('You are not allowed to view this schedule.');
         cannot<RequestBrigadier>(Action.Read, Request, {
           'brigadier.user.id': { $ne: user.id },
         }).because('You are not allowed to view this request.');

@@ -13,6 +13,8 @@ import { AbilityModule } from 'src/ability/ability.module';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Client } from 'src/client/entities/client.entity';
+import { ScheduleModule } from 'src/schedule/schedule.module';
+import { RequestSubscriber } from './subscribers/request.subscriber';
 
 @Module({
   imports: [
@@ -29,8 +31,9 @@ import { Client } from 'src/client/entities/client.entity';
       Brigadier,
     ]),
     AbilityModule,
+    ScheduleModule,
   ],
   controllers: [RequestController],
-  providers: [RequestService],
+  providers: [RequestService, RequestSubscriber],
 })
 export class RequestModule {}
