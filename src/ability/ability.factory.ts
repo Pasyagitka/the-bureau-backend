@@ -52,6 +52,8 @@ export class AbilityFactory {
         cannot(Action.Update, User, { id: { $ne: user.id } }).because(
           'You are not allowed to update other users.',
         );
+        cannot(Action.ManageAccess, User).because('You are not admin');
+
         break;
       }
       default: {
@@ -69,6 +71,7 @@ export class AbilityFactory {
         cannot(Action.Update, User, { id: { $ne: user.id } }).because(
           'You are not allowed to update other users.',
         );
+        cannot(Action.ManageAccess, User).because('You are not admin');
         break;
       }
     }

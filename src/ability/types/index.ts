@@ -14,6 +14,7 @@ export enum Action {
   Read = 'read',
   Update = 'update',
   Delete = 'delete',
+  ManageAccess = 'manageaccess',
 }
 
 export type Subjects =

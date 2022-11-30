@@ -28,13 +28,13 @@ export class UserController {
   }
 
   @Put('activate/:id')
-  @CheckAbilities({ action: Action.Update, subject: User })
+  @CheckAbilities({ action: Action.ManageAccess, subject: User })
   activateUser(@Param('id') id: string) {
     return this.userService.activateUser(+id);
   }
 
   @Put('deactivate/:id')
-  @CheckAbilities({ action: Action.Update, subject: User })
+  @CheckAbilities({ action: Action.ManageAccess, subject: User })
   deactivateUser(@Param('id') id: string) {
     return this.userService.deactivateUser(+id);
   }
