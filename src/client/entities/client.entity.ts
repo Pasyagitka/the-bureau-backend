@@ -34,7 +34,7 @@ export class Client {
     eager: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' } ])
+  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
   @OneToMany(() => Request, (request) => request.client)

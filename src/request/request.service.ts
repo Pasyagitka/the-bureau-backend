@@ -92,6 +92,33 @@ export class RequestService {
     return await this.requestRepository.findOne({ where: { id } });
   }
 
+  async getBrigadierRequests(brigadierId: number, user: User) {
+    const requests = await this.requestRepository.find({
+      where: { brigadier: { id: brigadierId } },
+    });
+
+    if (requests.length > 0) {
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
+    }
+    return requests;
+  }
+
+  async getClientRequests(clientId: number, user: User) {
+    const requests = await this.requestRepository.find({
+      where: { client: { id: clientId } },
+      relations: {
+        client: true,
+      },
+    });
+
+    if (requests.length > 0) {
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
+    }
+    return requests;
+  }
+
   async getRequestWithEquipment(id: number): Promise<Request> {
     return await this.requestRepository.findOne({
       where: { id },

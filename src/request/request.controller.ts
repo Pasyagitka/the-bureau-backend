@@ -41,6 +41,18 @@ export class RequestController {
     return this.requestService.getRequestAccessories(+id);
   }
 
+  @Get('brigadier/:brigadierId')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getBrigadierRequests(@Param('brigadierId') id: string, @Req() req) {
+    return this.requestService.getBrigadierRequests(+id, req.user);
+  }
+
+  @Get('client/:clientId')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getClientRequests(@Param('clientId') id: string, @Req() req) {
+    return this.requestService.getClientRequests(+id, req.user);
+  }
+
   @Get(':id/equipment')
   @CheckAbilities({ action: Action.Read, subject: Request })
   getWithEquipment(@Param('id') id: string) {

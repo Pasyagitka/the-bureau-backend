@@ -15,6 +15,10 @@ type RequestBrigadier = Request & {
   'brigadier.user.id': Request['brigadier']['user']['id'];
 };
 
+type RequestClient = Request & {
+  'client.user.id': Request['client']['user']['id'];
+};
+
 type ClientUser = Client & {
   'user.id': Client['user']['id'];
 };
@@ -36,6 +40,9 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], Brigadier);
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], User);
+        cannot<RequestBrigadier>(Action.Read, Request, {
+          'brigadier.user.id': { $ne: user.id },
+        }).because('You are not allowed to view this request.');
         cannot<RequestBrigadier>(Action.Update, Request, {
           'brigadier.user.id': { $ne: user.id },
         }).because('You are not allowed to update this request.');
@@ -48,10 +55,13 @@ export class AbilityFactory {
         break;
       }
       default: {
-        can(Action.Create, Request);
+        can([Action.Create, Action.Read], Request);
         can(Action.Read, Brigadier);
         can([Action.Read, Action.Update], Client);
         can([Action.Update], User);
+        cannot<RequestClient>(Action.Read, Request, {
+          'client.user.id': { $ne: user.id },
+        }).because('You are not allowed to view this request.');
         // cannot([Action.Create, Action.Delete], User).because('You are not the admin!');
         cannot<ClientUser>([Action.Update], Client, {
           'user.id': { $ne: user.id },
