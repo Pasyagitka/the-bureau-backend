@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsPositive,
-  MaxLength,
-  IsNotEmpty,
-  IsNumber,
-} from 'class-validator';
+import { IsString, IsPositive, MaxLength, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateToolDto {
   @IsString()
