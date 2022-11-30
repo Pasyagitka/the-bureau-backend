@@ -30,12 +30,26 @@ export class ScheduleService {
   }
 
   async getBrigadierSchedule(brigadierId: number, user: User) {
-    const brigadier = await this.brigadierRepository.find({ where: { id: brigadierId } });
+    const brigadier = await this.brigadierRepository.findOne({ where: { id: brigadierId } });
     if (!brigadier) throw new NotExistsError('brigadier');
     const schedule = await this.scheduleRepository.find({
       where: { brigadier: { id: brigadierId } },
-      loadRelationIds: true,
+      select: {
+        id: true,
+        brigadier: {
+          id: true,
+        },
+        request: {
+          id: true,
+        },
+      },
+      relations: {
+        brigadier: true,
+        request: true,
+      },
     });
+
+    console.log(schedule[0]);
 
     if (schedule.length > 0) {
       const ability = this.abilityFactory.defineAbility(user);

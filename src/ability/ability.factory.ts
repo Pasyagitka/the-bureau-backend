@@ -45,6 +45,7 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], Brigadier);
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], User);
+        can(Action.Read, Schedule);
         cannot<ScheduleBrigadier>(Action.Read, Schedule, {
           'brigadier.user.id': { $ne: user.id },
         }).because('You are not allowed to view this schedule.');
