@@ -21,8 +21,8 @@ export class Tool {
   @Column('text', { name: 'name' })
   name: string;
 
-  @Column('integer', { name: 'quantity', default: () => '0' })
-  quantity: number;
+  // @Column('integer', { name: 'quantity', default: () => '0' })
+  // quantity: number;
 
   @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.tool, {
     cascade: true,

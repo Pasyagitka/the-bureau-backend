@@ -30,6 +30,24 @@ export class RequestController {
     return this.requestService.get(+id);
   }
 
+  @Get(':id/tools')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getTools(@Param('id') id: string) {
+    return this.requestService.getRequestTools(+id);
+  }
+
+  @Get(':id/accessories')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getAccessories(@Param('id') id: string) {
+    return this.requestService.getRequestAccessories(+id);
+  }
+
+  @Get(':id/equipment')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getWithEquipment(@Param('id') id: string) {
+    return this.requestService.getRequestWithEquipment(+id);
+  }
+
   // @Put(':id')
   // @CheckAbilities({ action: Action.Update, subject: Request })
   // update(@Param('id') id: string, @Body() updateRequestDto: UpdateRequestDto, @Req() req) {

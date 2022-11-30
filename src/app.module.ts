@@ -1,12 +1,9 @@
 import * as winston from 'winston';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  utilities as nestWinstonModuleUtilities,
-  WinstonModule,
-} from 'nest-winston';
+import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
 import { DataSource } from 'typeorm';
 
 import { AuthModule } from './auth/auth.module';

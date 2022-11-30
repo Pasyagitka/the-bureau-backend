@@ -70,7 +70,7 @@ export class Request extends BaseEntity {
   @JoinColumn([{ name: 'clientId', referencedColumnName: 'id' }])
   client: Client;
 
-  @ManyToOne(() => Stage, (stage) => stage.requests)
+  @ManyToOne(() => Stage, (stage) => stage.requests, { eager: true })
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
 
