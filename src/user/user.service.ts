@@ -33,6 +33,7 @@ export class UserService {
       password: createClientDto.password,
       role: Role.Client,
       activationLink: createClientDto.activationLink,
+      isActivated: true,
     });
     const client = this.clientRepository.create({
       firstname: createClientDto.firstname,
@@ -60,6 +61,20 @@ export class UserService {
     });
     brigadier.user = user;
     return await this.brigadierRepository.save(brigadier);
+  }
+
+  async activateUser(userId: number) {
+    const user = await this.get(userId);
+    if (!user) throw new NotExistsError('user');
+    user.isActivated = true;
+    return this.usersRepository.save(user);
+  }
+
+  async deactivateUser(userId: number) {
+    const user = await this.get(userId);
+    if (!user) throw new NotExistsError('user');
+    user.isActivated = false;
+    return this.usersRepository.save(user);
   }
 
   //TODO do not return users pd

@@ -1,11 +1,4 @@
-import {
-  IsString,
-  MaxLength,
-  IsOptional,
-  IsNotEmpty,
-  IsNumber,
-  IsPositive,
-} from 'class-validator';
+import { IsString, MaxLength, IsOptional, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class CreateAccessoryDto {
   @IsString()

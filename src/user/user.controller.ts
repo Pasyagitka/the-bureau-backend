@@ -27,6 +27,18 @@ export class UserController {
     return this.userService.update(+id, updateUserDto, req.user);
   }
 
+  @Put('activate/:id')
+  @CheckAbilities({ action: Action.Update, subject: User })
+  activateUser(@Param('id') id: string) {
+    return this.userService.activateUser(+id);
+  }
+
+  @Put('deactivate/:id')
+  @CheckAbilities({ action: Action.Update, subject: User })
+  deactivateUser(@Param('id') id: string) {
+    return this.userService.deactivateUser(+id);
+  }
+
   @Delete(':id')
   @CheckAbilities({ action: Action.Delete, subject: User })
   remove(@Param('id') id: string, @Req() req) {

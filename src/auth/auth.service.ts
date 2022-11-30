@@ -7,6 +7,7 @@ import {
   AlreadyExistsError,
   BadActivationLinkError,
   BadResetPasswordLinkError,
+  NotActivatedError,
   NotExistsError,
   WrongPasswordError,
 } from 'src/common/exceptions';
@@ -28,6 +29,7 @@ export class AuthService {
     if (!user) {
       throw new NotExistsError('user (by email)');
     }
+    if (!user.isActivated) throw new NotActivatedError(`${user.login}`);
     const isPassEquals = await bcrypt.compare(pass, user.password);
     console.log(pass, user.password, isPassEquals);
     if (!isPassEquals) {
