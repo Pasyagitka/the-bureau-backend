@@ -36,6 +36,20 @@ export class MailService {
     });
   }
 
+  async sendAccountDeactivated(to) {
+    await this.mailerService.sendMail({
+      from: process.env.EMAIL_USERNAME,
+      to,
+      subject: `Your account on ${process.env.API_NAME} is deactivated now`,
+      text: '',
+      html: `
+                <div>
+                    <span>This is a confirmation that your account has just been deactivated.</span>
+                </div>
+                `,
+    });
+  }
+
   async sendConfirmResetPasswordEmail(to) {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
