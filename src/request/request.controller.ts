@@ -5,7 +5,7 @@ import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Request } from './entities/request.entity';
 import { Action } from 'src/ability/types';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
-import { UpdateRequestBrigadierDto } from './dto/update-request-brigadier.dto';
+import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 
 @Controller('request')
 export class RequestController {
@@ -65,25 +65,23 @@ export class RequestController {
   //   return this.requestService.update(+id, updateRequestDto, req.user);
   // }
 
-  @Put('status/:id')
+  @Put('brigadier/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
-  updateStatus(
+  updateByBrigadier(
     @Param('id') id: string,
     @Body() updateRequestStatusDto: UpdateRequestByBrigadierDto,
     @Req() req,
   ) {
-    return this.requestService.setStatus(+id, updateRequestStatusDto, req.user);
+    return this.requestService.updateByBrigadier(+id, updateRequestStatusDto, req.user);
   }
-  //можно сделать 1 дто бригадира и 1 админа (статус + бригадир опционально все)
 
-  //todo бригадир может обновлять тоже! надо как-то разделить
-  @Put('brigadier/:id')
+  @Put('admin/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
-  updateBrigadier(
+  updateByAdmin(
     @Param('id') id: string,
-    @Body() updateRequestBrigadierDto: UpdateRequestBrigadierDto,
+    @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto,
   ) {
-    return this.requestService.setBrigadier(+id, updateRequestBrigadierDto);
+    return this.requestService.updateByAdmin(+id, updateRequestBrigadierDto);
   }
 
   @Delete(':id')

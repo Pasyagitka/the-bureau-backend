@@ -7,17 +7,17 @@ import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { NotExistsError } from 'src/common/exceptions';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UpdateRequestBrigadierDto } from './dto/update-request-brigadier.dto';
+import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { Request } from './entities/request.entity';
 import { DataSource } from 'typeorm';
 import { Tool } from 'src/tool/entities/tool.entity';
 import { CreateRequestDto } from './dto/create-request.dto';
-import { Stage } from './entities/stage.entity';
 import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Client } from 'src/client/entities/client.entity';
 import { Address } from './entities/address.entity';
+import { Stage } from 'src/stage/entities/stage.entity';
 
 @Injectable()
 export class RequestService {
@@ -174,7 +174,7 @@ export class RequestService {
       .getRawMany();
   }
 
-  async setStatus(
+  async updateByBrigadier(
     id: number,
     updateRequestByBrigadierDto: UpdateRequestByBrigadierDto,
     user: User,
@@ -191,7 +191,7 @@ export class RequestService {
     });
   }
 
-  async setBrigadier(id: number, updateBrigadierDto: UpdateRequestBrigadierDto) {
+  async updateByAdmin(id: number, updateBrigadierDto: UpdateRequestByAdminDto) {
     const request = await this.get(id);
     if (!request) throw new NotExistsError('request');
 
@@ -201,7 +201,10 @@ export class RequestService {
     if (!newBrigadier) throw new NotExistsError('brigadier');
 
     request.brigadier = newBrigadier;
-    return await this.requestRepository.save(request);
+    if (updateBrigadierDto.status) request.status = updateBrigadierDto.status;
+    const res = await this.requestRepository.save(request);
+
+    return res;
   }
 
   async remove(id: number) {

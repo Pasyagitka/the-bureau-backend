@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
-import { Stage } from 'src/request/entities/stage.entity';
+import { Stage } from 'src/stage/entities/stage.entity';
 import { Repository } from 'typeorm';
 import { CreateToolDto } from './dto/create-tool.dto';
 import { UpdateToolDto } from './dto/update-tool.dto';

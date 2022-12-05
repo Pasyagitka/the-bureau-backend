@@ -1,5 +1,5 @@
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Request } from './request.entity';
+import { Request } from '../../request/entities/request.entity';
 import { Tool } from '../../tool/entities/tool.entity';
 
 @Index('stage_pkey', ['id'], { unique: true })

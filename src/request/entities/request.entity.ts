@@ -14,12 +14,12 @@ import { Report } from './report.entity';
 import { Address } from './address.entity';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
-import { Stage } from './stage.entity';
 import { RequestAccessory } from './request-accessory.entity';
 import { RequestEquipment } from './request-equipment.entity';
 import { RequestTool } from './request-tool.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { RequestStatus } from '../types/request-status.enum';
+import { Stage } from 'src/stage/entities/stage.entity';
 
 @Index('request_pkey', ['id'], { unique: true })
 @Entity('request')

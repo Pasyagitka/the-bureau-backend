@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { BrigadierTool } from '../../brigadier/entities/brigadier-tool.entity';
 import { RequestTool } from '../../request/entities/request-tool.entity';
-import { Stage } from '../../request/entities/stage.entity';
+import { Stage } from '../../stage/entities/stage.entity';
 
 @Index('tool_pkey', ['id'], { unique: true })
 @Entity('tool')

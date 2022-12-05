@@ -6,10 +6,10 @@ export class CreateToolDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  quantity: number;
+  // @IsNotEmpty()
+  // @IsNumber()
+  // @IsPositive()
+  // quantity: number;
 
   @IsNotEmpty()
   @IsNumber()
