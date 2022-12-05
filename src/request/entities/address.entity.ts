@@ -12,6 +12,10 @@ export class Address {
   @Column('text', { name: 'city' })
   city: string;
 
+  //TODO remove nullable
+  @Column('text', { name: 'street', nullable: true })
+  street: string;
+
   @Column('integer', { name: 'house' })
   house: number;
 

@@ -38,6 +38,11 @@ class AddressDto {
   @IsNotEmpty()
   city: string;
 
+  @IsString()
+  @MaxLength(50)
+  @IsNotEmpty()
+  street: string;
+
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
