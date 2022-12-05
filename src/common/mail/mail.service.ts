@@ -5,7 +5,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  async sendActivationMail(to, link) {
+  async sendActivationMail(to: string, activationLink: string) {
+    const link = `${process.env.API_URL}/auth/activate/${activationLink}`;
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
@@ -20,7 +21,13 @@ export class MailService {
     });
   }
 
-  async sendResetPasswordEmail(to, link, password) {
+  async sendResetPasswordEmail(
+    to: string,
+    login: string,
+    resetPasswordLink: string,
+    password: string,
+  ) {
+    const link = `${process.env.API_URL}/auth/reset-password/${login}/${resetPasswordLink}`;
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
@@ -36,7 +43,7 @@ export class MailService {
     });
   }
 
-  async sendAccountDeactivated(to) {
+  async sendAccountDeactivated(to: string) {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
@@ -50,7 +57,7 @@ export class MailService {
     });
   }
 
-  async sendConfirmResetPasswordEmail(to) {
+  async sendConfirmResetPasswordEmail(to: string) {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,

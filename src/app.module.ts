@@ -30,12 +30,13 @@ import { Report } from './request/entities/report.entity';
 import { RequestAccessory } from './request/entities/request-accessory.entity';
 import { RequestEquipment } from './request/entities/request-equipment.entity';
 import { RequestTool } from './request/entities/request-tool.entity';
-import { Stage } from './request/entities/stage.entity';
+import { Stage } from './stage/entities/stage.entity';
 import { Address } from './request/entities/address.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
 import { AbilityModule } from './ability/ability.module';
-import { RequestSubscriber } from './request/subscribers/request.subscriber';
+import { MailModule } from './common/mail/mail.module';
+import { StageModule } from './stage/stage.module';
 
 @Module({
   imports: [
@@ -66,7 +67,6 @@ import { RequestSubscriber } from './request/subscribers/request.subscriber';
         Report,
         Schedule,
       ], //TODO add migrations
-      // subscribers: [RequestSubscriber],
     }),
     MailerModule.forRoot({
       transport: {
@@ -100,6 +100,8 @@ import { RequestSubscriber } from './request/subscribers/request.subscriber';
     ScheduleModule,
     ToolModule,
     AbilityModule,
+    MailModule,
+    StageModule,
   ],
   controllers: [],
   providers: [

@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as uuid from 'uuid';
 import * as generator from 'generate-password';
 import { Injectable } from '@nestjs/common';
@@ -12,7 +12,7 @@ import {
   WrongPasswordError,
 } from 'src/common/exceptions';
 import { UserService } from '../user/user.service';
-import { MailService } from './mail/mail.service';
+import { MailService } from '../common/mail/mail.service';
 import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from 'src/client/dto/create-client.dto';
 
@@ -62,15 +62,12 @@ export class AuthService {
     }
     const hashPassword = await bcrypt.hash(createClientDto.password, 3);
     const activationLink = uuid.v4();
-    await this.usersService.createClient({
+    const clientUser = await this.usersService.createClient({
       ...createClientDto,
       password: hashPassword,
       activationLink,
     });
-    // await this.mailService.sendActivationMail(
-    //   newUser.email,
-    //   `${process.env.API_URL}/auth/activate/${activationLink}`, //TODO store all links as const...
-    // );
+    await this.mailService.sendActivationMail('pasyagitka@yandex.by', activationLink);
     this.loginWithCredentials(createClientDto);
   }
 
@@ -90,10 +87,7 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    // await this.mailService.sendActivationMail(
-    //   brigadierUser.email,
-    //   `${process.env.API_URL}/auth/activate/${activationLink}`, //TODO store all links as const...
-    // );
+    await this.mailService.sendActivationMail(brigadierUser.email, activationLink);
     this.loginWithCredentials(brigadierUser);
   }
 
@@ -120,11 +114,7 @@ export class AuthService {
     });
     const temporaryPassword = await bcrypt.hash(password, 3);
     await this.usersService.resetPasswordSend(email, link, temporaryPassword);
-    await this.mailService.sendResetPasswordEmail(
-      email,
-      `${process.env.API_URL}/auth/reset-password/${findUser.login}/${link}`,
-      password,
-    );
+    await this.mailService.sendResetPasswordEmail(email, findUser.login, link, password);
   }
 
   async resetConfirm(login, resetPasswordLink) {
