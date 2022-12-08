@@ -14,7 +14,7 @@ export class EquipmentService {
   ) {}
 
   async getAll(): Promise<Equipment[]> {
-    return this.equipmentRepository.find();
+    return this.equipmentRepository.find({ order: { id: 'ASC' } });
   }
 
   async get(id: number): Promise<Equipment> {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
+import { NotExistsError } from 'src/common/exceptions';
 import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Repository } from 'typeorm';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
@@ -17,7 +17,7 @@ export class AccessoryService {
   ) {}
 
   async getAll(): Promise<Accessory[]> {
-    return this.accessoryRepository.find();
+    return this.accessoryRepository.find({ order: { id: 'ASC' } });
   }
 
   async get(id: number): Promise<Accessory> {

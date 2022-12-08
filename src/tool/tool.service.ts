@@ -17,7 +17,7 @@ export class ToolService {
   ) {}
 
   async getAll(): Promise<Tool[]> {
-    return this.toolsRepository.find();
+    return this.toolsRepository.find({ order: { id: 'ASC' } });
   }
 
   async get(id: number): Promise<Tool> {
