@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Role } from 'src/auth/enum/role.enum';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { Client } from 'src/client/entities/client.entity';
+import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Request } from 'src/request/entities/request.entity';
 import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -68,6 +69,7 @@ export class AbilityFactory {
       default: {
         can([Action.Create, Action.Read], Request);
         can(Action.Read, Brigadier);
+        can(Action.Read, Equipment);
         can([Action.Read, Action.Update], Client);
         can([Action.Update], User);
         cannot<RequestClient>(Action.Read, Request, {

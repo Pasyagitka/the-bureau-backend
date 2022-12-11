@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { Public } from './decorators/auth.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -48,5 +48,14 @@ export class AuthController {
       return 'Success reset';
     }
     return 'Failure reset';
+  }
+
+  @Get('userinfo')
+  async getUser(@Req() req) {
+    if (req.headers && req.headers.authorization) {
+      const authorization = req.headers.authorization.split(' ')[1];
+      const decoded = await this.authService.getUser(authorization);
+      return decoded;
+    }
   }
 }

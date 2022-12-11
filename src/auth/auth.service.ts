@@ -129,4 +129,11 @@ export class AuthService {
     await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
     return true;
   }
+
+  async getUser(token) {
+    const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+    const user = this.usersService.get(decoded.sub);
+    if (!user) throw new NotExistsError('user by token');
+    return user;
+  }
 }

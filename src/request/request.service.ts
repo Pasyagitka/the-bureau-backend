@@ -95,6 +95,9 @@ export class RequestService {
   async getBrigadierRequests(brigadierId: number, user: User) {
     const requests = await this.requestRepository.find({
       where: { brigadier: { id: brigadierId } },
+      relations: {
+        requestEquipment: true,
+      },
     });
 
     if (requests.length > 0) {
@@ -109,6 +112,7 @@ export class RequestService {
       where: { client: { id: clientId } },
       relations: {
         client: true,
+        requestEquipment: true,
       },
     });
 
