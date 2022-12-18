@@ -87,6 +87,20 @@ export class UserService {
     return await this.usersRepository.findOne({ where: { id } });
   }
 
+  async getWithInfo(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id },
+      select: {
+        id: true,
+        role: true,
+        password: false,
+        client: { id: true },
+        brigadier: { id: true },
+      },
+      relations: { client: true, brigadier: true },
+    });
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto, user: User) {
     const item = await this.get(+id);
     if (!item) throw new NotExistsError('user');

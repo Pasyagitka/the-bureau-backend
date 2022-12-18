@@ -17,7 +17,7 @@ export class ToolService {
   ) {}
 
   async getAll(): Promise<Tool[]> {
-    return this.toolsRepository.find({ order: { id: 'ASC' } });
+    return this.toolsRepository.find({ relations: { stage: true }, order: { id: 'ASC' } });
   }
 
   async get(id: number): Promise<Tool> {
@@ -40,6 +40,7 @@ export class ToolService {
     if (!stage) throw new NotExistsError('stage');
 
     const item = this.toolsRepository.create(createToolDto);
+    item.stage = stage;
     await this.toolsRepository.save(item);
     return item;
   }
@@ -52,7 +53,9 @@ export class ToolService {
       where: { id: updateToolDto.stageId },
     });
     if (!stage) throw new NotExistsError('stage');
-    return this.toolsRepository.save({ id, ...updateToolDto });
+    tool.stage = stage;
+    tool.name = updateToolDto.name;
+    return this.toolsRepository.save(tool);
   }
 
   async remove(id: number): Promise<Tool> {
