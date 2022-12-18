@@ -17,7 +17,7 @@ export class Accessory {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('integer', { name: 'sku', nullable: true, unique: false })
+  @Column('text', { name: 'sku', nullable: true, unique: false })
   sku: string | null;
 
   @Column('text', { name: 'name' })

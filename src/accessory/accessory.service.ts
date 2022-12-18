@@ -35,18 +35,22 @@ export class AccessoryService {
     if (!equipment) throw new NotExistsError('equipment');
 
     const item = this.accessoryRepository.create(createAccessoryDto);
-    await this.accessoryRepository.save(item);
-    return item;
+    item.equipment = equipment;
+    return await this.accessoryRepository.save(item);
   }
 
   async update(id: number, updateAccessoryDto: UpdateAccessoryDto): Promise<Accessory> {
     const accessory = await this.accessoryRepository.findOne({ where: { id } });
     if (!accessory) throw new NotExistsError('accessory');
 
+    if (updateAccessoryDto.sku === null) {
+      accessory.sku = null;
+    }
     const equipment = await this.equipmentRepository.findOne({
       where: { id: updateAccessoryDto.equipmentId },
     });
     if (!equipment) throw new NotExistsError('equipment');
+    accessory.equipment = equipment;
     return this.accessoryRepository.save({ id, ...updateAccessoryDto });
   }
 
