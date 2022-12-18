@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Stage } from './entities/stage.entity';
 
 @Injectable()
 export class StageService {
-  findAll() {
-    return `This action returns all stage`;
-  }
+  constructor(
+    @InjectRepository(Stage)
+    private stageRepository: Repository<Stage>,
+  ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} stage`;
+  async getAll(): Promise<Stage[]> {
+    return this.stageRepository.find();
   }
 }

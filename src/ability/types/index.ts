@@ -7,6 +7,7 @@ import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { Request } from 'src/request/entities/request.entity';
 import { Tool } from 'src/tool/entities/tool.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Stage } from 'src/stage/entities/stage.entity';
 
 export enum Action {
   Manage = 'manage',
@@ -27,6 +28,7 @@ export type Subjects =
       | typeof Schedule
       | typeof Tool
       | typeof User
+      | typeof Stage
     >
   | 'all';
 
