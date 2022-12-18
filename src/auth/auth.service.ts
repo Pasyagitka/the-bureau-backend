@@ -27,7 +27,7 @@ export class AuthService {
   async validateUser(login: string, pass: string) {
     const user = await this.usersService.findByUsername(login);
     if (!user) {
-      throw new NotExistsError('user (by email)');
+      throw new NotExistsError('user (by login)');
     }
     if (!user.isActivated) throw new NotActivatedError(`${user.login}`);
     const isPassEquals = await bcrypt.compare(pass, user.password);
@@ -67,7 +67,8 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    await this.mailService.sendActivationMail('pasyagitka@yandex.by', activationLink);
+    console.log(clientUser);
+    //await this.mailService.sendActivationMail('pasyagitka@yandex.by', activationLink);
     this.loginWithCredentials(createClientDto);
   }
 
@@ -87,7 +88,7 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    await this.mailService.sendActivationMail(brigadierUser.email, activationLink);
+    //await this.mailService.sendActivationMail(brigadierUser.email, activationLink);
     this.loginWithCredentials(brigadierUser);
   }
 
@@ -132,7 +133,7 @@ export class AuthService {
 
   async getUser(token) {
     const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
-    const user = this.usersService.get(decoded.sub);
+    const user = this.usersService.getWithInfo(decoded.sub);
     if (!user) throw new NotExistsError('user by token');
     return user;
   }
