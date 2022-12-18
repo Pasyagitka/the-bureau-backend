@@ -51,7 +51,7 @@ export class AccessoryService {
     });
     if (!equipment) throw new NotExistsError('equipment');
     accessory.equipment = equipment;
-    return this.accessoryRepository.save({ id, ...updateAccessoryDto });
+    return this.accessoryRepository.save(accessory);
   }
 
   async remove(id: number): Promise<Accessory> {

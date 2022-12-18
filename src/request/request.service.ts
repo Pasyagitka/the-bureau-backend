@@ -89,7 +89,9 @@ export class RequestService {
         client: true,
         brigadier: true,
         stage: true,
-        requestEquipment: true,
+        requestEquipment: {
+          equipment: true,
+        },
       },
     });
   }
@@ -98,7 +100,9 @@ export class RequestService {
     const requests: any = await this.requestRepository.find({
       where: { brigadier: { id: brigadierId } },
       relations: {
-        requestEquipment: true,
+        requestEquipment: {
+          equipment: true,
+        },
         client: true,
         stage: true,
       },
@@ -122,7 +126,9 @@ export class RequestService {
       where: { client: { id: clientId } },
       relations: {
         client: true,
-        requestEquipment: true,
+        requestEquipment: {
+          equipment: true,
+        },
       },
       order: { id: 'DESC' },
     });
@@ -138,7 +144,9 @@ export class RequestService {
     return await this.requestRepository.findOne({
       where: { id },
       relations: {
-        requestEquipment: true,
+        requestEquipment: {
+          equipment: true,
+        },
       },
     });
   }
@@ -169,6 +177,7 @@ export class RequestService {
         .from(Tool, 'tool')
         .innerJoin('tool.stage', 'stage')
         .where('tool.stageId = :stageId', { stageId })
+        .orWhere('tool.stageId = 3')
         .getRawMany();
     }
     return requestTools;
@@ -195,10 +204,12 @@ export class RequestService {
       .select('extract(isodow from "mountingDate")', 'day')
       .addSelect('request.brigadierId', 'brigadierId')
       .addSelect('count(request.id)', 'count')
+      //.addSelect(`DATE_PART('week', "mountingDate")`)
+      //.addSelect(`DATE_PART('week', current_date)`, 'd2')
       .from(Request, 'request')
       .where('request.brigadierId is not null')
       .andWhere("request.status in ('InProcessing', 'Completed')")
-      .andWhere("date_trunc('week', \"mountingDate\") = date_trunc('week', CURRENT_TIMESTAMP)")
+      .andWhere(`DATE_PART('week', "mountingDate") = DATE_PART('week', current_date)`)
       .groupBy('request.brigadierId')
       .addGroupBy('request.mountingDate')
       .orderBy('request.brigadierId')
