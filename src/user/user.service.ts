@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcryptjs';
 import { ForbiddenError } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,6 +26,23 @@ export class UserService {
     private clientRepository: Repository<Client>,
     private readonly abilityFactory: AbilityFactory,
   ) {}
+
+  async onModuleInit() {
+    const adminUser = await this.usersRepository.findOne({
+      where: { login: process.env.ADMIN_LOGIN },
+    });
+    console.log(adminUser);
+    if (!adminUser) {
+      const admin = await this.usersRepository.save({
+        login: process.env.ADMIN_LOGIN,
+        email: process.env.ADMIN_EMAIL,
+        password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 3),
+        role: Role.Admin,
+        isActivated: true,
+      });
+      console.log(admin);
+    }
+  }
 
   async createClient(createClientDto: CreateClientDto) {
     const user = this.usersRepository.create({
