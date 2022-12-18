@@ -17,6 +17,12 @@ export class RequestController {
     return this.requestService.create(createRequestDto, req.user);
   }
 
+  @Get('/weekly-report')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getWeeklyReport() {
+    return this.requestService.getWeeklyReport();
+  }
+
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Request })
   getAll() {
@@ -58,12 +64,6 @@ export class RequestController {
   getWithEquipment(@Param('id') id: string) {
     return this.requestService.getRequestWithEquipment(+id);
   }
-
-  // @Put(':id')
-  // @CheckAbilities({ action: Action.Update, subject: Request })
-  // update(@Param('id') id: string, @Body() updateRequestDto: UpdateRequestDto, @Req() req) {
-  //   return this.requestService.update(+id, updateRequestDto, req.user);
-  // }
 
   @Put('brigadier/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })

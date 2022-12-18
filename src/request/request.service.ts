@@ -31,8 +31,6 @@ export class RequestService {
     private equipmentRepository: Repository<Equipment>,
     @InjectRepository(Client)
     private clientRepository: Repository<Client>,
-    @InjectRepository(Address)
-    private addressRepository: Repository<Address>,
     @InjectRepository(Stage)
     private stageRepository: Repository<Stage>,
     @InjectRepository(Brigadier)
@@ -65,8 +63,7 @@ export class RequestService {
     console.log(user, client);
 
     const request = this.requestRepository.create({
-      clientDateStart: createRequestDto.clientDateStart,
-      clientDateEnd: createRequestDto.clientDateEnd,
+      mountingDate: createRequestDto.mountingDate,
       comment: createRequestDto.comment,
       stage: stage,
       client: client,
@@ -81,29 +78,42 @@ export class RequestService {
     return this.requestRepository.find({
       //TODO do not return creds
       relations: ['client.user', 'address', 'client'],
+      order: { id: 'DESC' },
     });
   }
 
   async get(id: number): Promise<Request> {
-    // const item = await this.requestRepository.findOne({
-    //   where: { id },
-    //   relations: ['client.user'],
-    // });
-    return await this.requestRepository.findOne({ where: { id } });
+    return await this.requestRepository.findOne({
+      where: { id },
+      relations: {
+        client: true,
+        brigadier: true,
+        stage: true,
+        requestEquipment: true,
+      },
+    });
   }
 
   async getBrigadierRequests(brigadierId: number, user: User) {
-    const requests = await this.requestRepository.find({
+    const requests: any = await this.requestRepository.find({
       where: { brigadier: { id: brigadierId } },
       relations: {
         requestEquipment: true,
+        client: true,
+        stage: true,
       },
+      order: { id: 'DESC' },
     });
 
     if (requests.length > 0) {
       const ability = this.abilityFactory.defineAbility(user);
       ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
     }
+    for (let i = 0; i < requests.length; i++) {
+      requests[i].requestAccessories = await this.getRequestAccessories(requests[i].id);
+      requests[i].requestTools = await this.getRequestTools(requests[i].id);
+    }
+
     return requests;
   }
 
@@ -114,6 +124,7 @@ export class RequestService {
         client: true,
         requestEquipment: true,
       },
+      order: { id: 'DESC' },
     });
 
     if (requests.length > 0) {
@@ -143,7 +154,7 @@ export class RequestService {
     if (stageId === 3) {
       requestTools = await this.dataSource
         .createQueryBuilder()
-        .select('tool.name')
+        .select('tool.name', 'name')
         .distinct()
         .from(Tool, 'tool')
         .innerJoin('tool.stage', 'stage')
@@ -153,7 +164,7 @@ export class RequestService {
     } else {
       requestTools = await this.dataSource
         .createQueryBuilder()
-        .select('tool.name')
+        .select('tool.name', 'name')
         .distinct()
         .from(Tool, 'tool')
         .innerJoin('tool.stage', 'stage')
@@ -167,14 +178,30 @@ export class RequestService {
     return await this.dataSource
       .createQueryBuilder()
       .select('SUM(request_equipment.quantity)', 'quantity')
-      .addSelect('accessories.sku')
-      .addSelect('accessories.name')
+      .addSelect('accessories.sku', 'sku')
+      .addSelect('accessories.name', 'name')
       .from(RequestEquipment, 'request_equipment')
       .where('request_equipment.requestId = :id', { id })
       .innerJoin('request_equipment.equipment', 'equipment')
       .innerJoin('equipment.accessories', 'accessories')
       .groupBy('accessories.sku')
       .addGroupBy('accessories.name')
+      .getRawMany();
+  }
+
+  async getWeeklyReport() {
+    return await this.dataSource
+      .createQueryBuilder()
+      .select('extract(isodow from "mountingDate")', 'day')
+      .addSelect('request.brigadierId', 'brigadierId')
+      .addSelect('count(request.id)', 'count')
+      .from(Request, 'request')
+      .where('request.brigadierId is not null')
+      .andWhere("request.status in ('InProcessing', 'Completed')")
+      .andWhere("date_trunc('week', \"mountingDate\") = date_trunc('week', CURRENT_TIMESTAMP)")
+      .groupBy('request.brigadierId')
+      .addGroupBy('request.mountingDate')
+      .orderBy('request.brigadierId')
       .getRawMany();
   }
 
@@ -199,12 +226,17 @@ export class RequestService {
     const request = await this.get(id);
     if (!request) throw new NotExistsError('request');
 
-    const newBrigadier = await this.brigadierRepository.findOne({
-      where: { id: updateBrigadierDto.brigadier },
-    });
-    if (!newBrigadier) throw new NotExistsError('brigadier');
-
-    request.brigadier = newBrigadier;
+    if (updateBrigadierDto.brigadier !== undefined) {
+      if (updateBrigadierDto.brigadier === null) {
+        request.brigadier = null;
+      } else {
+        const newBrigadier = await this.brigadierRepository.findOne({
+          where: { id: updateBrigadierDto.brigadier },
+        });
+        if (!newBrigadier) throw new NotExistsError('brigadier');
+        request.brigadier = newBrigadier;
+      }
+    }
     if (updateBrigadierDto.status) request.status = updateBrigadierDto.status;
     const res = await this.requestRepository.save(request);
 

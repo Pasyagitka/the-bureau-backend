@@ -23,10 +23,12 @@ export class RequestSubscriber implements EntitySubscriberInterface<Request> {
       Request.prototype.brigadier,
     );
     if (brigadierGotUpdated) {
-      await this.scheduleService.addRecord({
-        request: event.entity.id,
-        brigadier: event.entity.brigadier.id,
-      });
+      if (event.entity?.brigadier?.id) {
+        await this.scheduleService.addRecord({
+          request: event.entity.id,
+          brigadier: event.entity.brigadier.id,
+        });
+      }
     }
   }
 }

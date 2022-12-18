@@ -30,14 +30,8 @@ export class Request {
   @CreateDateColumn({ name: 'registerDate' })
   registerDate: Date;
 
-  @Column('date', { name: 'clientDateStart', nullable: true })
-  clientDateStart: Date;
-
   @Column('date', { name: 'mountingDate', nullable: true })
-  mountingDate: string | null;
-
-  @Column('date', { name: 'clientDateEnd', nullable: true })
-  clientDateEnd: Date;
+  mountingDate: Date;
 
   @Column('text', { name: 'comment', nullable: true })
   comment: string | null;

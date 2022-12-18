@@ -10,10 +10,8 @@ import {
   IsString,
   MaxLength,
   MinDate,
-  Validate,
   ValidateNested,
 } from 'class-validator';
-import { IsAfterConstraint } from 'src/common/validators/after-date/validate.after-date';
 
 class RequestEquipmentDto {
   @IsNumber()
@@ -60,17 +58,12 @@ class AddressDto {
 }
 
 export class CreateRequestDto {
+
   @Transform(({ value }) => value && new Date(value))
   @IsDate()
   @MinDate(new Date())
   @IsNotEmpty()
-  clientDateStart: Date;
-
-  @Transform(({ value }) => value && new Date(value))
-  @IsDate()
-  @Validate(IsAfterConstraint, ['clientDateStart'])
-  @IsNotEmpty()
-  clientDateEnd: Date;
+  mountingDate: Date;
 
   @IsOptional()
   @IsString()
@@ -81,11 +74,6 @@ export class CreateRequestDto {
   @IsNumber()
   @IsPositive()
   stage: number;
-
-  // @IsNotEmpty()
-  // @IsNumber()
-  // @IsPositive()
-  // client: number;
 
   @IsNotEmpty()
   @Type(() => AddressDto)
