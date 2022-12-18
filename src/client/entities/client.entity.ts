@@ -29,7 +29,7 @@ export class Client {
   @Column('text', { name: 'contactNumber' })
   contactNumber: string;
 
-  @OneToOne(() => User, {
+  @OneToOne(() => User, (user) => user.client, {
     cascade: true,
     eager: true,
     onDelete: 'CASCADE',

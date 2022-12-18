@@ -37,7 +37,7 @@ export class Brigadier {
   @Column('boolean', { name: 'isApproved', default: () => 'false' })
   isApproved: boolean;
 
-  @OneToOne(() => User, {
+  @OneToOne(() => User, (user) => user.brigadier, {
     cascade: true,
     eager: true,
     onDelete: 'CASCADE',

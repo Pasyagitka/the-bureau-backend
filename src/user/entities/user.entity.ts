@@ -1,5 +1,7 @@
-import { Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, Index, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from 'src/auth/enum/role.enum';
+import { Client } from '../../client/entities/client.entity';
+import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 
 @Index('user_pkey', ['id'], { unique: true })
 @Entity('user')
@@ -34,6 +36,12 @@ export class User {
     default: Role.Client,
   })
   role: Role;
+
+  @OneToOne(() => Client, (client) => client.user)
+  client: Client;
+
+  @OneToOne(() => Brigadier, (brigadier) => brigadier.user)
+  brigadier: Brigadier;
 
   @DeleteDateColumn()
   deletedAt?: Date;

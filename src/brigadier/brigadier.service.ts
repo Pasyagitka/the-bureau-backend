@@ -18,7 +18,10 @@ export class BrigadierService {
   ) {}
 
   async getAll(): Promise<Brigadier[]> {
-    return this.brigadierRepository.find();
+    return this.brigadierRepository.find({
+      relations: { user: true },
+      order: { id: 'DESC' },
+    });
   }
 
   async get(id: number): Promise<Brigadier> {
