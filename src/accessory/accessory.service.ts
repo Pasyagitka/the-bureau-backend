@@ -51,6 +51,7 @@ export class AccessoryService {
     });
     if (!equipment) throw new NotExistsError('equipment');
     accessory.equipment = equipment;
+    accessory.name = updateAccessoryDto.name || accessory.name;
     return this.accessoryRepository.save(accessory);
   }
 
