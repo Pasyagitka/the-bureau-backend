@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -11,27 +12,29 @@ import { Equipment } from '../../equipment/entities/equipment.entity';
 import { RequestAccessory } from '../../request/entities/request-accessory.entity';
 
 @Index('accessory_pkey', ['id'], { unique: true })
-@Entity('accessory', { schema: 'public' })
+@Entity('accessory')
 export class Accessory {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('integer', { name: 'sku', nullable: true })
-  sku: number | null;
+  @Column('text', { name: 'sku', nullable: true, unique: false })
+  sku: string | null;
 
   @Column('text', { name: 'name' })
   name: string;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @ManyToOne(() => Equipment, (equipment) => equipment.accessories) //todo one or many?
+  @ManyToOne(() => Equipment, (equipment) => equipment.accessories, {
+    eager: true,
+  })
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
 
-  @OneToMany(
-    () => RequestAccessory,
-    (requestAccessory) => requestAccessory.accessory,
-  )
+  @OneToMany(() => RequestAccessory, (requestAccessory) => requestAccessory.accessory, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   requestAccessories: RequestAccessory[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

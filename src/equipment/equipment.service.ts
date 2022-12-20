@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
+import { Repository } from 'typeorm';
 import { CreateEquipmentDto } from './dto/create-equipment.dto';
 import { UpdateEquipmentDto } from './dto/update-equipment.dto';
+import { Equipment } from './entities/equipment.entity';
 
 @Injectable()
 export class EquipmentService {
-  create(createEquipmentDto: CreateEquipmentDto) {
-    return 'This action adds a new equipment';
+  constructor(
+    @InjectRepository(Equipment)
+    private equipmentRepository: Repository<Equipment>,
+  ) {}
+
+  async getAll(): Promise<Equipment[]> {
+    return this.equipmentRepository.find({ order: { id: 'ASC' } });
   }
 
-  findAll() {
-    return `This action returns all equipment`;
+  async get(id: number): Promise<Equipment> {
+    return await this.equipmentRepository.findOne({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} equipment`;
+  async create(createEquipmentDto: CreateEquipmentDto): Promise<Equipment> {
+    const equipment = await this.equipmentRepository.findOne({
+      where: { type: createEquipmentDto.type },
+    });
+    if (equipment) throw new AlreadyExistsError('equipment');
+    const item = this.equipmentRepository.create(createEquipmentDto);
+    await this.equipmentRepository.save(item);
+    return item;
   }
 
-  update(id: number, updateEquipmentDto: UpdateEquipmentDto) {
-    return `This action updates a #${id} equipment`;
+  async update(id: number, updateEquipmentDto: UpdateEquipmentDto): Promise<Equipment> {
+    const equipment = await this.equipmentRepository.findOne({ where: { id } });
+    if (!equipment) throw new NotExistsError('equipment');
+    return this.equipmentRepository.save({ id, ...updateEquipmentDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} equipment`;
+  async remove(id: number) {
+    const item = await this.equipmentRepository.findOne({
+      where: { id },
+      relations: ['accessories', 'accessories.requestAccessories'],
+    });
+    if (!item) throw new NotExistsError('equipment');
+    return await this.equipmentRepository.softRemove(item);
   }
 }

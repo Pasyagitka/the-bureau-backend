@@ -1,14 +1,7 @@
-import {
-  Column,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Request } from './request.entity';
+import { Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('address_pkey', ['id'], { unique: true })
-@Entity('address', { schema: 'public' })
+@Entity('address')
 export class Address {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -19,6 +12,10 @@ export class Address {
   @Column('text', { name: 'city' })
   city: string;
 
+  //TODO remove nullable
+  @Column('text', { name: 'street', nullable: true })
+  street: string;
+
   @Column('integer', { name: 'house' })
   house: number;
 
@@ -28,9 +25,6 @@ export class Address {
   @Column('integer', { name: 'flat', nullable: true })
   flat: number | null;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @OneToMany(() => Request, (request) => request.address)
-  requests: Request[];
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

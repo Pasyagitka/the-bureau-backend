@@ -1,61 +1,61 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
-import { Public } from './auth.decorator';
+import { Body, Controller, Get, Param, Post, Req, Request, UseGuards } from '@nestjs/common';
+import { Public } from './decorators/auth.decorator';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
+import { CreateClientDto } from 'src/client/dto/create-client.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('login')
   async login(@Request() req) {
-    console.log(req);
     return this.authService.loginWithCredentials(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Post('registration')
-  async register(@Body() registerUserDto: RegisterDto) {
+  async register(@Body() registerUserDto: CreateClientDto) {
     return this.authService.register(registerUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Public()
+  @Post('brigadier/registration')
+  async registerBrigadier(@Body() registerUserDto: CreateBrigadierDto) {
+    return this.authService.registerBrigadier(registerUserDto);
+  }
+
   @Public()
   @Get('activate/:link')
   async activate(@Param('link') activationLink: string) {
     return this.authService.activate(activationLink);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Post('reset-password')
   async sendReset(@Body('email') email: string) {
     return this.authService.sendResetPassword(email);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
   @Get('reset-password/:login/:link')
-  async resetConfirm(
-    @Param('login') login: string,
-    @Param('link') link: string,
-  ) {
+  async resetConfirm(@Param('login') login: string, @Param('link') link: string) {
     const isReset = await this.authService.resetConfirm(login, link);
-    // if (isReset) {
-    //   return 'Success reset';
-    // }
+    if (isReset) {
+      return 'Success reset';
+    }
     return 'Failure reset';
+  }
+
+  @Get('userinfo')
+  async getUser(@Req() req) {
+    if (req.headers && req.headers.authorization) {
+      const authorization = req.headers.authorization.split(' ')[1];
+      const decoded = await this.authService.getUser(authorization);
+      return decoded;
+    }
   }
 }
