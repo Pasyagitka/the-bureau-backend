@@ -204,10 +204,24 @@ export class RequestService {
       .select('extract(isodow from "mountingDate")', 'day')
       .addSelect('request.brigadierId', 'brigadierId')
       .addSelect('count(request.id)', 'count')
-      //.addSelect(`DATE_PART('week', "mountingDate")`)
-      //.addSelect(`DATE_PART('week', current_date)`, 'd2')
       .from(Request, 'request')
       .where('request.brigadierId is not null')
+      .andWhere("request.status in ('InProcessing', 'Completed')")
+      .andWhere(`DATE_PART('week', "mountingDate") = DATE_PART('week', current_date)`)
+      .groupBy('request.brigadierId')
+      .addGroupBy('request.mountingDate')
+      .orderBy('request.brigadierId')
+      .getRawMany();
+  }
+
+  async getWeeklyReportForBrigadier(id: number) {
+    return await this.dataSource
+      .createQueryBuilder()
+      .select('extract(isodow from "mountingDate")', 'day')
+      .addSelect('request.brigadierId', 'brigadierId')
+      .addSelect('count(request.id)', 'count')
+      .from(Request, 'request')
+      .where('request.brigadierId = :id', { id })
       .andWhere("request.status in ('InProcessing', 'Completed')")
       .andWhere(`DATE_PART('week', "mountingDate") = DATE_PART('week', current_date)`)
       .groupBy('request.brigadierId')

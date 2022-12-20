@@ -23,6 +23,12 @@ export class RequestController {
     return this.requestService.getWeeklyReport();
   }
 
+  @Get('/weekly-report/:id')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  getWeeklyReportForBrigadier(@Param('id') id: string) {
+    return this.requestService.getWeeklyReportForBrigadier(+id);
+  }
+
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Request })
   getAll() {
