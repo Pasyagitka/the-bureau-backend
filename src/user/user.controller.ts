@@ -1,42 +1,47 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
+import { Action } from 'src/ability/types';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  @CheckAbilities({ action: Action.Read, subject: User })
+  getAll() {
+    return this.userService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @CheckAbilities({ action: Action.Read, subject: User })
+  get(@Param('id') id: string) {
+    return this.userService.get(+id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @CheckAbilities({ action: Action.Update, subject: User })
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Req() req) {
+    return this.userService.update(+id, updateUserDto, req.user);
+  }
+
+  @Put('activate/:id')
+  @CheckAbilities({ action: Action.ManageAccess, subject: User })
+  activateUser(@Param('id') id: string) {
+    return this.userService.activateUser(+id);
+  }
+
+  @Put('deactivate/:id')
+  @CheckAbilities({ action: Action.ManageAccess, subject: User })
+  deactivateUser(@Param('id') id: string) {
+    return this.userService.deactivateUser(+id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @CheckAbilities({ action: Action.Delete, subject: User })
+  remove(@Param('id') id: string, @Req() req) {
+    return this.userService.remove(+id, req.user);
   }
 }

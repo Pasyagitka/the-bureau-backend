@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as uuid from 'uuid';
 import * as generator from 'generate-password';
 import { Injectable } from '@nestjs/common';
@@ -7,111 +7,134 @@ import {
   AlreadyExistsError,
   BadActivationLinkError,
   BadResetPasswordLinkError,
+  NotActivatedError,
   NotExistsError,
   WrongPasswordError,
 } from 'src/common/exceptions';
 import { UserService } from '../user/user.service';
-import { MailService } from './mail.service';
+import { MailService } from '../common/mail/mail.service';
+import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
+import { CreateClientDto } from 'src/client/dto/create-client.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    //private readonly usersService: UserService,
+    private readonly usersService: UserService,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
 
-  async validateUser(username: string, pass: string) {
-    // const user = await this.usersService.findByUsername(username);
-    // if (!user) {
-    //   throw new NotExistsError('user (by email)');
-    // }
-    // const isPassEquals = await bcrypt.compare(pass, user.password);
-    // console.log(pass, user.password, isPassEquals);
-    // if (!isPassEquals) {
-    //   throw new WrongPasswordError();
-    // }
-    // const { password, ...result } = user;
-    // return result;
+  async validateUser(login: string, pass: string) {
+    const user = await this.usersService.findByUsername(login);
+    if (!user) {
+      throw new NotExistsError('user (by login)');
+    }
+    if (!user.isActivated) throw new NotActivatedError(`${user.login}`);
+    const isPassEquals = await bcrypt.compare(pass, user.password);
+    console.log(pass, user.password, isPassEquals);
+    if (!isPassEquals) {
+      throw new WrongPasswordError();
+    }
+    const { password, ...result } = user;
+    return result;
   }
 
   async loginWithCredentials(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    const payload = {
+      login: user.login,
+      sub: user.id,
+      role: user.role,
+    };
+    console.log('payload', payload);
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async register(user: any) {
-    // console.log('ref');
-    // const findByEmail = await this.usersService.findByEmail(user.email);
-    // if (findByEmail) {
-    //   throw new AlreadyExistsError('email');
-    // }
-    // const findByUsername = await this.usersService.findByUsername(user.login);
-    // if (findByUsername) {
-    //   throw new AlreadyExistsError('username');
-    // }
-    // const hashPassword = await bcrypt.hash(user.password, 3);
-    // const activationLink = uuid.v4();
-    // const newUser = await this.usersService.create({
-    //   email: user.email,
-    //   login: user.login,
-    //   password: hashPassword,
-    //   activationLink,
-    // });
-    // await this.mailService.sendActivationMail(
-    //   newUser.email,
-    //   `${process.env.API_URL}/auth/activate/${activationLink}`,
-    // );
-    // this.loginWithCredentials(user);
+  async register(createClientDto: CreateClientDto) {
+    const findByEmail = await this.usersService.findByEmail(createClientDto.email);
+    if (findByEmail) {
+      throw new AlreadyExistsError('email');
+    }
+    const findByUsername = await this.usersService.findByUsername(createClientDto.login);
+    if (findByUsername) {
+      throw new AlreadyExistsError('login');
+    }
+    const hashPassword = await bcrypt.hash(createClientDto.password, 3);
+    const activationLink = uuid.v4();
+    const clientUser = await this.usersService.createClient({
+      ...createClientDto,
+      password: hashPassword,
+      activationLink,
+    });
+    console.log(clientUser);
+    //await this.mailService.sendActivationMail('pasyagitka@yandex.by', activationLink);
+    this.loginWithCredentials(createClientDto);
+  }
+
+  async registerBrigadier(brigadierUser: CreateBrigadierDto) {
+    const findByEmail = await this.usersService.findByEmail(brigadierUser.email);
+    if (findByEmail) {
+      throw new AlreadyExistsError('email');
+    }
+    const findByUsername = await this.usersService.findByUsername(brigadierUser.login);
+    if (findByUsername) {
+      throw new AlreadyExistsError('login');
+    }
+    const hashPassword = await bcrypt.hash(brigadierUser.password, 3);
+    const activationLink = uuid.v4();
+    await this.usersService.createBrigadier({
+      ...brigadierUser,
+      password: hashPassword,
+      activationLink,
+    });
+    //await this.mailService.sendActivationMail(brigadierUser.email, activationLink);
+    this.loginWithCredentials(brigadierUser);
   }
 
   async activate(activationLink) {
-    // const findUser = await this.usersService.findByActivationLink(
-    //   activationLink,
-    // );
-    // if (!findUser) {
-    //   throw new BadActivationLinkError();
-    // }
-    // await this.usersService.activate(findUser.id, {
-    //   isActivated: true,
-    //   activationLink: null,
-    // });
+    const findUser = await this.usersService.findByActivationLink(activationLink);
+    if (!findUser) {
+      throw new BadActivationLinkError();
+    }
+    await this.usersService.activate(findUser.id, {
+      isActivated: true,
+      activationLink: null,
+    });
   }
 
   async sendResetPassword(email) {
-    // const findUser = await this.usersService.findByEmail(email);
-    // if (!findUser) {
-    //   throw new NotExistsError('user (by email)');
-    // }
-    // const link = uuid.v4();
-    // const password = generator.generate({
-    //   length: 10,
-    //   numbers: true,
-    // });
-    // const temporaryPassword = await bcrypt.hash(password, 3);
-    // await this.usersService.resetPasswordSend(email, link, temporaryPassword);
-    // await this.mailService.sendResetPasswordEmail(
-    //   email,
-    //   `${process.env.API_URL}/auth/reset-password/${findUser.login}/${link}`,
-    //   password,
-    // );
+    const findUser = await this.usersService.findByEmail(email);
+    if (!findUser) {
+      throw new NotExistsError('user (by email)');
+    }
+    const link = uuid.v4();
+    const password = generator.generate({
+      length: 10,
+      numbers: true,
+    });
+    const temporaryPassword = await bcrypt.hash(password, 3);
+    await this.usersService.resetPasswordSend(email, link, temporaryPassword);
+    await this.mailService.sendResetPasswordEmail(email, findUser.login, link, password);
   }
 
   async resetConfirm(login, resetPasswordLink) {
-    // const findUser = await this.usersService.findByUsername(login);
-    // if (!findUser) {
-    //   throw new NotExistsError('user (by login)');
-    // }
-    // if (resetPasswordLink !== findUser.resetPasswordLink) {
-    //   throw new BadResetPasswordLinkError();
-    // }
-    // await this.usersService.resetPasswordConfirm(
-    //   login,
-    //   findUser.temporaryPassword,
-    // );
-    // await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
-    // return true;
+    const findUser = await this.usersService.findByUsername(login);
+    if (!findUser) {
+      throw new NotExistsError('user (by login)');
+    }
+    if (resetPasswordLink !== findUser.resetPasswordLink) {
+      throw new BadResetPasswordLinkError();
+    }
+    await this.usersService.resetPasswordConfirm(login, findUser.temporaryPassword);
+    await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
+    return true;
+  }
+
+  async getUser(token) {
+    const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+    const user = this.usersService.getWithInfo(decoded.sub);
+    if (!user) throw new NotExistsError('user by token');
+    return user;
   }
 }

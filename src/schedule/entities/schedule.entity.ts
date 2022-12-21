@@ -1,22 +1,20 @@
 import {
-  Column,
   Entity,
   Index,
+  DeleteDateColumn,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Request } from '../../request/entities/request.entity';
 
 @Index('schedule_pkey', ['id'], { unique: true })
-@Entity('schedule', { schema: 'public' })
+@Entity('schedule')
 export class Schedule {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
-
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
 
   @ManyToOne(() => Brigadier, (brigadier) => brigadier.schedules)
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
@@ -25,4 +23,10 @@ export class Schedule {
   @ManyToOne(() => Request, (request) => request.schedules)
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
   request: Request;
+
+  @CreateDateColumn({ name: 'modifiedDate' })
+  modifiedDate: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

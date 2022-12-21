@@ -3,10 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  utilities as nestWinstonModuleUtilities,
-  WinstonModule,
-} from 'nest-winston';
+import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
 import { DataSource } from 'typeorm';
 
 import { AuthModule } from './auth/auth.module';
@@ -20,13 +17,11 @@ import { ClientModule } from './client/client.module';
 import { EquipmentModule } from './equipment/equipment.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ToolModule } from './tool/tool.module';
-import { RoleModule } from './role/role.module';
 import { User } from './user/entities/user.entity';
 import { Accessory } from './accessory/entities/accessory.entity';
 import { Brigadier } from './brigadier/entities/brigadier.entity';
 import { Client } from './client/entities/client.entity';
 import { Equipment } from './equipment/entities/equipment.entity';
-import { Role } from './role/entities/role.entity';
 import { Schedule } from './schedule/entities/schedule.entity';
 import { Tool } from './tool/entities/tool.entity';
 import { Request } from './request/entities/request.entity';
@@ -35,14 +30,17 @@ import { Report } from './request/entities/report.entity';
 import { RequestAccessory } from './request/entities/request-accessory.entity';
 import { RequestEquipment } from './request/entities/request-equipment.entity';
 import { RequestTool } from './request/entities/request-tool.entity';
-import { Stage } from './request/entities/stage.entity';
-import { Status } from './request/entities/status.entity';
-import { Mounting } from './equipment/entities/mounting.entity';
+import { Stage } from './stage/entities/stage.entity';
 import { Address } from './request/entities/address.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
+import { AbilityModule } from './ability/ability.module';
+import { MailModule } from './common/mail/mail.module';
+import { StageModule } from './stage/stage.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot(), //todo move configs
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -50,16 +48,15 @@ import { Address } from './request/entities/address.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
+      synchronize: true,
+      logging: true,
       entities: [
-        Mounting,
         Equipment,
         Accessory,
-        Role,
         User,
         Client,
         Address,
         Stage,
-        Status,
         Tool,
         Brigadier,
         BrigadierTool,
@@ -69,9 +66,16 @@ import { Address } from './request/entities/address.entity';
         RequestTool,
         Report,
         Schedule,
-      ],
-      migrations: [__dirname + '/db-migrations/*{.ts,.js}'],
-      synchronize: true,
+      ], //TODO add migrations
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
     }),
     WinstonModule.forRoot({
       transports: [
@@ -95,10 +99,16 @@ import { Address } from './request/entities/address.entity';
     EquipmentModule,
     ScheduleModule,
     ToolModule,
-    RoleModule,
+    AbilityModule,
+    MailModule,
+    StageModule,
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ForbiddenAbilityFilter,
+    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

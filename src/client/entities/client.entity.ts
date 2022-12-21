@@ -6,12 +6,13 @@ import {
   OneToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Request } from '../../request/entities/request.entity';
 
 @Index('client_pkey', ['id'], { unique: true })
-@Entity('client', { schema: 'public' })
+@Entity('client')
 export class Client {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -25,19 +26,20 @@ export class Client {
   @Column('text', { name: 'patronymic' })
   patronymic: string;
 
-  @Column('text', { name: 'email' })
-  email: string;
-
   @Column('text', { name: 'contactNumber' })
   contactNumber: string;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.client, {
+    cascade: true,
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
   @OneToMany(() => Request, (request) => request.client)
   requests: Request[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

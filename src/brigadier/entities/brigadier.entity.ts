@@ -3,6 +3,7 @@ import {
   Entity,
   Index,
   JoinColumn,
+  DeleteDateColumn,
   OneToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -13,7 +14,7 @@ import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 
 @Index('brigadier_pkey', ['id'], { unique: true })
-@Entity('brigadier', { schema: 'public' })
+@Entity('brigadier')
 export class Brigadier {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
@@ -36,19 +37,32 @@ export class Brigadier {
   @Column('boolean', { name: 'isApproved', default: () => 'false' })
   isApproved: boolean;
 
-  @Column('boolean', { name: 'isDeleted', default: () => 'false' })
-  isDeleted: boolean;
-
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.brigadier, {
+    cascade: true,
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.brigadier)
+  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.brigadier, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   brigadierTools: BrigadierTool[];
 
-  @OneToMany(() => Request, (request) => request.brigadier)
+  @OneToMany(() => Request, (request) => request.brigadier, {
+    cascade: true,
+    onDelete: 'SET NULL',
+  })
   requests: Request[];
 
-  @OneToMany(() => Schedule, (schedule) => schedule.brigadier)
+  @OneToMany(() => Schedule, (schedule) => schedule.brigadier, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   schedules: Schedule[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

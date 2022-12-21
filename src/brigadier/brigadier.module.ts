@@ -8,17 +8,12 @@ import { User } from 'src/user/entities/user.entity';
 import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { Request } from 'src/request/entities/request.entity';
 import { Tool } from 'src/tool/entities/tool.entity';
+import { AbilityModule } from 'src/ability/ability.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      User,
-      Brigadier,
-      BrigadierTool,
-      Tool,
-      Request,
-      Schedule,
-    ]),
+    TypeOrmModule.forFeature([User, Brigadier, BrigadierTool, Tool, Request, Schedule]),
+    AbilityModule,
   ],
   controllers: [BrigadierController],
   providers: [BrigadierService],

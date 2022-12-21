@@ -1,44 +1,41 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
+import { Action } from 'src/ability/types';
 import { AccessoryService } from './accessory.service';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
+import { Accessory } from './entities/accessory.entity';
 
 @Controller('accessory')
 export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}
 
   @Post()
+  @CheckAbilities({ action: Action.Create, subject: Accessory })
   create(@Body() createAccessoryDto: CreateAccessoryDto) {
     return this.accessoryService.create(createAccessoryDto);
   }
 
   @Get()
-  findAll() {
-    return this.accessoryService.findAll();
+  @CheckAbilities({ action: Action.Read, subject: Accessory })
+  getAll() {
+    return this.accessoryService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accessoryService.findOne(+id);
+  @CheckAbilities({ action: Action.Read, subject: Accessory })
+  get(@Param('id') id: string) {
+    return this.accessoryService.get(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateAccessoryDto: UpdateAccessoryDto,
-  ) {
+  @Put(':id')
+  @CheckAbilities({ action: Action.Update, subject: Accessory })
+  update(@Param('id') id: string, @Body() updateAccessoryDto: UpdateAccessoryDto) {
     return this.accessoryService.update(+id, updateAccessoryDto);
   }
 
   @Delete(':id')
+  @CheckAbilities({ action: Action.Delete, subject: Accessory })
   remove(@Param('id') id: string) {
     return this.accessoryService.remove(+id);
   }
