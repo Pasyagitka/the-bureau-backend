@@ -16,8 +16,21 @@ export class AccessoryService {
     return `This action returns a #${id} accessory`;
   }
 
-  update(id: number, updateAccessoryDto: UpdateAccessoryDto) {
-    return `This action updates a #${id} accessory`;
+  async update(id: number, updateAccessoryDto: UpdateAccessoryDto): Promise<Accessory> {
+    const accessory = await this.accessoryRepository.findOne({ where: { id } });
+    if (!accessory) throw new NotExistsError('accessory');
+
+    if (updateAccessoryDto.sku === null) {
+      accessory.sku = null;
+    }
+    const equipment = await this.equipmentRepository.findOne({
+      where: { id: updateAccessoryDto.equipmentId },
+    });
+    if (!equipment) throw new NotExistsError('equipment');
+    accessory.equipment = equipment;
+    accessory.name = updateAccessoryDto.name || accessory.name;
+    console.log(accessory);
+    return this.accessoryRepository.save(accessory);
   }
 
   remove(id: number) {
