@@ -138,6 +138,10 @@ export class UserService {
   async findByLogin(login: string) {
     return await this.usersRepository.findOne({
       where: { login },
+      loadRelationIds: {
+        relations: ['client', 'brigadier'],
+        disableMixedMap: true,
+      },
     });
   }
 

@@ -20,8 +20,8 @@ export class ClientController {
 
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Client })
-  get(@Param('id') id: string) {
-    return this.clientService.get(+id);
+  get(@Param('id') id: string, @Req() req) {
+    return this.clientService.get(+id, req.user);
   }
 
   @Put(':id')

@@ -6,6 +6,8 @@ import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from 'src/client/dto/create-client.dto';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserInfoResponseDto } from './dto/user-info-response.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -39,8 +41,8 @@ export class AuthController {
 
   @Public()
   @Post('reset-password')
-  async sendReset(@Body('email') email: string) {
-    return this.authService.sendResetPassword(email);
+  async sendReset(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.sendResetPassword(resetPasswordDto.email);
   }
 
   @Public()
@@ -59,7 +61,7 @@ export class AuthController {
     if (req.headers && req.headers.authorization) {
       const authorization = req.headers.authorization.split(' ')[1];
       const decoded = await this.authService.getUser(authorization);
-      return decoded;
+      return new UserInfoResponseDto(decoded);
     }
   }
 }

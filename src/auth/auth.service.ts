@@ -44,6 +44,12 @@ export class AuthService {
       login: user.login,
       sub: user.id,
       role: user.role,
+      client: {
+        id: user.client?.id,
+      },
+      brigadier: {
+        id: user.brigadier?.id,
+      },
     };
     console.log('payload', payload);
     return {

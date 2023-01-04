@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Ability, AbilityBuilder, AbilityClass, ExtractSubjectType } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { Role } from 'src/auth/enum/role.enum';
@@ -9,20 +10,12 @@ import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { User } from 'src/user/entities/user.entity';
 import { AppAbility, Action, Subjects } from './types';
 
-type BrigadierUser = Brigadier & {
-  'user.id': Brigadier['user']['id'];
-};
-
 type RequestBrigadier = Request & {
   'brigadier.user.id': Request['brigadier']['user']['id'];
 };
 
 type RequestClient = Request & {
   'client.user.id': Request['client']['user']['id'];
-};
-
-type ClientUser = Client & {
-  'user.id': Client['user']['id'];
 };
 
 type ScheduleBrigadier = Schedule & {
@@ -47,21 +40,11 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], User);
         can(Action.Read, Schedule);
-        cannot<ScheduleBrigadier>(Action.Read, Schedule, {
-          'brigadier.user.id': { $ne: user.id },
-        }).because('You are not allowed to view this schedule.');
-        cannot<RequestBrigadier>(Action.Read, Request, {
-          'brigadier.user.id': { $ne: user.id },
-        }).because('You are not allowed to view this request.');
-        cannot<RequestBrigadier>(Action.Update, Request, {
-          'brigadier.user.id': { $ne: user.id },
-        }).because('You are not allowed to update this request.');
-        cannot<BrigadierUser>(Action.Update, Brigadier, { 'user.id': { $ne: user.id } }).because(
-          'You are not allowed to update other brigadiers.',
-        );
-        cannot(Action.Update, User, { id: { $ne: user.id } }).because(
-          'You are not allowed to update other users.',
-        );
+        cannot<ScheduleBrigadier>(Action.Read, Schedule, {'brigadier.user.id': { $ne: user.id }}).because('You are not allowed to view this schedule.');
+        cannot<RequestBrigadier>(Action.Read, Request, {'brigadier.user.id': { $ne: user.id } }).because('You are not allowed to view this request.');
+        cannot<RequestBrigadier>(Action.Update, Request, { 'brigadier.user.id': { $ne: user.id }}).because('You are not allowed to update this request.');
+        cannot(Action.Update, Brigadier, { id: { $ne: user.brigadier?.id } }).because('You are not allowed to update other brigadiers.');
+        cannot(Action.Update, User, { id: { $ne: user.id } }).because('You are not allowed to update other users.');
         cannot(Action.ManageAccess, User).because('You are not admin');
 
         break;
@@ -76,12 +59,9 @@ export class AbilityFactory {
           'client.user.id': { $ne: user.id },
         }).because('You are not allowed to view this request.');
         // cannot([Action.Create, Action.Delete], User).because('You are not the admin!');
-        cannot<ClientUser>([Action.Update], Client, {
-          'user.id': { $ne: user.id },
-        }).because('You are not allowed to manage other clients.');
-        cannot(Action.Update, User, { id: { $ne: user.id } }).because(
-          'You are not allowed to update other users.',
-        );
+        cannot([Action.Update], Client, { id: { $ne: user.client?.id } }).because('You are not allowed to manage other clients.');
+        cannot([Action.Read], Client, { id: { $ne: user.client?.id } }).because('You are not allowed to view other clients.');
+        cannot(Action.Update, User, { id: { $ne: user.id } }).because('You are not allowed to update other users.');
         cannot(Action.ManageAccess, User).because('You are not admin');
         break;
       }

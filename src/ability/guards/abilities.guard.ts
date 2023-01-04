@@ -8,17 +8,13 @@ import { RequiredRule } from '../types';
 
 @Injectable()
 export class AbilitiesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private abilityFactory: AbilityFactory,
-  ) {}
+  constructor(private reflector: Reflector, private abilityFactory: AbilityFactory) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const rules =
-      this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
-      [];
+    const rules = this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) || [];
 
     const { user } = context.switchToHttp().getRequest();
+    console.log('AbilitiesGuard', user);
 
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -27,12 +23,9 @@ export class AbilitiesGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-    //console.log('AbilitiesGuard', user);
 
     const ability = this.abilityFactory.defineAbility(user);
-    rules.forEach(({ action, subject }) =>
-      ForbiddenError.from(ability).throwUnlessCan(action, subject),
-    );
+    rules.forEach(({ action, subject }) => ForbiddenError.from(ability).throwUnlessCan(action, subject));
 
     return true;
   }

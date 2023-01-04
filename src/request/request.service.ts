@@ -58,7 +58,14 @@ export class RequestService {
       );
     }
 
-    const client = await this.clientRepository.findOne({ where: { user: { id: user.id } } });
+    const client = await this.clientRepository.findOne({
+      where: { user: { id: user.id } },
+      // loadEagerRelations: false,
+      // loadRelationIds: {
+      //   relations: ['user'],
+      //   disableMixedMap: true,
+      // },
+    });
     if (!client) throw new NotExistsError('client');
     console.log(user, client);
 

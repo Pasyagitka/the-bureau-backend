@@ -7,6 +7,12 @@ type Token = {
   role: any;
   userId: number;
   login: string;
+  client: {
+    id: number;
+  };
+  brigadier: {
+    id: number;
+  };
 };
 
 @Injectable()
@@ -25,6 +31,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       id: payload.sub,
       login: payload.login,
       role: payload.role,
+      client: {
+        id: payload.client?.id,
+      },
+      brigadier: {
+        id: payload.brigadier?.id,
+      },
     };
   }
 }

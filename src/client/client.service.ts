@@ -18,26 +18,50 @@ export class ClientService {
   ) {}
 
   async getAll(): Promise<Client[]> {
-    return this.clientRepository.find();
-  }
-
-  async get(id: number): Promise<Client> {
-    return await this.clientRepository.findOne({ where: { id } });
-  }
-
-  async getWithInfo(id: number): Promise<Client> {
-    return await this.clientRepository.findOne({
-      where: { id },
-      select: {
-        id: true,
-        user: { id: true, role: true },
-      },
-      relations: { user: true },
+    return this.clientRepository.find({
+      // loadEagerRelations: false,
+      // loadRelationIds: {
+      //   relations: ['user'],
+      //   disableMixedMap: true,
+      // },
     });
   }
-  
+
+  async get(id: number, user: User): Promise<Client> {
+    const client = await this.clientRepository.findOne({
+      where: { id },
+      // loadEagerRelations: false,
+      // loadRelationIds: {
+      //   relations: ['user'],
+      //   disableMixedMap: true,
+      // },
+    });
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, client);
+
+    return client;
+  }
+
+  // async getWithInfo(id: number): Promise<Client> {
+  //   return await this.clientRepository.findOne({
+  //     where: { id },
+  //     select: {
+  //       id: true,
+  //       user: { id: true, role: true },
+  //     },
+  //     loadEagerRelations: false,
+  //     loadRelationIds: {
+  //       relations: ['user'],
+  //       disableMixedMap: true,
+  //     },
+  //   });
+  // }
+
   async update(id: number, updateClientDto: UpdateClientDto, user: User): Promise<Client> {
-    const client = await this.get(id);
+    const client = await this.clientRepository.findOne({
+      where: { id },
+    });
     if (!client) throw new NotExistsError('client');
 
     const ability = this.abilityFactory.defineAbility(user);

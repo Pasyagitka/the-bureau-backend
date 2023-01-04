@@ -49,8 +49,10 @@ function createSwagger(app: INestApplication, basePath: string) {
   const document = SwaggerModule.createDocument(app, config, { ignoreGlobalPrefix: true });
   SwaggerModule.setup('/api/docs', app, document, {
     customSiteTitle: 'TheBureau API',
+    customCss: '.swagger-ui .topbar { display: none }',
     swaggerOptions: {
       persistAuthorization: true,
+      docExpansion: false,
     },
   });
 }

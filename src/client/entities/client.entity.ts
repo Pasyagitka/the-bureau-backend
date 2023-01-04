@@ -31,7 +31,7 @@ export class Client {
 
   @OneToOne(() => User, (user) => user.client, {
     cascade: true,
-    eager: true,
+    //eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
