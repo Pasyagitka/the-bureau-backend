@@ -121,25 +121,6 @@ export class RequestService {
     return requests;
   }
 
-  async getClientRequests(clientId: number, user: User) {
-    const requests = await this.requestRepository.find({
-      where: { client: { id: clientId } },
-      relations: {
-        client: true,
-        requestEquipment: {
-          equipment: true,
-        },
-      },
-      order: { id: 'DESC' },
-    });
-
-    if (requests.length > 0) {
-      const ability = this.abilityFactory.defineAbility(user);
-      ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
-    }
-    return requests;
-  }
-
   async getRequestWithEquipment(id: number): Promise<Request> {
     return await this.requestRepository.findOne({
       where: { id },
@@ -266,6 +247,25 @@ export class RequestService {
     const res = await this.requestRepository.save(request);
 
     return res;
+  }
+
+  async getClientRequests(clientId: number, user: User) {
+    const requests = await this.requestRepository.find({
+      where: { client: { id: clientId } },
+      relations: {
+        client: true,
+        requestEquipment: {
+          equipment: true,
+        },
+      },
+      order: { id: 'DESC' },
+    });
+
+    if (requests.length > 0) {
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
+    }
+    return requests;
   }
 
   async remove(id: number) {
