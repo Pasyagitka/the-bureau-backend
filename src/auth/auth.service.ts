@@ -25,7 +25,7 @@ export class AuthService {
   ) {}
 
   async validateUser(login: string, pass: string) {
-    const user = await this.usersService.findByUsername(login);
+    const user = await this.usersService.findByLogin(login);
     if (!user) {
       throw new NotExistsError('user (by login)');
     }
@@ -56,7 +56,7 @@ export class AuthService {
     if (findByEmail) {
       throw new AlreadyExistsError('email');
     }
-    const findByUsername = await this.usersService.findByUsername(createClientDto.login);
+    const findByUsername = await this.usersService.findByLogin(createClientDto.login);
     if (findByUsername) {
       throw new AlreadyExistsError('login');
     }
@@ -77,7 +77,7 @@ export class AuthService {
     if (findByEmail) {
       throw new AlreadyExistsError('email');
     }
-    const findByUsername = await this.usersService.findByUsername(brigadierUser.login);
+    const findByUsername = await this.usersService.findByLogin(brigadierUser.login);
     if (findByUsername) {
       throw new AlreadyExistsError('login');
     }
@@ -119,7 +119,7 @@ export class AuthService {
   }
 
   async resetConfirm(login, resetPasswordLink) {
-    const findUser = await this.usersService.findByUsername(login);
+    const findUser = await this.usersService.findByLogin(login);
     if (!findUser) {
       throw new NotExistsError('user (by login)');
     }

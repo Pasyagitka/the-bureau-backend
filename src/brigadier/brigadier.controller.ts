@@ -1,10 +1,13 @@
 import { Controller, Get, Body, Param, Delete, Put, Req } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
 import { BrigadierService } from './brigadier.service';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
 
+@ApiBearerAuth()
+@ApiTags('Brigadiers')
 @Controller('brigadier')
 export class BrigadierController {
   constructor(private readonly brigadierService: BrigadierService) {}

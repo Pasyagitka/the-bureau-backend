@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
 import { AccessoryService } from './accessory.service';
@@ -6,6 +7,8 @@ import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Accessory } from './entities/accessory.entity';
 
+@ApiBearerAuth()
+@ApiTags('Accessories')
 @Controller('accessory')
 export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}

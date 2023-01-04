@@ -126,7 +126,7 @@ export class UserService {
     const ability = this.abilityFactory.defineAbility(user);
     ForbiddenError.from(ability).throwUnlessCan(Action.Update, item);
 
-    const userbyLogin = await this.findByUsername(updateUserDto.login);
+    const userbyLogin = await this.findByLogin(updateUserDto.login);
     if (userbyLogin && userbyLogin.id !== id) throw new AlreadyExistsError('login');
 
     const userbyEmail = await this.findByEmail(updateUserDto.email);
@@ -135,9 +135,9 @@ export class UserService {
     return this.usersRepository.save({ id, ...updateUserDto });
   }
 
-  async findByUsername(login: string) {
+  async findByLogin(login: string) {
     return await this.usersRepository.findOne({
-      where: { login: login },
+      where: { login },
     });
   }
 
@@ -169,7 +169,7 @@ export class UserService {
   }
 
   async resetPasswordConfirm(login: string, temporaryPassword: string) {
-    const user = await this.findByUsername(login);
+    const user = await this.findByLogin(login);
     user.password = temporaryPassword;
     user.temporaryPassword = null;
     user.resetPasswordLink = null;

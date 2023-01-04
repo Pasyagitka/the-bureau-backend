@@ -6,7 +6,10 @@ import { Request } from './entities/request.entity';
 import { Action } from 'src/ability/types';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Requests')
 @Controller('request')
 export class RequestController {
   constructor(private readonly requestService: RequestService) {}

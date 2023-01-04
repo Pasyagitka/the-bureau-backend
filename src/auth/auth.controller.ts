@@ -4,7 +4,10 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from 'src/client/dto/create-client.dto';
+import { LoginDto } from './dto/login.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -12,7 +15,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Public()
   @Post('login')
-  async login(@Request() req) {
+  async login(@Body() loginDto: LoginDto, @Request() req) {
     return this.authService.loginWithCredentials(req.user);
   }
 
@@ -50,6 +53,7 @@ export class AuthController {
     return 'Failure reset';
   }
 
+  @ApiBearerAuth()
   @Get('userinfo')
   async getUser(@Req() req) {
     if (req.headers && req.headers.authorization) {

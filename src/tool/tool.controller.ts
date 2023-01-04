@@ -5,7 +5,10 @@ import { UpdateToolDto } from './dto/update-tool.dto';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
 import { Tool } from './entities/tool.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Tools')
 @Controller('tool')
 export class ToolController {
   constructor(private readonly toolService: ToolService) {}

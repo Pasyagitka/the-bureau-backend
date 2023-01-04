@@ -1,10 +1,13 @@
 import { Controller, Get, Put, Body, Param, Req } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
 import { ClientService } from './client.service';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { Client } from './entities/client.entity';
 
+@ApiBearerAuth()
+@ApiTags('Clients')
 @Controller('client')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
