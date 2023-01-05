@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { ApiBearerAuth, ApiProduces, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
 import { AccessoryService } from './accessory.service';
+import { AccessoryResponseDto } from './dto/accessory-response.dto';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Accessory } from './entities/accessory.entity';
@@ -21,25 +22,26 @@ export class AccessoryController {
 
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Accessory })
-  getAll() {
-    return this.accessoryService.getAll();
+  async getAll() {
+    return (await this.accessoryService.getAll()).map((i) => new AccessoryResponseDto(i));
+    //return this.accessoryService.getAll();
   }
 
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Accessory })
-  get(@Param('id') id: string) {
-    return this.accessoryService.get(+id);
+  async get(@Param('id') id: string) {
+    return new AccessoryResponseDto(await this.accessoryService.get(+id));
   }
 
   @Put(':id')
   @CheckAbilities({ action: Action.Update, subject: Accessory })
-  update(@Param('id') id: string, @Body() updateAccessoryDto: UpdateAccessoryDto) {
-    return this.accessoryService.update(+id, updateAccessoryDto);
+  async update(@Param('id') id: string, @Body() updateAccessoryDto: UpdateAccessoryDto) {
+    return new AccessoryResponseDto(await this.accessoryService.update(+id, updateAccessoryDto));
   }
 
   @Delete(':id')
   @CheckAbilities({ action: Action.Delete, subject: Accessory })
-  remove(@Param('id') id: string) {
-    return this.accessoryService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return new AccessoryResponseDto(await this.accessoryService.remove(+id));
   }
 }

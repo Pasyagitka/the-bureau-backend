@@ -24,6 +24,7 @@ async function bootstrap() {
   }
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.useGlobalGuards(new AbilitiesGuard(reflector, new AbilityFactory()));
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
   await app.listen(process.env.PORT);
 }
 
