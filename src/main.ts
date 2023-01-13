@@ -1,11 +1,12 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AbilityFactory } from './ability/ability.factory';
 import { AbilitiesGuard } from './ability/guards/abilities.guard';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,8 +23,11 @@ async function bootstrap() {
   if (!process.env.SWAGGER_ENABLE || process.env.SWAGGER_ENABLE === 'true') {
     createSwagger(app, basePath);
   }
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.useGlobalGuards(new AbilitiesGuard(reflector, new AbilityFactory()));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
   app.getHttpAdapter().getInstance().disable('x-powered-by');
   await app.listen(process.env.PORT);
 }

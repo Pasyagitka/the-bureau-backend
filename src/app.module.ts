@@ -37,6 +37,7 @@ import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filt
 import { AbilityModule } from './ability/ability.module';
 import { MailModule } from './common/mail/mail.module';
 import { StageModule } from './stage/stage.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -89,6 +90,9 @@ import { StageModule } from './stage/stage.module';
           ),
         }),
       ],
+    }),
+    EventEmitterModule.forRoot({
+      delimiter: '.',
     }),
     AuthModule,
     RequestModule,

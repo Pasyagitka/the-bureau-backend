@@ -6,10 +6,7 @@ import { Request } from '../entities/request.entity';
 @Injectable()
 @EventSubscriber()
 export class RequestSubscriber implements EntitySubscriberInterface<Request> {
-  constructor(
-    private readonly connection: Connection,
-    private readonly scheduleService: ScheduleService,
-  ) {
+  constructor(private readonly connection: Connection, private readonly scheduleService: ScheduleService) {
     connection.subscribers.push(this);
   }
 
@@ -18,10 +15,7 @@ export class RequestSubscriber implements EntitySubscriberInterface<Request> {
   }
 
   async afterUpdate(event: UpdateEvent<Request>): Promise<Promise<any> | void> {
-    const brigadierGotUpdated = event.updatedRelations.find(
-      (value) => value.propertyName,
-      Request.prototype.brigadier,
-    );
+    const brigadierGotUpdated = event.updatedRelations.find((value) => value.propertyName, Request.prototype.brigadier);
     if (brigadierGotUpdated) {
       if (event.entity?.brigadier?.id) {
         await this.scheduleService.addRecord({

@@ -12,16 +12,19 @@ import {
   WrongPasswordError,
 } from 'src/common/exceptions';
 import { UserService } from '../user/user.service';
-import { MailService } from '../common/mail/mail.service';
 import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from 'src/client/dto/create-client.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { RegisterUserEvent } from './events/register-user.event';
+import { ResetPasswordEvent } from './events/reset-password.event';
+import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
-    private readonly mailService: MailService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async validateUser(login: string, pass: string) {
@@ -68,13 +71,13 @@ export class AuthService {
     }
     const hashPassword = await bcrypt.hash(createClientDto.password, 3);
     const activationLink = uuid.v4();
-    const clientUser = await this.usersService.createClient({
+    await this.usersService.createClient({
       ...createClientDto,
       password: hashPassword,
       activationLink,
     });
-    console.log(clientUser);
-    //await this.mailService.sendActivationMail('pasyagitka@yandex.by', activationLink);
+    this.eventEmitter.emit('user.created', new RegisterUserEvent({ email: createClientDto.email, activationLink }));
+
     this.loginWithCredentials(createClientDto);
   }
 
@@ -94,7 +97,7 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    //await this.mailService.sendActivationMail(brigadierUser.email, activationLink);
+    //this.eventEmitter.emit('user.created', new RegisterUserEvent({ email: brigadierUser.email, activationLink }));
     this.loginWithCredentials(brigadierUser);
   }
 
@@ -121,7 +124,11 @@ export class AuthService {
     });
     const temporaryPassword = await bcrypt.hash(password, 3);
     await this.usersService.resetPasswordSend(email, link, temporaryPassword);
-    await this.mailService.sendResetPasswordEmail(email, findUser.login, link, password);
+    //await this.mailService.sendResetPasswordEmail(email, findUser.login, link, password);
+    this.eventEmitter.emit(
+      'user.resetPassword',
+      new ResetPasswordEvent({ email, login: findUser.login, resetPasswordLink: link, password }),
+    );
   }
 
   async resetConfirm(login, resetPasswordLink) {
@@ -133,7 +140,8 @@ export class AuthService {
       throw new BadResetPasswordLinkError();
     }
     await this.usersService.resetPasswordConfirm(login, findUser.temporaryPassword);
-    await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
+    //await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
+    this.eventEmitter.emit('user.comfirmResetPassword', new ConfirmResetPasswordEvent({ email: findUser.email }));
     return true;
   }
 

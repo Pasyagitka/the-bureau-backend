@@ -40,3 +40,9 @@ export class WrongPasswordError extends HttpException {
     super('Wrong password', HttpStatus.BAD_REQUEST);
   }
 }
+
+export class EmailError extends HttpException {
+  constructor(data = '') {
+    super(`Email sending error ${data}`, HttpStatus.BAD_REQUEST);
+  }
+}

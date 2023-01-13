@@ -1,55 +1,79 @@
-export class RequestResponseDto {
+import { Exclude, Expose, Type } from 'class-transformer';
+
+class UserDto {
   id: number;
-  registerDate: string;
-  mountingDate: string;
+  login: string;
+  email: string;
+  //password
+  role: string;
+}
+
+class ClientDto {
+  id: number;
+  firstname: string;
+  surname: string;
+  patronymic: string;
+  contactNumber: string;
+  @Exclude()
+  user: UserDto;
+}
+
+class AddressDto {
+  id: number;
+  country: string;
+  city: string;
+  street: string;
+  house: number;
+  corpus: string;
+  flat: number;
+}
+
+class BrigadierDto {
+  id: number;
+  firstname: string;
+  surname: string;
+  patronymic: string;
+  contactNumber: string;
+  user: UserDto;
+}
+
+class StageDto {
+  id: number;
+  stage: string;
+}
+
+@Exclude()
+export class RequestResponseDto {
+  @Expose()
+  id: number;
+
+  @Expose()
+  registerDate: Date;
+
+  @Expose()
+  mountingDate: Date;
+
+  @Expose()
   comment: string;
+
+  @Expose()
   status: string;
 
-  client: {
-    id: number;
-    firstname: string;
-    surname: string;
-    patronymic: string;
-    contactNumber: string;
+  @Expose()
+  @Type(() => ClientDto)
+  client: ClientDto;
 
-    user: {
-      id: number;
-      login: string;
-      email: string;
-      //password
-      role: string;
-    };
-  };
+  @Expose()
+  @Type(() => AddressDto)
+  address: AddressDto;
 
-  address: {
-    id: number;
-    country: string;
-    city: string;
-    street: string;
-    house: number;
-    corpus: string;
-    flat: string;
-  };
+  @Expose()
+  @Type(() => BrigadierDto)
+  brigadier: BrigadierDto;
 
-  brigadier: {
-    id: number;
-    firstname: string;
-    surname: string;
-    patronymic: string;
-    contactNumber: string;
-    user: {
-      id: number;
-      login: string;
-      email: string;
-      password: string; //exclude
-      role: string;
-    };
-  };
-
-  stage: {
-    id: number;
-    stage: string;
-  };
+  @Expose()
+  @Type(() => StageDto)
+  stage: StageDto;
 
   constructor(partial: Partial<RequestResponseDto>) {
     Object.assign(this, partial);

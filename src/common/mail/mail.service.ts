@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { EmailError } from '../exceptions';
 
 @Injectable()
 export class MailService {
@@ -7,26 +8,26 @@ export class MailService {
 
   async sendActivationMail(to: string, activationLink: string) {
     const link = `${process.env.API_URL}/auth/activate/${activationLink}`;
-    await this.mailerService.sendMail({
-      from: process.env.EMAIL_USERNAME,
-      to,
-      subject: `Activate your account on ${process.env.API_NAME}`,
-      text: 'Thank you for joining us.',
-      html: `
-                    <div>
-                        <h1>Click the link:</h1>
-                        <a href="${link}">${link}</a>
-                    </div>
-                `,
-    });
+    try {
+      await this.mailerService.sendMail({
+        from: process.env.EMAIL_USERNAME,
+        to,
+        subject: `Activate your account on ${process.env.API_NAME}`,
+        text: 'Thank you for joining us.',
+        html: `
+                      <div>
+                          <h1>Click the link:</h1>
+                          <a href="${link}">${link}</a>
+                      </div>
+                  `,
+      });
+    } catch (err) {
+      console.log(err);
+      //throw new BadRequestException(err.message); филтьтр не ловит
+    }
   }
 
-  async sendResetPasswordEmail(
-    to: string,
-    login: string,
-    resetPasswordLink: string,
-    password: string,
-  ) {
+  async sendResetPasswordEmail(to: string, login: string, resetPasswordLink: string, password: string) {
     const link = `${process.env.API_URL}/auth/reset-password/${login}/${resetPasswordLink}`;
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,

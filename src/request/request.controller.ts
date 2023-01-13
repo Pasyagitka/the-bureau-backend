@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Req, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
@@ -7,6 +7,7 @@ import { Action } from 'src/ability/types';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { RequestResponseDto } from './dto/request-response.dto';
 
 @ApiBearerAuth()
 @ApiTags('Requests')
@@ -40,8 +41,10 @@ export class RequestController {
 
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Request })
-  get(@Param('id') id: string) {
-    return this.requestService.get(+id);
+  async get(@Param('id') id: string): Promise<RequestResponseDto> {
+    const req = await this.requestService.get(+id);
+    const dto = new RequestResponseDto(req);
+    return dto;
   }
 
   @Get(':id/tools')
