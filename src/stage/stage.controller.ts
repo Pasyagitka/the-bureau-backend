@@ -1,11 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
+import { ApiAuth } from 'src/common/decorators/auth.decorator';
 import { Stage } from './entities/stage.entity';
 import { StageService } from './stage.service';
 
-@ApiBearerAuth()
+@ApiAuth()
 @ApiTags('Stages')
 @Controller('stage')
 export class StageController {

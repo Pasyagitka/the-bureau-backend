@@ -1,11 +1,12 @@
 import { Controller, Get, Param, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
+import { ApiAuth } from 'src/common/decorators/auth.decorator';
 import { Schedule } from './entities/schedule.entity';
 import { ScheduleService } from './schedule.service';
 
-@ApiBearerAuth()
+@ApiAuth()
 @ApiTags('Schedules')
 @Controller('schedule')
 export class ScheduleController {

@@ -52,7 +52,8 @@ export class AccessoryService {
     if (!equipment) throw new NotExistsError('equipment');
     accessory.equipment = equipment;
     accessory.name = updateAccessoryDto.name || accessory.name;
-    return this.accessoryRepository.save(accessory);
+    const updatedAccessory = await this.accessoryRepository.save(accessory); //TODO check if returns updated
+    return Object.assign(accessory, updatedAccessory);
   }
 
   async remove(id: number): Promise<Accessory> {

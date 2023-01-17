@@ -6,10 +6,11 @@ import { Request } from './entities/request.entity';
 import { Action } from 'src/ability/types';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { RequestResponseDto } from './dto/request-response.dto';
+import { ApiAuth } from 'src/common/decorators/auth.decorator';
 
-@ApiBearerAuth()
+@ApiAuth()
 @ApiTags('Requests')
 @Controller('request')
 export class RequestController {

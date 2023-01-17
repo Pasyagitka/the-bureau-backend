@@ -4,9 +4,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiAuth } from 'src/common/decorators/auth.decorator';
 
-@ApiBearerAuth()
+@ApiAuth()
 @ApiTags('Users')
 @Controller('user')
 export class UserController {

@@ -5,9 +5,10 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from 'src/client/dto/create-client.dto';
 import { LoginDto } from './dto/login.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { UserInfoResponseDto } from './dto/user-info-response.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ApiAuth } from 'src/common/decorators/auth.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -55,7 +56,7 @@ export class AuthController {
     return 'Failure reset';
   }
 
-  @ApiBearerAuth()
+  @ApiAuth()
   @Get('userinfo')
   async getUser(@Req() req) {
     if (req.headers && req.headers.authorization) {
