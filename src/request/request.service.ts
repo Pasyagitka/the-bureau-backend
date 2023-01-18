@@ -4,19 +4,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AbilityFactory } from 'src/ability/ability.factory';
 import { Action } from 'src/ability/types';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { Client } from 'src/client/entities/client.entity';
 import { NotExistsError } from 'src/common/exceptions';
+import { Equipment } from 'src/equipment/entities/equipment.entity';
+import { Stage } from 'src/stage/entities/stage.entity';
+import { Tool } from 'src/tool/entities/tool.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { Request } from './entities/request.entity';
-import { DataSource } from 'typeorm';
-import { Tool } from 'src/tool/entities/tool.entity';
-import { CreateRequestDto } from './dto/create-request.dto';
-import { Equipment } from 'src/equipment/entities/equipment.entity';
-import { Client } from 'src/client/entities/client.entity';
-import { Stage } from 'src/stage/entities/stage.entity';
 
 @Injectable()
 export class RequestService {
@@ -187,7 +186,7 @@ export class RequestService {
   }
 
   async getWeeklyReport() {
-    return await this.dataSource
+    return this.dataSource
       .createQueryBuilder()
       .select('extract(isodow from "mountingDate")', 'day')
       .addSelect('request.brigadierId', 'brigadierId')
@@ -203,6 +202,7 @@ export class RequestService {
   }
 
   async getWeeklyReportForBrigadier(id: number) {
+    //todo check brigadierExisits
     return await this.dataSource
       .createQueryBuilder()
       .select('extract(isodow from "mountingDate")', 'day')
