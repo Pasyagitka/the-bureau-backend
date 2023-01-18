@@ -19,9 +19,9 @@ export class AccessoryController {
 
   @ApiResponses({
     201: AccessoryResponseDto,
-    400: ErrorMessageResponseDto, 
-    404: ErrorMessageResponseDto, 
-    500: ErrorMessageResponseDto
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
   })
   @Post()
   @CheckAbilities({ action: Action.Create, subject: Accessory })
@@ -31,18 +31,18 @@ export class AccessoryController {
 
   @ApiResponses({
     200: [AccessoryResponseDto],
-    500: ErrorMessageResponseDto
-  })  
+    500: ErrorMessageResponseDto,
+  })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Accessory })
   async getAll() {
     return (await this.accessoryService.getAll()).map((i) => new AccessoryResponseDto(i));
   }
-  
+
   @ApiResponses({
     200: AccessoryResponseDto,
-    404: ErrorMessageResponseDto, 
-    500: ErrorMessageResponseDto
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
   })
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Accessory })
@@ -53,9 +53,9 @@ export class AccessoryController {
   @ApiResponses({
     200: AccessoryResponseDto,
     400: ErrorMessageResponseDto,
-    404: ErrorMessageResponseDto, 
-    500: ErrorMessageResponseDto
-  })  
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
   @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: Accessory })
   async update(@Param('id') id: string, @Body() updateAccessoryDto: UpdateAccessoryDto) {
@@ -65,9 +65,9 @@ export class AccessoryController {
 
   @ApiResponses({
     200: AccessoryResponseDto,
-    400: ErrorMessageResponseDto, 
-    404: ErrorMessageResponseDto, 
-    500: ErrorMessageResponseDto
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
   })
   @Delete(':id')
   @CheckAbilities({ action: Action.Delete, subject: Accessory })
