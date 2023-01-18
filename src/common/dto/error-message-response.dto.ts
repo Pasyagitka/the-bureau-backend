@@ -1,4 +1,5 @@
-export class ErrorMessageResponseDto {
-    statusCode: number;
-    message: string;
+import { MessageResponseDto } from './message-response.dto';
+
+export class ErrorMessageResponseDto extends MessageResponseDto {
+  statusCode: number;
 }
