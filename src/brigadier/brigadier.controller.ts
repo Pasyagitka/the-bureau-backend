@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, Patch, Req } from '@nestjs/common
 import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
-import { AccessoryResponseDto } from 'src/accessory/dto/accessory-response.dto';
 import { ApiResponses } from 'src/common/decorators/api-responses.decorator';
 import { ApiAuth } from 'src/common/decorators/auth.decorator';
 import { ErrorMessageResponseDto } from 'src/common/dto/error-message-response.dto';
@@ -24,7 +23,7 @@ export class BrigadierController {
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Brigadier })
   async getAll() {
-    return (await this.brigadierService.getAll()).map((i) => new AccessoryResponseDto(i));
+    return (await this.brigadierService.getAll()).map((i) => new BrigadierResponseDto(i));
   }
 
   @ApiResponses({
@@ -52,7 +51,6 @@ export class BrigadierController {
 
   @ApiResponses({
     200: BrigadierResponseDto,
-    400: ErrorMessageResponseDto,
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })

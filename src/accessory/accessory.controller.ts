@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
@@ -65,7 +65,6 @@ export class AccessoryController {
 
   @ApiResponses({
     200: AccessoryResponseDto,
-    400: ErrorMessageResponseDto,
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })

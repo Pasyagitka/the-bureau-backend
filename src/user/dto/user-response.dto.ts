@@ -15,4 +15,8 @@ export class UserResponseDto {
 
   @Expose()
   role: string;
+
+  constructor(partial: Partial<UserResponseDto>) {
+    Object.assign(this, partial);
+  }
 }

@@ -49,6 +49,10 @@ export class StageResponseDto {
 
   @Expose()
   stage: string;
+
+  constructor(partial: Partial<StageResponseDto>) {
+    Object.assign(this, partial);
+  }
 }
 
 @Exclude()

@@ -1,7 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
-import { BrigadierResponseDto } from 'src/brigadier/dto/brigadier-response.dto';
 import { ClientResponseDto } from 'src/client/dto/client-response.dto';
-import { AddressResponseDto, RequestEquipmentResponseDto, StageResponseDto } from './brigadier-request-response.dto';
+import { RequestEquipmentResponseDto, StageResponseDto } from './brigadier-request-response.dto';
 
 @Exclude()
 export class ClientRequestResponseDto {
@@ -9,10 +8,10 @@ export class ClientRequestResponseDto {
   id: number;
 
   @Expose()
-  registerDate: string;
+  registerDate: Date;
 
   @Expose()
-  mountingDate: string;
+  mountingDate: Date;
 
   @Expose()
   comment: string;
@@ -26,11 +25,11 @@ export class ClientRequestResponseDto {
   @Expose()
   stage: StageResponseDto;
 
-  @Expose()
-  address: AddressResponseDto;
+  // @Expose()
+  // address: AddressResponseDto;
 
-  @Expose()
-  brigadier: BrigadierResponseDto;
+  // @Expose()
+  // brigadier: BrigadierResponseDto;
 
   @Expose()
   requestEquipment: Array<RequestEquipmentResponseDto>;
