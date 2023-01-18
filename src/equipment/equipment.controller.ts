@@ -1,12 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { EquipmentService } from './equipment.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
+import { Action } from 'src/ability/types';
+import { ApiAuth } from 'src/common/decorators/auth.decorator';
 import { CreateEquipmentDto } from './dto/create-equipment.dto';
 import { UpdateEquipmentDto } from './dto/update-equipment.dto';
 import { Equipment } from './entities/equipment.entity';
-import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
-import { Action } from 'src/ability/types';
-import { ApiTags } from '@nestjs/swagger';
-import { ApiAuth } from 'src/common/decorators/auth.decorator';
+import { EquipmentService } from './equipment.service';
 
 @ApiAuth()
 @ApiTags('Equipment')
@@ -32,7 +32,7 @@ export class EquipmentController {
     return this.equipmentService.get(+id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: Equipment })
   update(@Param('id') id: string, @Body() updateEquipmentDto: UpdateEquipmentDto) {
     return this.equipmentService.update(+id, updateEquipmentDto);

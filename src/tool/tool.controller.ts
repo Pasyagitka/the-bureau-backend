@@ -1,12 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { ToolService } from './tool.service';
-import { CreateToolDto } from './dto/create-tool.dto';
-import { UpdateToolDto } from './dto/update-tool.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
-import { Tool } from './entities/tool.entity';
-import { ApiTags } from '@nestjs/swagger';
 import { ApiAuth } from 'src/common/decorators/auth.decorator';
+import { CreateToolDto } from './dto/create-tool.dto';
+import { UpdateToolDto } from './dto/update-tool.dto';
+import { Tool } from './entities/tool.entity';
+import { ToolService } from './tool.service';
 
 @ApiAuth()
 @ApiTags('Tools')
@@ -32,7 +32,7 @@ export class ToolController {
     return this.toolService.get(+id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: Tool })
   update(@Param('id') id: string, @Body() updateToolDto: UpdateToolDto) {
     return this.toolService.update(+id, updateToolDto);

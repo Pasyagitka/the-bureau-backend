@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
-import { RequestService } from './request.service';
-import { CreateRequestDto } from './dto/create-request.dto';
-import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
-import { Request } from './entities/request.entity';
-import { Action } from 'src/ability/types';
-import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
-import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { RequestResponseDto } from './dto/request-response.dto';
+import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
+import { Action } from 'src/ability/types';
 import { ApiAuth } from 'src/common/decorators/auth.decorator';
+import { CreateRequestDto } from './dto/create-request.dto';
+import { RequestResponseDto } from './dto/request-response.dto';
+import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
+import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
+import { Request } from './entities/request.entity';
+import { RequestService } from './request.service';
 
 @ApiAuth()
 @ApiTags('Requests')
@@ -78,13 +78,13 @@ export class RequestController {
     return this.requestService.getRequestWithEquipment(+id);
   }
 
-  @Put('brigadier/update/:id')
+  @Patch('brigadier/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
   updateByBrigadier(@Param('id') id: string, @Body() updateRequestStatusDto: UpdateRequestByBrigadierDto, @Req() req) {
     return this.requestService.updateByBrigadier(+id, updateRequestStatusDto, req.user);
   }
 
-  @Put('admin/update/:id')
+  @Patch('admin/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
   updateByAdmin(@Param('id') id: string, @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto) {
     return this.requestService.updateByAdmin(+id, updateRequestBrigadierDto);

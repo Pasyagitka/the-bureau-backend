@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { Body, Controller, Delete, Get, Param, Patch, Req } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
-import { ApiTags } from '@nestjs/swagger';
 import { ApiAuth } from 'src/common/decorators/auth.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @ApiAuth()
 @ApiTags('Users')
@@ -25,19 +25,19 @@ export class UserController {
     return this.userService.get(+id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: User })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Req() req) {
     return this.userService.update(+id, updateUserDto, req.user);
   }
 
-  @Put('activate/:id')
+  @Patch('activate/:id')
   @CheckAbilities({ action: Action.ManageAccess, subject: User })
   activateUser(@Param('id') id: string) {
     return this.userService.activateUser(+id);
   }
 
-  @Put('deactivate/:id')
+  @Patch('deactivate/:id')
   @CheckAbilities({ action: Action.ManageAccess, subject: User })
   deactivateUser(@Param('id') id: string) {
     return this.userService.deactivateUser(+id);

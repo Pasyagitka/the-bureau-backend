@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body, Param, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
@@ -25,7 +25,7 @@ export class ClientController {
     return this.clientService.get(+id, req.user);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: Client })
   update(@Param('id') id: string, @Body() updateClientDto: UpdateClientDto, @Req() req) {
     return this.clientService.update(+id, updateClientDto, req.user);
