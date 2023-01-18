@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Req, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Req } from '@nestjs/common';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
@@ -80,20 +80,13 @@ export class RequestController {
 
   @Put('brigadier/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
-  updateByBrigadier(
-    @Param('id') id: string,
-    @Body() updateRequestStatusDto: UpdateRequestByBrigadierDto,
-    @Req() req,
-  ) {
+  updateByBrigadier(@Param('id') id: string, @Body() updateRequestStatusDto: UpdateRequestByBrigadierDto, @Req() req) {
     return this.requestService.updateByBrigadier(+id, updateRequestStatusDto, req.user);
   }
 
   @Put('admin/update/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
-  updateByAdmin(
-    @Param('id') id: string,
-    @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto,
-  ) {
+  updateByAdmin(@Param('id') id: string, @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto) {
     return this.requestService.updateByAdmin(+id, updateRequestBrigadierDto);
   }
 

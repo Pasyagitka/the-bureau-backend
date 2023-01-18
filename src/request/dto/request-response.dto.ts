@@ -1,46 +1,7 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-
-class UserDto {
-  id: number;
-  login: string;
-  email: string;
-  //password
-  role: string;
-}
-
-class ClientDto {
-  id: number;
-  firstname: string;
-  surname: string;
-  patronymic: string;
-  contactNumber: string;
-  @Exclude()
-  user: UserDto;
-}
-
-class AddressDto {
-  id: number;
-  country: string;
-  city: string;
-  street: string;
-  house: number;
-  corpus: string;
-  flat: number;
-}
-
-class BrigadierDto {
-  id: number;
-  firstname: string;
-  surname: string;
-  patronymic: string;
-  contactNumber: string;
-  user: UserDto;
-}
-
-class StageDto {
-  id: number;
-  stage: string;
-}
+import { BrigadierResponseDto } from 'src/brigadier/dto/brigadier-response.dto';
+import { ClientResponseDto } from 'src/client/dto/client-response.dto';
+import { AddressResponseDto, StageResponseDto } from './brigadier-request-response.dto';
 
 @Exclude()
 export class RequestResponseDto {
@@ -60,20 +21,20 @@ export class RequestResponseDto {
   status: string;
 
   @Expose()
-  @Type(() => ClientDto)
-  client: ClientDto;
+  @Type(() => ClientResponseDto)
+  client: ClientResponseDto;
 
   @Expose()
-  @Type(() => AddressDto)
-  address: AddressDto;
+  @Type(() => AddressResponseDto)
+  address: AddressResponseDto;
 
   @Expose()
-  @Type(() => BrigadierDto)
-  brigadier: BrigadierDto;
+  @Type(() => BrigadierResponseDto)
+  brigadier: BrigadierResponseDto;
 
   @Expose()
-  @Type(() => StageDto)
-  stage: StageDto;
+  @Type(() => StageResponseDto)
+  stage: StageResponseDto;
 
   constructor(partial: Partial<RequestResponseDto>) {
     Object.assign(this, partial);

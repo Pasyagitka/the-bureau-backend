@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { EquipmentResponseDto } from 'src/equipment/dto/equipment-response.dto';
 
 @Exclude()
@@ -13,6 +13,7 @@ export class AccessoryResponseDto {
   name: string;
 
   @Expose()
+  @Type(() => EquipmentResponseDto)
   equipment: EquipmentResponseDto;
 
   constructor(partial: Partial<AccessoryResponseDto>) {

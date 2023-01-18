@@ -16,7 +16,6 @@ import { Tool } from 'src/tool/entities/tool.entity';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Client } from 'src/client/entities/client.entity';
-import { Address } from './entities/address.entity';
 import { Stage } from 'src/stage/entities/stage.entity';
 
 @Injectable()
@@ -95,6 +94,7 @@ export class RequestService {
       relations: {
         client: true,
         brigadier: true,
+        address: true,
         stage: true,
         requestEquipment: {
           equipment: true,
@@ -218,11 +218,7 @@ export class RequestService {
       .getRawMany();
   }
 
-  async updateByBrigadier(
-    id: number,
-    updateRequestByBrigadierDto: UpdateRequestByBrigadierDto,
-    user: User,
-  ) {
+  async updateByBrigadier(id: number, updateRequestByBrigadierDto: UpdateRequestByBrigadierDto, user: User) {
     const request = await this.get(id);
     if (!request) throw new NotExistsError('request');
 
@@ -278,14 +274,7 @@ export class RequestService {
   async remove(id: number) {
     const item = await this.requestRepository.findOneOrFail({
       where: { id },
-      relations: [
-        'address',
-        'reports',
-        'requestAccessories',
-        'requestEquipment',
-        'requestTools',
-        'schedules',
-      ],
+      relations: ['address', 'reports', 'requestAccessories', 'requestEquipment', 'requestTools', 'schedules'],
     });
     return await this.requestRepository.softRemove(item);
   }

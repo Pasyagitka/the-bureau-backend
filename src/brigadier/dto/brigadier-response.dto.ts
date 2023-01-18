@@ -1,17 +1,26 @@
+import { UserResponseDto } from 'src/user/dto/user-response.dto';
+import { Exclude, Expose, Type } from 'class-transformer';
+
+@Exclude()
 export class BrigadierResponseDto {
+  @Expose()
   id: number;
+
+  @Expose()
   firstname: string;
+
+  @Expose()
   surname: string;
+
+  @Expose()
   patronymic: string;
+
+  @Expose()
   contactNumber: string;
 
-  user: {
-    id: number;
-    login: string;
-    email: string;
-    password: string; //exclude
-    role: string;
-  };
+  @Expose()
+  @Type(() => UserResponseDto)
+  user: UserResponseDto;
 
   constructor(partial: Partial<BrigadierResponseDto>) {
     Object.assign(this, partial);

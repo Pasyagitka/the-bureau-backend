@@ -1,61 +1,41 @@
+import { Exclude, Expose } from 'class-transformer';
+import { BrigadierResponseDto } from 'src/brigadier/dto/brigadier-response.dto';
+import { ClientResponseDto } from 'src/client/dto/client-response.dto';
+import { AddressResponseDto, RequestEquipmentResponseDto, StageResponseDto } from './brigadier-request-response.dto';
+
+@Exclude()
 export class ClientRequestResponseDto {
+  @Expose()
   id: number;
+
+  @Expose()
   registerDate: string;
+
+  @Expose()
   mountingDate: string;
+
+  @Expose()
   comment: string;
+
+  @Expose()
   status: string;
 
-  client: {
-    id: number;
-    firstname: string;
-    surname: string;
-    patronymic: string;
-    contactNumber: string;
-  };
+  @Expose()
+  client: ClientResponseDto;
 
-  stage: {
-    id: number;
-    stage: string;
-  };
+  @Expose()
+  stage: StageResponseDto;
 
-  address: {
-    id: number;
-    country: string;
-    city: string;
-    street: string;
-    house: number;
-    corpus: string;
-    flat: string;
-  };
+  @Expose()
+  address: AddressResponseDto;
 
-  brigadier: {
-    id: number;
-    firstname: string;
-    surname: string;
-    patronymic: string;
-    contactNumber: string;
-    user: {
-      id: number;
-      login: string;
-      email: string;
-      password: string; //exclude
-      role: string;
-    };
-  };
+  @Expose()
+  brigadier: BrigadierResponseDto;
 
+  @Expose()
   requestEquipment: Array<RequestEquipmentResponseDto>;
 
   constructor(partial: Partial<ClientRequestResponseDto>) {
     Object.assign(this, partial);
   }
-}
-
-class RequestEquipmentResponseDto {
-  id: number;
-  quantity: number;
-  equipment: {
-    id: number;
-    type: string;
-    mounting: string;
-  };
 }
