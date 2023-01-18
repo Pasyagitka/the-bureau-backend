@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
 import { Action } from 'src/ability/types';
 import { ApiResponses } from 'src/common/decorators/api-responses.decorator';
@@ -17,32 +17,50 @@ import { Accessory } from './entities/accessory.entity';
 export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}
 
-  @ApiResponse({status: 201, type: AccessoryResponseDto})
+  @ApiResponses({
+    201: AccessoryResponseDto,
+    400: ErrorMessageResponseDto, 
+    404: ErrorMessageResponseDto, 
+    500: ErrorMessageResponseDto
+  })
   @Post()
   @CheckAbilities({ action: Action.Create, subject: Accessory })
   async create(@Body() createAccessoryDto: CreateAccessoryDto) {
     return new AccessoryResponseDto(await this.accessoryService.create(createAccessoryDto));
   }
 
-  @ApiResponse({status: 200, type: AccessoryResponseDto, isArray: true})
+  @ApiResponses({
+    200: [AccessoryResponseDto],
+    500: ErrorMessageResponseDto
+  })  
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Accessory })
   async getAll() {
     return (await this.accessoryService.getAll()).map((i) => new AccessoryResponseDto(i));
   }
-
-  @ApiResponse({status: 200, type: AccessoryResponseDto})
+  
+  @ApiResponses({
+    200: AccessoryResponseDto,
+    404: ErrorMessageResponseDto, 
+    500: ErrorMessageResponseDto
+  })
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Accessory })
   async get(@Param('id') id: string) {
     return new AccessoryResponseDto(await this.accessoryService.get(+id));
   }
 
-  @ApiResponse({status: 200, type: AccessoryResponseDto})
-  @Put(':id')
+  @ApiResponses({
+    200: AccessoryResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto, 
+    500: ErrorMessageResponseDto
+  })  
+  @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: Accessory })
   async update(@Param('id') id: string, @Body() updateAccessoryDto: UpdateAccessoryDto) {
-    return new AccessoryResponseDto(await this.accessoryService.update(+id, updateAccessoryDto));
+    await this.accessoryService.update(+id, updateAccessoryDto);
+    return new AccessoryResponseDto(await this.accessoryService.get(+id));
   }
 
   @ApiResponses({

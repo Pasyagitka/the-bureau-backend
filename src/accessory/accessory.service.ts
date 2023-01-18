@@ -43,17 +43,18 @@ export class AccessoryService {
     const accessory = await this.accessoryRepository.findOne({ where: { id } });
     if (!accessory) throw new NotExistsError('accessory');
 
-    if (updateAccessoryDto.sku === null) {
-      accessory.sku = null;
+    if (!updateAccessoryDto.sku) {
+      if (updateAccessoryDto.sku === null) accessory.sku = null; 
+    } else {
+      accessory.sku = updateAccessoryDto.sku;
     }
     const equipment = await this.equipmentRepository.findOne({
       where: { id: updateAccessoryDto.equipmentId },
     });
     if (!equipment) throw new NotExistsError('equipment');
     accessory.equipment = equipment;
-    accessory.name = updateAccessoryDto.name || accessory.name;
-    const updatedAccessory = await this.accessoryRepository.save(accessory); //TODO check if returns updated
-    return Object.assign(accessory, updatedAccessory);
+    accessory.name = updateAccessoryDto.name;
+    return this.accessoryRepository.save(accessory);
   }
 
   async remove(id: number): Promise<Accessory> {

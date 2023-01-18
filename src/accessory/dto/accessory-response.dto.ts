@@ -1,4 +1,4 @@
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose, Transform } from "class-transformer";
 import { EquipmentResponseDto } from "src/equipment/dto/equipment-response.dto";
 
 @Exclude()
@@ -8,6 +8,9 @@ export class AccessoryResponseDto {
 
   @Expose()
   sku?: string;
+
+  @Expose()
+  name: string;
 
   @Expose()
   equipment: EquipmentResponseDto;

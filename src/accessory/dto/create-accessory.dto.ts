@@ -1,18 +1,20 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, MaxLength, IsOptional, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class CreateAccessoryDto {
+  @ApiPropertyOptional()
   @IsString()
   @MaxLength(50)
   @IsOptional()
-  sku: string | null;
+  sku?: string | null;
 
+  @ApiProperty()
   @IsString()
   @MaxLength(100)
-  @IsNotEmpty()
   name: string;
 
+  @ApiProperty()
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
   equipmentId: number;
 }
