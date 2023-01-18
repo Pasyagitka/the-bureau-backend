@@ -8,7 +8,7 @@ export class AlreadyExistsError extends HttpException {
 
 export class NotExistsError extends HttpException {
   constructor(data = '') {
-    super(`Not exists ${data}`, HttpStatus.BAD_REQUEST);
+    super(`Not exists ${data}`, HttpStatus.NOT_FOUND);
   }
 }
 
