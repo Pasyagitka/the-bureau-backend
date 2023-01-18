@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Request } from '../../request/entities/request.entity';
+import { Exclude } from 'class-transformer';
 
 @Index('client_pkey', ['id'], { unique: true })
 @Entity('client')
@@ -40,6 +41,7 @@ export class Client {
   @OneToMany(() => Request, (request) => request.client)
   requests: Request[];
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

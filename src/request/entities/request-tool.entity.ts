@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Request } from './request.entity';
 import { Tool } from '../../tool/entities/tool.entity';
+import { Exclude } from 'class-transformer';
 
 @Index('request_tool_pkey', ['id'], { unique: true })
 @Entity('request_tool')
@@ -27,6 +28,7 @@ export class RequestTool {
   @JoinColumn([{ name: 'toolId', referencedColumnName: 'id' }])
   tool: Tool;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

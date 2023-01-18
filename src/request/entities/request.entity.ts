@@ -20,6 +20,7 @@ import { RequestTool } from './request-tool.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { RequestStatus } from '../types/request-status.enum';
 import { Stage } from 'src/stage/entities/stage.entity';
+import { Exclude } from 'class-transformer';
 
 @Index('request_pkey', ['id'], { unique: true })
 @Entity('request')
@@ -93,6 +94,7 @@ export class Request {
   })
   schedules: Schedule[];
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

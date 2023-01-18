@@ -2,6 +2,7 @@ import { Column, DeleteDateColumn, Entity, Index, OneToOne, PrimaryGeneratedColu
 import { Role } from 'src/auth/enum/role.enum';
 import { Client } from '../../client/entities/client.entity';
 import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { Exclude } from 'class-transformer';
 
 @Index('user_pkey', ['id'], { unique: true })
 @Entity('user')
@@ -43,6 +44,7 @@ export class User {
   @OneToOne(() => Brigadier, (brigadier) => brigadier.user)
   brigadier: Brigadier;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

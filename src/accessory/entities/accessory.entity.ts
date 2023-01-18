@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   DeleteDateColumn,
@@ -35,6 +36,7 @@ export class Accessory {
   })
   requestAccessories: RequestAccessory[];
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

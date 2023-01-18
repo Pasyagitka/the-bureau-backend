@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   DeleteDateColumn,
@@ -38,6 +39,7 @@ export class Equipment {
   })
   requestEquipment: RequestEquipment[];
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

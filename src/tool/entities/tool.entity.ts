@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   DeleteDateColumn,
@@ -40,6 +41,7 @@ export class Tool {
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

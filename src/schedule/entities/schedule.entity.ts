@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Index,
@@ -27,6 +28,7 @@ export class Schedule {
   @CreateDateColumn({ name: 'modifiedDate' })
   modifiedDate: Date;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

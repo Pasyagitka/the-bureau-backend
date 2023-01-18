@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   DeleteDateColumn,
@@ -27,6 +28,7 @@ export class RequestEquipment {
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
   request: Request;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }

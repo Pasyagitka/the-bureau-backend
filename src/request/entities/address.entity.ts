@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('address_pkey', ['id'], { unique: true })
@@ -25,6 +26,7 @@ export class Address {
   @Column('integer', { name: 'flat', nullable: true })
   flat: number | null;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;
 }
