@@ -1,11 +1,11 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AbilityFactory } from './ability/ability.factory';
 import { AbilitiesGuard } from './ability/guards/abilities.guard';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
@@ -45,6 +45,8 @@ function createSwagger(app: INestApplication, basePath: string) {
     .addTag('Clients')
     .addTag('Equipment')
     .addTag('Requests')
+    .addTag('Request Report')
+    .addTag('Rental')
     .addTag('Schedules')
     .addTag('Stages')
     .addTag('Tools')
