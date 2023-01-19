@@ -7,7 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { BrigadierTool } from '../../brigadier/entities/brigadier-tool.entity';
 import { RequestTool } from '../../request/entities/request-tool.entity';
@@ -22,8 +22,14 @@ export class Tool {
   @Column('text', { name: 'name' })
   name: string;
 
-  // @Column('integer', { name: 'quantity', default: () => '0' })
-  // quantity: number;
+  @Column('integer', { name: 'quantity_total', default: () => '0' })
+  quantity_total: number;
+
+  @Column('integer', { name: 'quantity_in_stock', default: () => '0' })
+  quantity_in_stock: number;
+
+  @Column('integer', { name: 'rental_price', default: () => '0' })
+  rental_price: number;
 
   @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.tool, {
     cascade: true,

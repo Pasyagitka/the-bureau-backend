@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { RequestReport } from 'src/request-report/entities/request-report.entity';
 import { Stage } from 'src/stage/entities/stage.entity';
 import {
   Column,
@@ -17,7 +18,6 @@ import { Client } from '../../client/entities/client.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { RequestStatus } from '../types/request-status.enum';
 import { Address } from './address.entity';
-import { Report } from './report.entity';
 import { RequestAccessory } from './request-accessory.entity';
 import { RequestEquipment } from './request-equipment.entity';
 import { RequestTool } from './request-tool.entity';
@@ -37,11 +37,11 @@ export class Request {
   @Column('text', { name: 'comment', nullable: true })
   comment: string | null;
 
-  @OneToMany(() => Report, (report) => report.request, {
+  @OneToMany(() => RequestReport, (report) => report.request, {
     cascade: true,
     onDelete: 'CASCADE',
   })
-  reports: Report[];
+  reports: RequestReport[];
 
   @OneToOne(() => Address, {
     cascade: true,
