@@ -1,18 +1,13 @@
+import { Exclude } from 'class-transformer';
 import {
-  Column,
-  Entity,
+  Column, DeleteDateColumn, Entity,
   Index,
-  JoinColumn,
-  DeleteDateColumn,
-  OneToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
-import { BrigadierTool } from './brigadier-tool.entity';
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
-import { Exclude } from 'class-transformer';
+import { User } from '../../user/entities/user.entity';
+import { BrigadierTool } from './brigadier-tool.entity';
 
 @Index('brigadier_pkey', ['id'], { unique: true })
 @Entity('brigadier')
@@ -40,7 +35,7 @@ export class Brigadier {
 
   @OneToOne(() => User, (user) => user.brigadier, {
     cascade: true,
-    eager: true,
+    //eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])

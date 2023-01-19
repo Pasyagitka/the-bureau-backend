@@ -7,7 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Equipment } from '../../equipment/entities/equipment.entity';
 import { RequestAccessory } from '../../request/entities/request-accessory.entity';
@@ -25,7 +25,7 @@ export class Accessory {
   name: string;
 
   @ManyToOne(() => Equipment, (equipment) => equipment.accessories, {
-    eager: true,
+    //eager: true,
   })
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
