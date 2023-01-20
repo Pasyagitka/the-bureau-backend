@@ -17,6 +17,7 @@ import { BrigadierTool } from './brigadier/entities/brigadier-tool.entity';
 import { Brigadier } from './brigadier/entities/brigadier.entity';
 import { ClientModule } from './client/client.module';
 import { Client } from './client/entities/client.entity';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { BadRequestExceptionFilter } from './common/filters/bad-request-exception.filter';
 import { HttpExceptionFilter } from './common/filters/exception.filter';
 import { MailModule } from './common/mail/mail.module';
@@ -110,6 +111,10 @@ import { UserModule } from './user/user.module';
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
     {
       provide: APP_FILTER,
       useClass: ForbiddenAbilityFilter,
