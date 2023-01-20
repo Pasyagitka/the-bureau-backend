@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotExistsError } from 'src/common/exceptions';
+import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Repository } from 'typeorm';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
@@ -16,8 +17,15 @@ export class AccessoryService {
     private equipmentRepository: Repository<Equipment>,
   ) {}
 
-  async getAll(): Promise<Accessory[]> {
-    return this.accessoryRepository.find({ order: { id: 'ASC' } });
+  async getAll(query: PaginatedQuery) {
+    return this.accessoryRepository.findAndCount({
+      relations: {
+        equipment: true,
+      },
+      order: { id: 'ASC' },
+      skip: query.offset,
+      take: query.limit,
+    });
   }
 
   async get(id: number): Promise<Accessory> {
@@ -44,7 +52,7 @@ export class AccessoryService {
     if (!accessory) throw new NotExistsError('accessory');
 
     if (!updateAccessoryDto.sku) {
-      if (updateAccessoryDto.sku === null) accessory.sku = null; 
+      if (updateAccessoryDto.sku === null) accessory.sku = null;
     } else {
       accessory.sku = updateAccessoryDto.sku;
     }
