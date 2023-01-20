@@ -1,16 +1,6 @@
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Equipment } from '../../equipment/entities/equipment.entity';
-import { RequestAccessory } from '../../request/entities/request-accessory.entity';
 
 @Index('accessory_pkey', ['id'], { unique: true })
 @Entity('accessory')
@@ -24,17 +14,9 @@ export class Accessory {
   @Column('text', { name: 'name' })
   name: string;
 
-  @ManyToOne(() => Equipment, (equipment) => equipment.accessories, {
-    //eager: true,
-  })
+  @ManyToOne(() => Equipment, (equipment) => equipment.accessories)
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
-
-  @OneToMany(() => RequestAccessory, (requestAccessory) => requestAccessory.accessory, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  requestAccessories: RequestAccessory[];
 
   @Exclude()
   @DeleteDateColumn()

@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ToolService } from './tool.service';
-import { ToolController } from './tool.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Tool } from './entities/tool.entity';
 import { BrigadierTool } from 'src/brigadier/entities/brigadier-tool.entity';
-import { RequestTool } from 'src/request/entities/request-tool.entity';
 import { Stage } from 'src/stage/entities/stage.entity';
+import { Tool } from './entities/tool.entity';
+import { ToolController } from './tool.controller';
+import { ToolService } from './tool.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tool, Stage, RequestTool, BrigadierTool])],
+  imports: [TypeOrmModule.forFeature([Tool, Stage, BrigadierTool])],
   controllers: [ToolController],
   providers: [ToolService],
 })

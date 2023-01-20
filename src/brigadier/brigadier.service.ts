@@ -1,13 +1,13 @@
+import { ForbiddenError } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Brigadier } from './entities/brigadier.entity';
-import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
-import { NotExistsError } from 'src/common/exceptions';
 import { AbilityFactory } from 'src/ability/ability.factory';
 import { Action } from 'src/ability/types';
-import { ForbiddenError } from '@casl/ability';
+import { NotExistsError } from 'src/common/exceptions';
 import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
+import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
+import { Brigadier } from './entities/brigadier.entity';
 
 @Injectable()
 export class BrigadierService {
@@ -25,7 +25,7 @@ export class BrigadierService {
   }
 
   async get(id: number): Promise<Brigadier> {
-    return await this.brigadierRepository.findOne({ where: { id } });
+    return await this.brigadierRepository.findOne({ where: { id }, relations: { user: true } });
   }
 
   async update(id: number, updateBrigadierDto: UpdateBrigadierDto, user: User): Promise<Brigadier> {

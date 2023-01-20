@@ -1,8 +1,13 @@
 import { Exclude } from 'class-transformer';
 import {
-  Column, DeleteDateColumn, Entity,
+  Column,
+  DeleteDateColumn,
+  Entity,
   Index,
-  JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
@@ -27,36 +32,20 @@ export class Brigadier {
   @Column('text', { name: 'contactNumber' })
   contactNumber: string;
 
-  @Column('float', { name: 'rating', default: () => '0' })
-  rating: number;
-
   @Column('boolean', { name: 'isApproved', default: () => 'false' })
   isApproved: boolean;
 
-  @OneToOne(() => User, (user) => user.brigadier, {
-    cascade: true,
-    //eager: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => User, (user) => user.brigadier, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.brigadier, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.brigadier, { cascade: true, onDelete: 'CASCADE' })
   brigadierTools: BrigadierTool[];
 
-  @OneToMany(() => Request, (request) => request.brigadier, {
-    cascade: true,
-    onDelete: 'SET NULL',
-  })
+  @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];
 
-  @OneToMany(() => Schedule, (schedule) => schedule.brigadier, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => Schedule, (schedule) => schedule.brigadier, { cascade: true, onDelete: 'CASCADE' })
   schedules: Schedule[];
 
   @Exclude()

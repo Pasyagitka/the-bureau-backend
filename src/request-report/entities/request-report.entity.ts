@@ -1,18 +1,10 @@
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Request } from './request.entity';
+import { Column, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Request } from '../../request/entities/request.entity';
 
-@Index('report_pkey', ['id'], { unique: true })
-@Entity('report')
-export class Report {
+@Index('request_report_pkey', ['id'], { unique: true })
+@Entity('request_report')
+export class RequestReport {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 

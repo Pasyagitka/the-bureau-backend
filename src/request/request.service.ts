@@ -58,11 +58,9 @@ export class RequestService {
 
     const client = await this.clientRepository.findOne({
       where: { user: { id: user.id } },
-      // loadEagerRelations: false,
-      // loadRelationIds: {
-      //   relations: ['user'],
-      //   disableMixedMap: true,
-      // },
+      relations: {
+        user: true,
+      },
     });
     if (!client) throw new NotExistsError('client');
     console.log(user, client);
@@ -82,7 +80,7 @@ export class RequestService {
   async getAll(): Promise<Request[]> {
     return this.requestRepository.find({
       //TODO do not return creds
-      relations: ['client.user', 'address', 'client'],
+      relations: ['client.user', 'address', 'client', 'stage'],
       order: { id: 'DESC' },
     });
   }
@@ -111,6 +109,8 @@ export class RequestService {
         },
         client: true,
         stage: true,
+        brigadier: true,
+        address: true,
       },
       order: { id: 'DESC' },
     });
@@ -134,6 +134,9 @@ export class RequestService {
         requestEquipment: {
           equipment: true,
         },
+        brigadier: true,
+        address: true,
+        stage: true,
       },
     });
   }
@@ -257,9 +260,12 @@ export class RequestService {
       where: { client: { id: clientId } },
       relations: {
         client: true,
+        brigadier: true,
+        address: true,
         requestEquipment: {
           equipment: true,
         },
+        stage: true,
       },
       order: { id: 'DESC' },
     });
@@ -274,7 +280,7 @@ export class RequestService {
   async remove(id: number) {
     const item = await this.requestRepository.findOneOrFail({
       where: { id },
-      relations: ['address', 'reports', 'requestAccessories', 'requestEquipment', 'requestTools', 'schedules'],
+      relations: ['address', 'reports', 'requestEquipment', 'schedules'],
     });
     return await this.requestRepository.softRemove(item);
   }
