@@ -19,22 +19,18 @@ export class ClientService {
 
   async getAll(): Promise<Client[]> {
     return this.clientRepository.find({
-      // loadEagerRelations: false,
-      // loadRelationIds: {
-      //   relations: ['user'],
-      //   disableMixedMap: true,
-      // },
+      relations: {
+        user: true,
+      },
     });
   }
 
   async get(id: number, user: User): Promise<Client> {
     const client = await this.clientRepository.findOne({
       where: { id },
-      // loadEagerRelations: false,
-      // loadRelationIds: {
-      //   relations: ['user'],
-      //   disableMixedMap: true,
-      // },
+      relations: {
+        user: true,
+      },
     });
 
     const ability = this.abilityFactory.defineAbility(user);
@@ -61,6 +57,9 @@ export class ClientService {
   async update(id: number, updateClientDto: UpdateClientDto, user: User): Promise<Client> {
     const client = await this.clientRepository.findOne({
       where: { id },
+      relations: {
+        user: true,
+      },
     });
     if (!client) throw new NotExistsError('client');
 

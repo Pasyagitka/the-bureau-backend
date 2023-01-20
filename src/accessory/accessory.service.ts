@@ -29,7 +29,12 @@ export class AccessoryService {
   }
 
   async get(id: number): Promise<Accessory> {
-    const item = await this.accessoryRepository.findOne({ where: { id } });
+    const item = await this.accessoryRepository.findOne({
+      where: { id },
+      relations: {
+        equipment: true,
+      },
+    });
     if (!item) {
       throw new NotExistsError('accessory');
     }
@@ -68,7 +73,6 @@ export class AccessoryService {
   async remove(id: number): Promise<Accessory> {
     const item = await this.accessoryRepository.findOne({
       where: { id },
-      relations: ['requestAccessories'],
     });
     if (!item) throw new NotExistsError('accessory');
     return await this.accessoryRepository.softRemove(item);

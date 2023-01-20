@@ -41,19 +41,11 @@ export class Request {
   })
   reports: RequestReport[];
 
-  @OneToOne(() => Address, {
-    cascade: true,
-    //eager: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => Address, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'addressId', referencedColumnName: 'id' }])
   address: Address;
 
-  @ManyToOne(
-    () => Brigadier,
-    (brigadier) => brigadier.requests,
-    //  { eager: true }
-  )
+  @ManyToOne(() => Brigadier, (brigadier) => brigadier.requests)
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
   brigadier: Brigadier;
 
@@ -61,11 +53,7 @@ export class Request {
   @JoinColumn([{ name: 'clientId', referencedColumnName: 'id' }])
   client: Client;
 
-  @ManyToOne(
-    () => Stage,
-    (stage) => stage.requests,
-    // , { eager: true }
-  )
+  @ManyToOne(() => Stage, (stage) => stage.requests)
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
 
