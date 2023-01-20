@@ -27,9 +27,7 @@ import { RentalModule } from './rental/rental.module';
 import { RequestReport } from './request-report/entities/request-report.entity';
 import { RequestReportModule } from './request-report/request-report.module';
 import { Address } from './request/entities/address.entity';
-import { RequestAccessory } from './request/entities/request-accessory.entity';
 import { RequestEquipment } from './request/entities/request-equipment.entity';
-import { RequestTool } from './request/entities/request-tool.entity';
 import { Request } from './request/entities/request.entity';
 import { RequestModule } from './request/request.module';
 import { Schedule } from './schedule/entities/schedule.entity';
@@ -63,10 +61,8 @@ import { UserModule } from './user/user.module';
         Stage,
         Tool,
         Request,
-        RequestAccessory,
         RequestEquipment,
         Rental,
-        RequestTool,
         RequestReport,
         Schedule,
         User,

@@ -274,7 +274,7 @@ export class RequestService {
   async remove(id: number) {
     const item = await this.requestRepository.findOneOrFail({
       where: { id },
-      relations: ['address', 'reports', 'requestAccessories', 'requestEquipment', 'requestTools', 'schedules'],
+      relations: ['address', 'reports', 'requestEquipment', 'schedules'],
     });
     return await this.requestRepository.softRemove(item);
   }

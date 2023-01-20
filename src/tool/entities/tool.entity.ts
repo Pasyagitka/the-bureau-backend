@@ -10,7 +10,6 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { BrigadierTool } from '../../brigadier/entities/brigadier-tool.entity';
-import { RequestTool } from '../../request/entities/request-tool.entity';
 import { Stage } from '../../stage/entities/stage.entity';
 
 @Index('tool_pkey', ['id'], { unique: true })
@@ -36,12 +35,6 @@ export class Tool {
     onDelete: 'CASCADE',
   })
   brigadierTools: BrigadierTool[];
-
-  @OneToMany(() => RequestTool, (requestTool) => requestTool.tool, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  requestTools: RequestTool[];
 
   @ManyToOne(() => Stage, (stage) => stage.tools)
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])

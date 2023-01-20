@@ -8,9 +8,7 @@ import { RequestReport } from 'src/request-report/entities/request-report.entity
 import { ScheduleModule } from 'src/schedule/schedule.module';
 import { Stage } from 'src/stage/entities/stage.entity';
 import { Address } from './entities/address.entity';
-import { RequestAccessory } from './entities/request-accessory.entity';
 import { RequestEquipment } from './entities/request-equipment.entity';
-import { RequestTool } from './entities/request-tool.entity';
 import { Request } from './entities/request.entity';
 import { RequestController } from './request.controller';
 import { RequestService } from './request.service';
@@ -18,18 +16,7 @@ import { RequestSubscriber } from './subscribers/request.subscriber';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Request,
-      Address,
-      RequestReport,
-      Equipment,
-      Client,
-      RequestAccessory,
-      RequestEquipment,
-      RequestTool,
-      Stage,
-      Brigadier,
-    ]),
+    TypeOrmModule.forFeature([Request, Address, RequestReport, Equipment, Client, RequestEquipment, Stage, Brigadier]),
     AbilityModule,
     ScheduleModule,
   ],

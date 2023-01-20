@@ -18,9 +18,7 @@ import { Client } from '../../client/entities/client.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { RequestStatus } from '../types/request-status.enum';
 import { Address } from './address.entity';
-import { RequestAccessory } from './request-accessory.entity';
 import { RequestEquipment } from './request-equipment.entity';
-import { RequestTool } from './request-tool.entity';
 
 @Index('request_pkey', ['id'], { unique: true })
 @Entity('request')
@@ -51,7 +49,11 @@ export class Request {
   @JoinColumn([{ name: 'addressId', referencedColumnName: 'id' }])
   address: Address;
 
-  @ManyToOne(() => Brigadier, (brigadier) => brigadier.requests, { eager: true })
+  @ManyToOne(
+    () => Brigadier,
+    (brigadier) => brigadier.requests,
+    //  { eager: true }
+  )
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
   brigadier: Brigadier;
 
@@ -59,7 +61,11 @@ export class Request {
   @JoinColumn([{ name: 'clientId', referencedColumnName: 'id' }])
   client: Client;
 
-  @ManyToOne(() => Stage, (stage) => stage.requests, { eager: true })
+  @ManyToOne(
+    () => Stage,
+    (stage) => stage.requests,
+    // , { eager: true }
+  )
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
 
@@ -70,23 +76,11 @@ export class Request {
   })
   status: RequestStatus;
 
-  @OneToMany(() => RequestAccessory, (requestAccessory) => requestAccessory.request, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  requestAccessories: RequestAccessory[];
-
   @OneToMany(() => RequestEquipment, (requestEquipment) => requestEquipment.request, {
     cascade: true,
     onDelete: 'CASCADE',
   })
   requestEquipment: RequestEquipment[];
-
-  @OneToMany(() => RequestTool, (requestTool) => requestTool.request, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  requestTools: RequestTool[];
 
   @OneToMany(() => Schedule, (schedule) => schedule.request, {
     cascade: true,
