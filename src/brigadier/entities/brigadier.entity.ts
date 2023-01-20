@@ -32,9 +32,6 @@ export class Brigadier {
   @Column('text', { name: 'contactNumber' })
   contactNumber: string;
 
-  @Column('float', { name: 'rating', default: () => '0' })
-  rating: number;
-
   @Column('boolean', { name: 'isApproved', default: () => 'false' })
   isApproved: boolean;
 
