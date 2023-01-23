@@ -1,12 +1,5 @@
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, DeleteDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { RequestEquipment } from '../../request/entities/request-equipment.entity';
 import { Mounting } from '../types/mounting.enum';

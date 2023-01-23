@@ -1,4 +1,5 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { UserResponseDto } from 'src/user/dto/user-response.dto';
 
 @Exclude()
 export class ClientResponseDto {
@@ -16,6 +17,10 @@ export class ClientResponseDto {
 
   @Expose()
   patronymic: string;
+
+  @Expose()
+  @Type(() => UserResponseDto)
+  user?: UserResponseDto;
 
   constructor(partial: Partial<ClientResponseDto>) {
     Object.assign(this, partial);

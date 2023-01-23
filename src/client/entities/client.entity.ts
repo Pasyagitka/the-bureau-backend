@@ -1,16 +1,11 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  DeleteDateColumn,
-} from 'typeorm';
-import { User } from '../../user/entities/user.entity';
-import { Request } from '../../request/entities/request.entity';
 import { Exclude } from 'class-transformer';
+import {
+  Column, DeleteDateColumn, Entity,
+  Index,
+  JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn
+} from 'typeorm';
+import { Request } from '../../request/entities/request.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Index('client_pkey', ['id'], { unique: true })
 @Entity('client')
@@ -30,11 +25,7 @@ export class Client {
   @Column('text', { name: 'contactNumber' })
   contactNumber: string;
 
-  @OneToOne(() => User, (user) => user.client, {
-    cascade: true,
-    //eager: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => User, (user) => user.client, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
