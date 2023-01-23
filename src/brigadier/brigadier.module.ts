@@ -1,20 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BrigadierService } from './brigadier.service';
+import { AbilityModule } from '../ability/ability.module';
+import { Request } from '../request/entities/request.entity';
+import { Schedule } from '../schedule/entities/schedule.entity';
+import { Tool } from '../tool/entities/tool.entity';
+import { User } from '../user/entities/user.entity';
 import { BrigadierController } from './brigadier.controller';
+import { BrigadierService } from './brigadier.service';
 import { BrigadierTool } from './entities/brigadier-tool.entity';
 import { Brigadier } from './entities/brigadier.entity';
-import { User } from 'src/user/entities/user.entity';
-import { Schedule } from 'src/schedule/entities/schedule.entity';
-import { Request } from 'src/request/entities/request.entity';
-import { Tool } from 'src/tool/entities/tool.entity';
-import { AbilityModule } from 'src/ability/ability.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, Brigadier, BrigadierTool, Tool, Request, Schedule]),
-    AbilityModule,
-  ],
+  imports: [TypeOrmModule.forFeature([User, Brigadier, BrigadierTool, Tool, Request, Schedule]), AbilityModule],
   controllers: [BrigadierController],
   providers: [BrigadierService],
 })

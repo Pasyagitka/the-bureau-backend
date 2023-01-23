@@ -1,5 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { ClientResponseDto } from 'src/client/dto/client-response.dto';
+import { ClientResponseDto } from '../../client/dto/client-response.dto';
 import { RequestEquipmentResponseDto, StageResponseDto } from './brigadier-request-response.dto';
 
 @Exclude()

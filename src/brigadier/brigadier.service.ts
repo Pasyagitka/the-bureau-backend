@@ -1,11 +1,11 @@
 import { ForbiddenError } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbilityFactory } from 'src/ability/ability.factory';
-import { Action } from 'src/ability/types';
-import { NotExistsError } from 'src/common/exceptions';
-import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { AbilityFactory } from '../ability/ability.factory';
+import { Action } from '../ability/types';
+import { NotExistsError } from '../common/exceptions';
+import { User } from '../user/entities/user.entity';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
 

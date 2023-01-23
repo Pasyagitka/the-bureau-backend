@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotExistsError } from 'src/common/exceptions';
-import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
-import { Equipment } from 'src/equipment/entities/equipment.entity';
 import { Repository } from 'typeorm';
+import { NotExistsError } from '../common/exceptions';
+import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
+import { Equipment } from '../equipment/entities/equipment.entity';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Accessory } from './entities/accessory.entity';

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EquipmentService } from './equipment.service';
-import { EquipmentController } from './equipment.controller';
-import { Accessory } from 'src/accessory/entities/accessory.entity';
-import { RequestEquipment } from 'src/request/entities/request-equipment.entity';
+import { Accessory } from '../accessory/entities/accessory.entity';
+import { RequestEquipment } from '../request/entities/request-equipment.entity';
 import { Equipment } from './entities/equipment.entity';
+import { EquipmentController } from './equipment.controller';
+import { EquipmentService } from './equipment.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Equipment, Accessory, RequestEquipment])],

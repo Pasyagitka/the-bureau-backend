@@ -1,12 +1,12 @@
 import { Ability, AbilityBuilder, AbilityClass, ExtractSubjectType } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Role } from 'src/auth/enum/role.enum';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
-import { Client } from 'src/client/entities/client.entity';
-import { Equipment } from 'src/equipment/entities/equipment.entity';
-import { Request } from 'src/request/entities/request.entity';
-import { Schedule } from 'src/schedule/entities/schedule.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Role } from '../auth/enum/role.enum';
+import { Brigadier } from '../brigadier/entities/brigadier.entity';
+import { Client } from '../client/entities/client.entity';
+import { Equipment } from '../equipment/entities/equipment.entity';
+import { Request } from '../request/entities/request.entity';
+import { Schedule } from '../schedule/entities/schedule.entity';
+import { User } from '../user/entities/user.entity';
 import { Action, AppAbility, Subjects } from './types';
 
 type RequestBrigadier = Request & {

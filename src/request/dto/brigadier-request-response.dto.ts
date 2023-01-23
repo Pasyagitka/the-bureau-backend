@@ -1,7 +1,7 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { BrigadierResponseDto } from 'src/brigadier/dto/brigadier-response.dto';
-import { ClientResponseDto } from 'src/client/dto/client-response.dto';
-import { EquipmentResponseDto } from 'src/equipment/dto/equipment-response.dto';
+import { BrigadierResponseDto } from '../../brigadier/dto/brigadier-response.dto';
+import { ClientResponseDto } from '../../client/dto/client-response.dto';
+import { EquipmentResponseDto } from '../../equipment/dto/equipment-response.dto';
 import { RequestAccessoryResponseDto } from './request-accessory-response.dto';
 import { RequestToolResponseDto } from './request-tool-response.dto';
 

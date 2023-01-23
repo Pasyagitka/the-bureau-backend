@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
-import { NotExistsError } from 'src/common/exceptions';
-import { Tool } from 'src/tool/entities/tool.entity';
 import { Repository } from 'typeorm';
+import { Brigadier } from '../brigadier/entities/brigadier.entity';
+import { NotExistsError } from '../common/exceptions';
+import { Tool } from '../tool/entities/tool.entity';
 import { CreateRentalDto } from './dto/create-rental.dto';
 import { RentalQueryDto } from './dto/rental-query.dto';
 import { Rental } from './entities/rental.entity';

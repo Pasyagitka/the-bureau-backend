@@ -1,6 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { BrigadierResponseDto } from 'src/brigadier/dto/brigadier-response.dto';
-import { ToolResponseDto } from 'src/tool/dto/tool-response.dto';
+import { BrigadierResponseDto } from '../../brigadier/dto/brigadier-response.dto';
+import { ToolResponseDto } from '../../tool/dto/tool-response.dto';
 
 @Exclude()
 export class RentalResponseDto {

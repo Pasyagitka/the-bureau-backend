@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AlreadyExistsError, NotExistsError } from 'src/common/exceptions';
 import { Repository } from 'typeorm';
+import { AlreadyExistsError, NotExistsError } from '../common/exceptions';
 import { CreateEquipmentDto } from './dto/create-equipment.dto';
 import { UpdateEquipmentDto } from './dto/update-equipment.dto';
 import { Equipment } from './entities/equipment.entity';

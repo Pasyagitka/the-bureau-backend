@@ -1,6 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
-import { Tool } from 'src/tool/entities/tool.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,6 +9,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
+import { Brigadier } from '../../brigadier/entities/brigadier.entity';
+import { Tool } from '../../tool/entities/tool.entity';
 
 @Index('rental_pkey', ['id'], { unique: true })
 @Entity('rental')

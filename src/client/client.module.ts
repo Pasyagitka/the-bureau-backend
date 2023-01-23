@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ClientService } from './client.service';
+import { AbilityModule } from '../ability/ability.module';
+import { User } from '../user/entities/user.entity';
 import { ClientController } from './client.controller';
+import { ClientService } from './client.service';
 import { Client } from './entities/client.entity';
-import { User } from 'src/user/entities/user.entity';
-import { AbilityModule } from 'src/ability/ability.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Client, User]), AbilityModule],

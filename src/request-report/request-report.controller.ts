@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiAuth } from 'src/common/decorators/auth.decorator';
+import { ApiAuth } from '../common/decorators/auth.decorator';
 import { CreateRequestReportDto } from './dto/create-request-report.dto';
 import { UpdateRequestReportDto } from './dto/update-request-report.dto';
 import { RequestReportService } from './request-report.service';

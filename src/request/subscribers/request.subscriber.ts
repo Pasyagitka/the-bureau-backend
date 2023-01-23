@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ScheduleService } from 'src/schedule/schedule.service';
 import { Connection, EntitySubscriberInterface, EventSubscriber, UpdateEvent } from 'typeorm';
+import { ScheduleService } from '../../schedule/schedule.service';
 import { Request } from '../entities/request.entity';
 
 @Injectable()

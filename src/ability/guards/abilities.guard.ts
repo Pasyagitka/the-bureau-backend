@@ -1,7 +1,7 @@
 import { ForbiddenError } from '@casl/ability';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/auth/decorators/auth.decorator';
+import { IS_PUBLIC_KEY } from '../../auth/decorators/auth.decorator';
 import { AbilityFactory } from '../ability.factory';
 import { CHECK_ABILITY } from '../decorators/abilities.decorator';
 import { RequiredRule } from '../types';

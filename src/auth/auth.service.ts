@@ -1,23 +1,23 @@
-import * as bcrypt from 'bcryptjs';
-import * as uuid from 'uuid';
-import * as generator from 'generate-password';
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
+import * as generator from 'generate-password';
+import * as uuid from 'uuid';
+import { CreateBrigadierDto } from '../brigadier/dto/create-brigadier.dto';
+import { CreateClientDto } from '../client/dto/create-client.dto';
 import {
   AlreadyExistsError,
   BadActivationLinkError,
   BadResetPasswordLinkError,
   NotActivatedError,
   NotExistsError,
-  WrongPasswordError,
-} from 'src/common/exceptions';
+  WrongPasswordError
+} from '../common/exceptions';
 import { UserService } from '../user/user.service';
-import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
-import { CreateClientDto } from 'src/client/dto/create-client.dto';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
 import { RegisterUserEvent } from './events/register-user.event';
 import { ResetPasswordEvent } from './events/reset-password.event';
-import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
 
 @Injectable()
 export class AuthService {

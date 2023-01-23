@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ScheduleService } from './schedule.service';
-import { ScheduleController } from './schedule.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
-import { Request } from 'src/request/entities/request.entity';
+import { AbilityModule } from '../ability/ability.module';
+import { Brigadier } from '../brigadier/entities/brigadier.entity';
+import { Request } from '../request/entities/request.entity';
 import { Schedule } from './entities/schedule.entity';
-import { AbilityModule } from 'src/ability/ability.module';
+import { ScheduleController } from './schedule.controller';
+import { ScheduleService } from './schedule.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Schedule, Brigadier, Request]), AbilityModule],

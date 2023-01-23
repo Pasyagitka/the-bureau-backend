@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ConfirmResetPasswordEvent } from 'src/auth/events/confirm-reset.event';
-import { RegisterUserEvent } from 'src/auth/events/register-user.event';
-import { ResetPasswordEvent } from 'src/auth/events/reset-password.event';
+import { ConfirmResetPasswordEvent } from '../../../auth/events/confirm-reset.event';
+import { RegisterUserEvent } from '../../../auth/events/register-user.event';
+import { ResetPasswordEvent } from '../../../auth/events/reset-password.event';
 import { MailService } from '../mail.service';
 
 @Injectable()

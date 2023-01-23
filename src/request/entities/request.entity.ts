@@ -1,6 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { RequestReport } from 'src/request-report/entities/request-report.entity';
-import { Stage } from 'src/stage/entities/stage.entity';
 import {
   Column,
   CreateDateColumn,
@@ -15,7 +13,9 @@ import {
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
+import { RequestReport } from '../../request-report/entities/request-report.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
+import { Stage } from '../../stage/entities/stage.entity';
 import { RequestStatus } from '../types/request-status.enum';
 import { Address } from './address.entity';
 import { RequestEquipment } from './request-equipment.entity';

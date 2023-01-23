@@ -1,11 +1,11 @@
 import { Body, Controller, Get, HttpCode, Param, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateBrigadierDto } from 'src/brigadier/dto/create-brigadier.dto';
-import { CreateClientDto } from 'src/client/dto/create-client.dto';
-import { ApiResponses } from 'src/common/decorators/api-responses.decorator';
-import { ApiAuth } from 'src/common/decorators/auth.decorator';
-import { ErrorMessageResponseDto } from 'src/common/dto/error-message-response.dto';
-import { MessageResponseDto } from 'src/common/dto/message-response.dto';
+import { CreateBrigadierDto } from '../brigadier/dto/create-brigadier.dto';
+import { CreateClientDto } from '../client/dto/create-client.dto';
+import { ApiResponses } from '../common/decorators/api-responses.decorator';
+import { ApiAuth } from '../common/decorators/auth.decorator';
+import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/auth.decorator';
 import { LoginResponseDto } from './dto/login-response.dto';

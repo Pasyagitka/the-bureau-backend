@@ -1,8 +1,8 @@
-import { Column, DeleteDateColumn, Entity, Index, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Role } from 'src/auth/enum/role.enum';
-import { Client } from '../../client/entities/client.entity';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
 import { Exclude } from 'class-transformer';
+import { Column, DeleteDateColumn, Entity, Index, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from '../../auth/enum/role.enum';
+import { Brigadier } from '../../brigadier/entities/brigadier.entity';
+import { Client } from '../../client/entities/client.entity';
 
 @Index('user_pkey', ['id'], { unique: true })
 @Entity('user')

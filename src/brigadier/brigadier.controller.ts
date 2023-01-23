@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
-import { Action } from 'src/ability/types';
-import { ApiResponses } from 'src/common/decorators/api-responses.decorator';
-import { ApiAuth } from 'src/common/decorators/auth.decorator';
-import { ErrorMessageResponseDto } from 'src/common/dto/error-message-response.dto';
+import { CheckAbilities } from '../ability/decorators/abilities.decorator';
+import { Action } from '../ability/types';
+import { ApiResponses } from '../common/decorators/api-responses.decorator';
+import { ApiAuth } from '../common/decorators/auth.decorator';
+import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { BrigadierService } from './brigadier.service';
 import { BrigadierResponseDto } from './dto/brigadier-response.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
