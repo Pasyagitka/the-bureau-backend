@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WinstonModule } from 'nest-winston';
 import { DataSource } from 'typeorm';
 import { AbilityModule } from './ability/ability.module';
 import { ForbiddenAbilityFilter } from './ability/filters/forbidden-ability.filter';
@@ -18,6 +19,7 @@ import { MailModule } from './common/mail/mail.module';
 import dbConfiguration from './config/database.config';
 import jwtConfiguration from './config/jwt.config';
 import mailConfiguration from './config/mail.config';
+import winstonConfiguration from './config/winston.config';
 import { EquipmentModule } from './equipment/equipment.module';
 import { RentalModule } from './rental/rental.module';
 import { RequestReportModule } from './request-report/request-report.module';
@@ -31,7 +33,7 @@ import { UserModule } from './user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [dbConfiguration, jwtConfiguration, mailConfiguration],
+      load: [dbConfiguration, jwtConfiguration, mailConfiguration, winstonConfiguration],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -41,17 +43,10 @@ import { UserModule } from './user/user.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({ ...configService.get('mail') }),
     }),
-    // WinstonModule.forRoot({
-    //   transports: [new winston.transports.Console(), new winston.transports.File({ filename: 'combined.log' })],
-    // }),
-    // WinstonModule.forRoot({
-    //   transports: [new winston.transports.Console()],
-    //   format: winston.format.combine(winston.format.timestamp(), winston.format.ms(), winston.format.json()),
-    // }),
-    // WinstonModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => ({ ...configService.get('winston') }),
-    // }),
+    WinstonModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({ ...configService.get('winston') }),
+    }),
     EventEmitterModule.forRoot({
       delimiter: '.',
     }),
