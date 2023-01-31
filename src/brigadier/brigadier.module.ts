@@ -7,11 +7,10 @@ import { Tool } from '../tool/entities/tool.entity';
 import { User } from '../user/entities/user.entity';
 import { BrigadierController } from './brigadier.controller';
 import { BrigadierService } from './brigadier.service';
-import { BrigadierTool } from './entities/brigadier-tool.entity';
 import { Brigadier } from './entities/brigadier.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Brigadier, BrigadierTool, Tool, Request, Schedule]), AbilityModule],
+  imports: [TypeOrmModule.forFeature([User, Brigadier, Tool, Request, Schedule]), AbilityModule],
   controllers: [BrigadierController],
   providers: [BrigadierService],
 })

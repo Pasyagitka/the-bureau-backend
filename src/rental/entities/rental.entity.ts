@@ -1,4 +1,6 @@
 import { Exclude } from 'class-transformer';
+import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { Tool } from 'src/tool/entities/tool.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,8 +11,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
-import { Brigadier } from '../../brigadier/entities/brigadier.entity';
-import { Tool } from '../../tool/entities/tool.entity';
 
 @Index('rental_pkey', ['id'], { unique: true })
 @Entity('rental')
@@ -24,11 +24,11 @@ export class Rental {
   @Column('date', { name: 'endDate' })
   endDate: Date;
 
-  @ManyToOne(() => Brigadier, (brigadier) => brigadier.brigadierTools)
+  @ManyToOne(() => Brigadier, (brigadier) => brigadier.brigadierRentals)
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
   brigadier: Brigadier;
 
-  @ManyToOne(() => Tool, (tool) => tool.brigadierTools)
+  @ManyToOne(() => Tool, (tool) => tool.id)
   @JoinColumn([{ name: 'toolId', referencedColumnName: 'id' }])
   tool: Tool;
 

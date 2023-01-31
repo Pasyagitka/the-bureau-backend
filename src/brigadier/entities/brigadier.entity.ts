@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Rental } from 'src/rental/entities/rental.entity';
 import {
   Column,
   DeleteDateColumn,
@@ -12,7 +13,6 @@ import {
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { User } from '../../user/entities/user.entity';
-import { BrigadierTool } from './brigadier-tool.entity';
 
 @Index('brigadier_pkey', ['id'], { unique: true })
 @Entity('brigadier')
@@ -39,8 +39,8 @@ export class Brigadier {
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToMany(() => BrigadierTool, (brigadierTool) => brigadierTool.brigadier, { cascade: true, onDelete: 'CASCADE' })
-  brigadierTools: BrigadierTool[];
+  @OneToMany(() => Rental, (brigadierRental) => brigadierRental.brigadier, { cascade: true, onDelete: 'CASCADE' })
+  brigadierRentals: Rental[];
 
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];
