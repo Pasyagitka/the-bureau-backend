@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { Repository } from 'typeorm';
 import { AlreadyExistsError, NotExistsError } from '../common/exceptions';
 import { Stage } from '../stage/entities/stage.entity';
@@ -16,8 +17,13 @@ export class ToolService {
     private stageRepository: Repository<Stage>,
   ) {}
 
-  async getAll(): Promise<Tool[]> {
-    return this.toolsRepository.find({ relations: { stage: true }, order: { id: 'ASC' } });
+  async getAll(query: PaginatedQuery) {
+    return this.toolsRepository.findAndCount({
+      relations: { stage: true },
+      order: { id: 'ASC' },
+      skip: query.offset,
+      take: query.limit,
+    });
   }
 
   async get(id: number): Promise<Tool> {

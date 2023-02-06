@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { Repository } from 'typeorm';
 import { AlreadyExistsError, NotExistsError } from '../common/exceptions';
 import { CreateEquipmentDto } from './dto/create-equipment.dto';
@@ -13,8 +14,12 @@ export class EquipmentService {
     private equipmentRepository: Repository<Equipment>,
   ) {}
 
-  async getAll(): Promise<Equipment[]> {
-    return this.equipmentRepository.find({ order: { id: 'ASC' } });
+  async getAll(query: PaginatedQuery) {
+    return this.equipmentRepository.findAndCount({
+      order: { id: 'ASC' },
+      skip: query.offset,
+      take: query.limit,
+    });
   }
 
   async get(id: number): Promise<Equipment> {

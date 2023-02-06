@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { PaginatedResponse } from 'src/common/pagination/paginate.dto';
+import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
@@ -30,13 +32,17 @@ export class EquipmentController {
   }
 
   @ApiResponses({
-    200: [EquipmentResponseDto],
+    200: PaginatedResponse(EquipmentResponseDto),
     500: ErrorMessageResponseDto,
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Equipment })
-  async getAll() {
-    return (await this.equipmentService.getAll()).map((i) => new EquipmentResponseDto(i));
+  async getAll(@Query() query: PaginatedQuery) {
+    const [data, total] = await this.equipmentService.getAll(query);
+    return {
+      data: data.map((i) => new EquipmentResponseDto(i)),
+      total,
+    };
   }
 
   @ApiResponses({

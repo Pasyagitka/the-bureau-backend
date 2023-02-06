@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { PaginatedResponse } from 'src/common/pagination/paginate.dto';
+import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
@@ -30,13 +32,17 @@ export class ToolController {
   }
 
   @ApiResponses({
-    200: [ToolResponseDto],
+    200: PaginatedResponse(ToolResponseDto),
     500: ErrorMessageResponseDto,
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Tool })
-  async getAll() {
-    return (await this.toolService.getAll()).map((i) => new ToolResponseDto(i));
+  async getAll(@Query() query: PaginatedQuery) {
+    const [data, total] = await this.toolService.getAll(query);
+    return {
+      data: data.map((i) => new ToolResponseDto(i)),
+      total,
+    };
   }
 
   @ApiResponses({
