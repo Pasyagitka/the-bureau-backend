@@ -39,6 +39,29 @@ export class UserController {
 
   @ApiResponses({
     200: UserResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id/activate')
+  @CheckAbilities({ action: Action.ManageAccess, subject: User })
+  async activateUser(@Param('id') id: string) {
+    return new UserResponseDto(await this.userService.activateUser(+id));
+  }
+
+  //TODO deactivate client too
+  @ApiResponses({
+    200: UserResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id/deactivate')
+  @CheckAbilities({ action: Action.ManageAccess, subject: User })
+  async deactivateUser(@Param('id') id: string) {
+    return new UserResponseDto(await this.userService.deactivateUser(+id));
+  }
+
+  @ApiResponses({
+    200: UserResponseDto,
     400: ErrorMessageResponseDto,
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
@@ -47,28 +70,6 @@ export class UserController {
   @CheckAbilities({ action: Action.Update, subject: User })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Req() req) {
     return new UserResponseDto(await this.userService.update(+id, updateUserDto, req.user));
-  }
-
-  @ApiResponses({
-    200: UserResponseDto,
-    404: ErrorMessageResponseDto,
-    500: ErrorMessageResponseDto,
-  })
-  @Patch('activate/:id')
-  @CheckAbilities({ action: Action.ManageAccess, subject: User })
-  async activateUser(@Param('id') id: string) {
-    return new UserResponseDto(await this.userService.activateUser(+id));
-  }
-
-  @ApiResponses({
-    200: UserResponseDto,
-    404: ErrorMessageResponseDto,
-    500: ErrorMessageResponseDto,
-  })
-  @Patch('deactivate/:id')
-  @CheckAbilities({ action: Action.ManageAccess, subject: User })
-  async deactivateUser(@Param('id') id: string) {
-    return new UserResponseDto(await this.userService.deactivateUser(+id));
   }
 
   @ApiResponses({

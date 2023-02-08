@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, Res, StreamableFile } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
@@ -17,6 +18,7 @@ import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.d
 import { Request } from './entities/request.entity';
 import { RequestService } from './request.service';
 
+//TODO manage app routes
 @ApiAuth()
 @ApiTags('Requests')
 @Controller('request')
@@ -50,9 +52,9 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @Get('/weekly-report/:id')
+  @Get(':brigadierId/weekly-report')
   @CheckAbilities({ action: Action.Read, subject: Request })
-  async getWeeklyReportForBrigadier(@Param('id') id: string) {
+  async getWeeklyReportForBrigadier(@Param('brigadierId') id: string) {
     return (await this.requestService.getWeeklyReportForBrigadier(+id)).map((i) => new RequestResponseDto(i));
   }
 
@@ -114,6 +116,9 @@ export class RequestController {
     );
   }
 
+  //TODO create report templates
+  //TODO create report (accessories; rental; schedule)
+
   @ApiResponses({
     200: [ClientRequestResponseDto],
     404: ErrorMessageResponseDto,
@@ -124,6 +129,25 @@ export class RequestController {
   async getClientRequests(@Param('clientId') id: string, @Req() req) {
     return (await this.requestService.getClientRequests(+id, req.user)).map((i) => new ClientRequestResponseDto(i));
   }
+
+  @ApiResponses({
+    200: StreamableFile,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Get(':id/report')
+  async getFullReport(@Param('id') id: number, @Res({ passthrough: true }) res: Response) {
+    const report = await this.requestService.getFullReport(id);
+    res.set({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'Content-Disposition': `attachment; filename="request-${id}-report.docx`,
+    });
+    return new StreamableFile(report);
+  }
+
+  //TODO add cron schedule
+
+  //TODO add request quality assurance (request-report)
 
   // @ApiResponses({
   //   200: [RequestEquipmentResponseDto],
@@ -142,7 +166,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @Patch('brigadier/update/:id')
+  @Patch(':id/update/brigadier')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByBrigadier(
     @Param('id') id: string,
@@ -152,26 +176,16 @@ export class RequestController {
     return new RequestResponseDto(await this.requestService.updateByBrigadier(+id, updateRequestStatusDto, req.user));
   }
 
+  //TODO email при смене статуса
   @ApiResponses({
     200: RequestResponseDto,
     400: ErrorMessageResponseDto,
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @Patch('admin/update/:id')
+  @Patch(':id/update/admin')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByAdmin(@Param('id') id: string, @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto) {
     return new RequestResponseDto(await this.requestService.updateByAdmin(+id, updateRequestBrigadierDto));
-  }
-
-  @ApiResponses({
-    200: RequestResponseDto,
-    404: ErrorMessageResponseDto,
-    500: ErrorMessageResponseDto,
-  })
-  @Delete(':id')
-  @CheckAbilities({ action: Action.Delete, subject: Request })
-  async remove(@Param('id') id: string) {
-    return new RequestResponseDto(await this.requestService.remove(+id));
   }
 }

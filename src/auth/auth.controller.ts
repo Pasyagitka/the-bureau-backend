@@ -20,6 +20,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  //TODO add email account confirmation
   @ApiResponses({
     200: LoginResponseDto,
     500: ErrorMessageResponseDto,

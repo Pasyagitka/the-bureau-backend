@@ -8,6 +8,7 @@ import { CreateRentalDto } from './dto/create-rental.dto';
 import { RentalQueryDto } from './dto/rental-query.dto';
 import { Rental } from './entities/rental.entity';
 
+//TODO implement tool rental
 @Injectable()
 export class RentalService {
   constructor(

@@ -31,16 +31,14 @@ export class UserService {
     const adminUser = await this.usersRepository.findOne({
       where: { login: process.env.ADMIN_LOGIN },
     });
-    console.log(adminUser);
     if (!adminUser) {
-      const admin = await this.usersRepository.save({
+      await this.usersRepository.save({
         login: process.env.ADMIN_LOGIN,
         email: process.env.ADMIN_EMAIL,
         password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 3),
         role: Role.Admin,
         isActivated: true,
       });
-      console.log(admin);
     }
   }
 
@@ -111,7 +109,6 @@ export class UserService {
       select: {
         id: true,
         role: true,
-        password: false,
         client: { id: true },
         brigadier: { id: true },
       },
