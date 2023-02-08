@@ -51,6 +51,24 @@ export class AccessoryService {
     item.equipment = equipment;
     return await this.accessoryRepository.save(item);
   }
+  //TODO return db errors
+
+  async import(importAccessoriesDto: CreateAccessoryDto[]): Promise<Accessory[]> {
+    const items = await Promise.all(
+      //todo rewrite for perfomance (equipment)
+      importAccessoriesDto.map(async (createAccessoryDto) => {
+        const equipment = await this.equipmentRepository.findOne({
+          where: { id: createAccessoryDto.equipmentId },
+        });
+        if (!equipment) throw new NotExistsError('equipment');
+
+        const item = this.accessoryRepository.create(createAccessoryDto);
+        item.equipment = equipment;
+        return item;
+      }),
+    );
+    return await this.accessoryRepository.save(items);
+  }
 
   async update(id: number, updateAccessoryDto: UpdateAccessoryDto): Promise<Accessory> {
     const accessory = await this.accessoryRepository.findOne({ where: { id } });

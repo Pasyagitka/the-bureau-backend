@@ -33,6 +33,18 @@ export class AccessoryController {
   }
 
   @ApiResponses({
+    201: [AccessoryResponseDto],
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Post('/import')
+  async import(@Body() importAccessoriesDto: CreateAccessoryDto[]) {
+    const data = await this.accessoryService.import(importAccessoriesDto);
+    return data.map((i) => new AccessoryResponseDto(i));
+  }
+
+  @ApiResponses({
     200: PaginatedResponse(AccessoryResponseDto),
     500: ErrorMessageResponseDto,
   })
