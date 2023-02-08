@@ -16,7 +16,8 @@ import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { Request } from './entities/request.entity';
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const carbone = require('carbone');
 @Injectable()
 export class RequestService {
   constructor(
@@ -100,33 +101,6 @@ export class RequestService {
     });
   }
 
-  async getBrigadierRequests(brigadierId: number, user: User) {
-    const requests: any = await this.requestRepository.find({
-      where: { brigadier: { id: brigadierId } },
-      relations: {
-        requestEquipment: {
-          equipment: true,
-        },
-        client: true,
-        stage: true,
-        brigadier: true,
-        address: true,
-      },
-      order: { id: 'DESC' },
-    });
-
-    if (requests.length > 0) {
-      const ability = this.abilityFactory.defineAbility(user);
-      ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
-    }
-    for (let i = 0; i < requests.length; i++) {
-      requests[i].requestAccessories = await this.getRequestAccessories(requests[i].id);
-      requests[i].requestTools = await this.getRequestTools(requests[i].id);
-    }
-
-    return requests;
-  }
-
   async getRequestWithEquipment(id: number): Promise<Request> {
     return await this.requestRepository.findOne({
       where: { id },
@@ -137,6 +111,7 @@ export class RequestService {
         brigadier: true,
         address: true,
         stage: true,
+        client: true,
       },
     });
   }
@@ -277,6 +252,33 @@ export class RequestService {
     return requests;
   }
 
+  async getBrigadierRequests(brigadierId: number, user: User) {
+    const requests: any = await this.requestRepository.find({
+      where: { brigadier: { id: brigadierId } },
+      relations: {
+        requestEquipment: {
+          equipment: true,
+        },
+        client: true,
+        stage: true,
+        brigadier: true,
+        address: true,
+      },
+      order: { id: 'DESC' },
+    });
+
+    if (requests.length > 0) {
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Read, requests[0]);
+    }
+    for (let i = 0; i < requests.length; i++) {
+      requests[i].requestAccessories = await this.getRequestAccessories(requests[i].id);
+      requests[i].requestTools = await this.getRequestTools(requests[i].id);
+    }
+
+    return requests;
+  }
+
   async remove(id: number) {
     const item = await this.requestRepository.findOneOrFail({
       where: { id },
@@ -284,4 +286,39 @@ export class RequestService {
     });
     return await this.requestRepository.softRemove(item);
   }
+
+  async getFullReport(id: number): Promise<Buffer> {
+    const templatePath = './assets/full-request-template.docx';
+    const request = await this.getRequestWithEquipment(id);
+    if (!request) throw new NotExistsError('request');
+    const requestAccessories = await this.getRequestAccessories(request.id); //todo убрать эти запросы (в репозиторий?)
+    const requestTools = await this.getRequestTools(request.id);
+    const data = {
+      request: {
+        id: request.id,
+        stage: request.stage.stage,
+        mountingDate: request.mountingDate,
+        contactNumber: request.client.contactNumber,
+      },
+      client: `${request.client.firstname} ${request.client.patronymic} ${request.client.surname}`,
+      address: `${request.address?.country}, г. ${request.address?.city}, ул.${request.address?.street}, дом ${
+        request.address?.house
+      }${request.address?.corpus ?? ''} ${request.address?.flat ?? ''}`,
+      equipment: request.requestEquipment.map((x) => ({
+        type: x.equipment.type,
+        mounting: x.equipment.mounting,
+        quantity: x.quantity,
+      })),
+      tools: requestTools,
+      accessories: requestAccessories,
+    };
+    return new Promise((resolve, reject) => {
+      carbone.render(templatePath, data, function (err, result) {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  //TODO add price to accessory unit
 }
