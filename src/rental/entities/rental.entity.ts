@@ -9,7 +9,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Index('rental_pkey', ['id'], { unique: true })
@@ -21,7 +21,7 @@ export class Rental {
   @CreateDateColumn({ name: 'startDate' })
   startDate: Date;
 
-  @Column('date', { name: 'endDate' })
+  @Column({ name: 'endDate', type: 'timestamp' })
   endDate: Date;
 
   @ManyToOne(() => Brigadier, (brigadier) => brigadier.brigadierRentals)
