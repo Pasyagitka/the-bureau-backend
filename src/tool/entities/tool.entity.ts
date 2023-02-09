@@ -27,7 +27,7 @@ export class Tool {
   @Column('integer', { name: 'quantity_in_stock', default: () => '0' })
   quantity_in_stock: number;
 
-  @Column('integer', { name: 'rental_price', default: () => '0' })
+  @Column({ type: 'decimal', precision: 6, scale: 2, name: 'rental_price', default: 0 })
   rental_price: number;
 
   @ManyToOne(() => Stage, (stage) => stage.tools)

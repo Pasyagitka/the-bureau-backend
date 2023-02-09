@@ -18,7 +18,7 @@ export class Accessory {
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
 
-  @Column('integer', { name: 'price', default: () => '0' })
+  @Column({ type: 'decimal', precision: 6, scale: 2, name: 'price', default: 0 })
   price: number;
 
   @Exclude()
