@@ -116,7 +116,6 @@ export class RequestController {
     );
   }
 
-  //TODO create report templates
   //TODO create report (accessories; rental; schedule)
 
   @ApiResponses({

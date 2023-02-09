@@ -11,6 +11,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { RentalStatus } from '../types/rental-status.enum';
 
 @Index('rental_pkey', ['id'], { unique: true })
 @Entity('rental')
@@ -38,8 +39,12 @@ export class Rental {
   @Column({ type: 'decimal', precision: 6, scale: 2, name: 'price', default: 0 })
   price: number;
 
-  @Column('boolean', { name: 'isApproved', default: false })
-  isApproved: boolean;
+  @Column({
+    type: 'enum',
+    enum: RentalStatus,
+    default: RentalStatus.INPROCESSING,
+  })
+  status: RentalStatus;
 
   @Exclude()
   @DeleteDateColumn()

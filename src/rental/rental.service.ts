@@ -7,6 +7,7 @@ import { Tool } from '../tool/entities/tool.entity';
 import { CreateRentalDto } from './dto/create-rental.dto';
 import { RentalQueryDto } from './dto/rental-query.dto';
 import { Rental } from './entities/rental.entity';
+import { RentalStatus } from './types/rental-status.enum';
 
 //TODO implement tool rental
 @Injectable()
@@ -20,7 +21,7 @@ export class RentalService {
     private brigadierRepository: Repository<Brigadier>,
   ) {}
 
-  async open(createRentalDto: CreateRentalDto) {
+  async open(createRentalDto: CreateRentalDto) { //проверять не занято ли
     const tool = await this.toolRepository.findOne({
       where: { id: createRentalDto.toolId },
     });
@@ -36,17 +37,19 @@ export class RentalService {
     item.quantity = createRentalDto.quantity;
     item.startDate = createRentalDto.startDate;
     item.endDate = createRentalDto.endDate;
+    item.status = RentalStatus.INPROCESSING;
+    item.price = createRentalDto.quantity * tool.rental_price;
     return await this.rentalRepository.save(item);
   }
 
   findAll(query: RentalQueryDto) {
     return this.rentalRepository.find({
-      where: {
-        brigadier: {
-          id: query.brigadierId,
+      where: [
+        {
+          brigadier: { id: query.brigadierId },
+          tool: { id: query.toolId },
         },
-        isApproved: query.isApproved,
-      },
+      ],
       relations: {
         tool: true,
         brigadier: true,
@@ -56,19 +59,16 @@ export class RentalService {
   }
 
   async approve(id: number) {
-    //todo
     const rental = await this.rentalRepository.findOne({ where: { id } });
     if (!rental) throw new NotExistsError('rental');
-    rental.isApproved = true;
+    rental.status = RentalStatus.APPROVED;
     return this.rentalRepository.save(rental);
   }
 
   async close(id: number) {
-    //todo
-    const item = await this.rentalRepository.findOne({
-      where: { id }, //relations
-    });
-    if (!item) throw new NotExistsError('rental');
-    return await this.rentalRepository.softRemove(item);
+    const rental = await this.rentalRepository.findOne({ where: { id } });
+    if (!rental) throw new NotExistsError('rental');
+    rental.status = RentalStatus.CLOSED;
+    return this.rentalRepository.save(rental);
   }
 }
