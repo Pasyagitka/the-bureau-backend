@@ -154,12 +154,14 @@ export class RequestService {
       .select('SUM(request_equipment.quantity)', 'quantity')
       .addSelect('accessories.sku', 'sku')
       .addSelect('accessories.name', 'name')
+      .addSelect('accessories.price', 'price')
       .from(RequestEquipment, 'request_equipment')
       .where('request_equipment.requestId = :id', { id })
       .innerJoin('request_equipment.equipment', 'equipment')
       .innerJoin('equipment.accessories', 'accessories')
       .groupBy('accessories.sku')
       .addGroupBy('accessories.name')
+      .addGroupBy('accessories.price')
       .getRawMany();
   }
 
@@ -319,6 +321,4 @@ export class RequestService {
       });
     });
   }
-
-  //TODO add price to accessory unit
 }

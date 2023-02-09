@@ -18,6 +18,9 @@ export class Accessory {
   @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
 
+  @Column('integer', { name: 'price', default: () => '0' })
+  price: number;
+
   @Exclude()
   @DeleteDateColumn()
   deletedAt?: Date;

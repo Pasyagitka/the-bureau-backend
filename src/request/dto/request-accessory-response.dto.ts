@@ -11,6 +11,9 @@ export class RequestAccessoryResponseDto {
   @Expose()
   quantity: number;
 
+  @Expose()
+  price: number;
+
   constructor(partial: Partial<RequestAccessoryResponseDto>) {
     Object.assign(this, partial);
   }

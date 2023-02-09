@@ -85,6 +85,7 @@ export class AccessoryService {
     if (!equipment) throw new NotExistsError('equipment');
     accessory.equipment = equipment;
     accessory.name = updateAccessoryDto.name;
+    accessory.price = updateAccessoryDto.price;
     return this.accessoryRepository.save(accessory);
   }
 
