@@ -48,7 +48,6 @@ export class UserController {
     return new UserResponseDto(await this.userService.activateUser(+id));
   }
 
-  //TODO deactivate client too
   @ApiResponses({
     200: UserResponseDto,
     404: ErrorMessageResponseDto,

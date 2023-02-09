@@ -7,14 +7,13 @@ export class Address {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('text', { name: 'country' })
+  @Column('text', { name: 'country', default: 'Беларусь' })
   country: string;
 
   @Column('text', { name: 'city' })
   city: string;
 
-  //TODO remove nullable
-  @Column('text', { name: 'street', nullable: true })
+  @Column('text', { name: 'street' })
   street: string;
 
   @Column('integer', { name: 'house' })
