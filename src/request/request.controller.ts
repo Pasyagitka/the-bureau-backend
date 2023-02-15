@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Req, Res, StreamableFile } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
@@ -41,6 +41,7 @@ export class RequestController {
     200: [ReportResponseDto],
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get weekly report (schedule) for all brigadiers (admin)' })
   @Get('/weekly-report')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getWeeklyReport() {
@@ -52,6 +53,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get weekly report (schedule) for one brigadier' })
   @Get(':brigadierId/weekly-report')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getWeeklyReportForBrigadier(@Param('brigadierId') id: string) {
@@ -86,6 +88,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get tools for request (based on stage)' })
   @Get(':id/tools')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getTools(@Param('id') id: string) {
@@ -97,6 +100,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get tools for request (based on request equipment)' })
   @Get(':id/accessories')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getAccessories(@Param('id') id: string) {
@@ -108,6 +112,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get all requests for brigadier' })
   @Get('brigadier/:brigadierId')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getBrigadierRequests(@Param('brigadierId') id: string, @Req() req) {
@@ -123,6 +128,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get all requests for client' })
   @Get('client/:clientId')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getClientRequests(@Param('clientId') id: string, @Req() req) {
@@ -134,6 +140,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get full report for request (.docx)' })
   @Get(':id/report')
   async getFullReport(@Param('id') id: number, @Res({ passthrough: true }) res: Response) {
     const report = await this.requestService.getFullReport(id);
@@ -165,6 +172,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Update request status (InProcessing, Completed) (brigadier)' })
   @Patch(':id/update/brigadier')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByBrigadier(
@@ -182,6 +190,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Update request status (all) (admin)' })
   @Patch(':id/update/admin')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByAdmin(@Param('id') id: string, @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto) {

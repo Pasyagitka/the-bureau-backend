@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
@@ -38,6 +38,7 @@ export class AccessoryController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Import accessories from .json' })
   @Post('/import')
   async import(@Body() importAccessoriesDto: CreateAccessoryDto[]) {
     const data = await this.accessoryService.import(importAccessoriesDto);
@@ -48,6 +49,7 @@ export class AccessoryController {
     200: PaginatedResponse(AccessoryResponseDto),
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get accessories (paginated)' })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Accessory })
   async getAll(@Query() query: PaginatedQuery): Promise<PaginatedResponseDto<AccessoryResponseDto>> {

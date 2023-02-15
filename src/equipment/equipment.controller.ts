@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PaginatedResponse } from 'src/common/pagination/paginate.dto';
 import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
@@ -35,6 +35,7 @@ export class EquipmentController {
     200: PaginatedResponse(EquipmentResponseDto),
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get equipment (paginated)' })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Equipment })
   async getAll(@Query() query: PaginatedQuery) {
