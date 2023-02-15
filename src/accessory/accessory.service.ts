@@ -17,7 +17,7 @@ export class AccessoryService {
     private equipmentRepository: Repository<Equipment>,
   ) {}
 
-  async getAll(query: PaginatedQuery) {
+  async findAll(query: PaginatedQuery) {
     return this.accessoryRepository.findAndCount({
       relations: {
         equipment: true,

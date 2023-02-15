@@ -95,7 +95,7 @@ export class UserService {
 
   //TODO do not return users pd
 
-  async getAll() {
+  async findAll() {
     return await this.usersRepository.find();
   }
 

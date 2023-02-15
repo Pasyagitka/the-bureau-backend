@@ -38,8 +38,8 @@ export class ToolController {
   @ApiOperation({ summary: 'Get tools (paginated)' })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Tool })
-  async getAll(@Query() query: PaginatedQuery) {
-    const [data, total] = await this.toolService.getAll(query);
+  async findAll(@Query() query: PaginatedQuery) {
+    const [data, total] = await this.toolService.findAll(query);
     return {
       data: data.map((i) => new ToolResponseDto(i)),
       total,

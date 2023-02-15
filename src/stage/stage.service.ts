@@ -10,7 +10,7 @@ export class StageService {
     private stageRepository: Repository<Stage>,
   ) {}
 
-  async getAll(): Promise<Stage[]> {
+  async findAll(): Promise<Stage[]> {
     return this.stageRepository.find();
   }
 }

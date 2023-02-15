@@ -14,7 +14,7 @@ export class EquipmentService {
     private equipmentRepository: Repository<Equipment>,
   ) {}
 
-  async getAll(query: PaginatedQuery) {
+  async findAll(query: PaginatedQuery) {
     return this.equipmentRepository.findAndCount({
       order: { id: 'ASC' },
       skip: query.offset,

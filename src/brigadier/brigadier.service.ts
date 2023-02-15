@@ -17,7 +17,7 @@ export class BrigadierService {
     private readonly abilityFactory: AbilityFactory,
   ) {}
 
-  async getAll(): Promise<Brigadier[]> {
+  async findAll(): Promise<Brigadier[]> {
     return this.brigadierRepository.find({
       relations: { user: true },
       order: { id: 'DESC' },

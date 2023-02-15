@@ -22,8 +22,8 @@ export class BrigadierController {
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Brigadier })
-  async getAll() {
-    return (await this.brigadierService.getAll()).map((i) => new BrigadierResponseDto(i));
+  async findAll() {
+    return (await this.brigadierService.findAll()).map((i) => new BrigadierResponseDto(i));
   }
 
   @ApiResponses({

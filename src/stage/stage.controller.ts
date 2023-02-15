@@ -22,7 +22,7 @@ export class StageController {
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Stage })
-  async getAll() {
-    return (await this.stageService.getAll()).map((i) => new StageResponseDto(i));
+  async findAll() {
+    return (await this.stageService.findAll()).map((i) => new StageResponseDto(i));
   }
 }

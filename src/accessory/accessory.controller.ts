@@ -52,8 +52,8 @@ export class AccessoryController {
   @ApiOperation({ summary: 'Get accessories (paginated)' })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Accessory })
-  async getAll(@Query() query: PaginatedQuery): Promise<PaginatedResponseDto<AccessoryResponseDto>> {
-    const [data, total] = await this.accessoryService.getAll(query);
+  async findAll(@Query() query: PaginatedQuery): Promise<PaginatedResponseDto<AccessoryResponseDto>> {
+    const [data, total] = await this.accessoryService.findAll(query);
     return {
       data: data.map((i) => new AccessoryResponseDto(i)),
       total,

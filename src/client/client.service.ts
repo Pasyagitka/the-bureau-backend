@@ -17,7 +17,7 @@ export class ClientService {
     private readonly abilityFactory: AbilityFactory,
   ) {}
 
-  async getAll(): Promise<Client[]> {
+  async findAll(): Promise<Client[]> {
     return this.clientRepository.find({
       relations: {
         user: true,

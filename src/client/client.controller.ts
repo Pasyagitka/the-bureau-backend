@@ -22,8 +22,8 @@ export class ClientController {
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Client })
-  async getAll() {
-    return (await this.clientService.getAll()).map((i) => new ClientResponseDto(i));
+  async findAll() {
+    return (await this.clientService.findAll()).map((i) => new ClientResponseDto(i));
   }
 
   @ApiResponses({

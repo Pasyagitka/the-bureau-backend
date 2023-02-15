@@ -38,8 +38,8 @@ export class EquipmentController {
   @ApiOperation({ summary: 'Get equipment (paginated)' })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Equipment })
-  async getAll(@Query() query: PaginatedQuery) {
-    const [data, total] = await this.equipmentService.getAll(query);
+  async findAll(@Query() query: PaginatedQuery) {
+    const [data, total] = await this.equipmentService.findAll(query);
     return {
       data: data.map((i) => new EquipmentResponseDto(i)),
       total,

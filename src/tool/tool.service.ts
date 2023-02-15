@@ -17,7 +17,7 @@ export class ToolService {
     private stageRepository: Repository<Stage>,
   ) {}
 
-  async getAll(query: PaginatedQuery) {
+  async findAll(query: PaginatedQuery) {
     return this.toolsRepository.findAndCount({
       relations: { stage: true },
       order: { id: 'ASC' },

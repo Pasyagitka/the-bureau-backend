@@ -66,8 +66,8 @@ export class RequestController {
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Request })
-  async getAll() {
-    return (await this.requestService.getAll()).map((i) => new RequestResponseDto(i));
+  async findAll() {
+    return (await this.requestService.findAll()).map((i) => new RequestResponseDto(i));
   }
 
   @ApiResponses({

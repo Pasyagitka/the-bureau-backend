@@ -22,8 +22,8 @@ export class UserController {
   })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: User })
-  async getAll() {
-    return (await this.userService.getAll()).map((i) => new UserResponseDto(i));
+  async findAll() {
+    return (await this.userService.findAll()).map((i) => new UserResponseDto(i));
   }
 
   @ApiResponses({
