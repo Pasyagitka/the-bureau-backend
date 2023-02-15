@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AbilityModule } from 'src/ability/ability.module';
+import { AbilityModule } from '../ability/ability.module';
 import { Request } from '../request/entities/request.entity';
 import { RequestReport } from './entities/request-report.entity';
 import { RequestReportController } from './request-report.controller';

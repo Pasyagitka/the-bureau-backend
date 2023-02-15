@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
+import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { Repository } from 'typeorm';
 import { AlreadyExistsError, NotExistsError } from '../common/exceptions';
 import { CreateEquipmentDto } from './dto/create-equipment.dto';

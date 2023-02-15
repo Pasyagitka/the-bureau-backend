@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Rental } from 'src/rental/entities/rental.entity';
+import { Rental } from '../../rental/entities/rental.entity';
 import {
   Column,
   DeleteDateColumn,

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PaginatedResponse } from 'src/common/pagination/paginate.dto';
-import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
+import { PaginatedResponse } from '../common/pagination/paginate.dto';
+import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';

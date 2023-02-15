@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
-import { Tool } from 'src/tool/entities/tool.entity';
+import { Brigadier } from '../../brigadier/entities/brigadier.entity';
+import { Tool } from '../../tool/entities/tool.entity';
 import {
   Column,
   CreateDateColumn,
