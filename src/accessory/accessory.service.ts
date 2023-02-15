@@ -55,7 +55,7 @@ export class AccessoryService {
 
   async import(importAccessoriesDto: CreateAccessoryDto[]): Promise<Accessory[]> {
     const items = await Promise.all(
-      //todo rewrite for perfomance (equipment)
+      //TODO rewrite for perfomance (equipment)
       importAccessoriesDto.map(async (createAccessoryDto) => {
         const equipment = await this.equipmentRepository.findOne({
           where: { id: createAccessoryDto.equipmentId },

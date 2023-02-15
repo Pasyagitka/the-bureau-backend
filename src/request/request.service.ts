@@ -49,7 +49,7 @@ export class RequestService {
     for (let i = 0; i < reqEq.length; i++) {
       if (!(await this.equipmentRepository.findOne({ where: { id: reqEq[i].equipment } })))
         throw new NotExistsError(`equipment ${reqEq[i].equipment}`);
-      requestEquipment.push(
+      requestEquipment.push(//todo perf
         this.requestEquipmentRepository.create({
           equipment: { id: reqEq[i].equipment },
           quantity: reqEq[i].quantity,
@@ -78,7 +78,7 @@ export class RequestService {
     return await this.requestRepository.save(request);
   }
 
-  async getAll(): Promise<Request[]> {
+  async findAll(): Promise<Request[]> {
     return this.requestRepository.find({
       //TODO do not return creds
       relations: ['client.user', 'address', 'client', 'stage'],
@@ -182,7 +182,7 @@ export class RequestService {
   }
 
   async getWeeklyReportForBrigadier(id: number) {
-    //todo check brigadierExisits
+    //TODO check brigadierExisits
     return await this.dataSource
       .createQueryBuilder()
       .select('extract(isodow from "mountingDate")', 'day')
@@ -293,7 +293,7 @@ export class RequestService {
     const templatePath = './assets/full-request-template.docx';
     const request = await this.getRequestWithEquipment(id);
     if (!request) throw new NotExistsError('request');
-    const requestAccessories = await this.getRequestAccessories(request.id); //todo убрать эти запросы (в репозиторий?)
+    const requestAccessories = await this.getRequestAccessories(request.id); //TODO убрать эти запросы (в репозиторий?)
     const requestTools = await this.getRequestTools(request.id);
     const data = {
       request: {

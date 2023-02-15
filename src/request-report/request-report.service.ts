@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbilityFactory } from 'src/ability/ability.factory';
+import { NotExistsError } from '../common/exceptions';
 import { DataSource, Repository } from 'typeorm';
 import { Request } from '../request/entities/request.entity';
-import { CreateRequestReportDto } from './dto/create-request-report.dto';
 import { RequestReport } from './entities/request-report.entity';
+import { UpsertRequestReportDto } from './dto/upsert-request-report.dto';
 
 @Injectable()
 export class RequestReportService {
@@ -14,19 +14,33 @@ export class RequestReportService {
     private requestRepository: Repository<Request>,
     @InjectRepository(RequestReport)
     private requestReportRepository: Repository<RequestReport>,
-    private readonly abilityFactory: AbilityFactory,
   ) {}
-  //move to reuest service
 
-  create(createRequestReportDto: CreateRequestReportDto) {
-    return 'This action adds a new requestReport';
+  async upsert(requestId: number, upsertRequestReportDto: [UpsertRequestReportDto]) {
+    const request = await this.requestRepository.findOne({ where: { id: requestId } });
+    if (!request) throw new NotExistsError('request');
+
+    const existingRequestReports = await this.requestReportRepository.find({ where: { request: { id: requestId } } });
+
+    const requestReports = upsertRequestReportDto.map((x) =>
+      this.requestReportRepository.create({
+        file: x.file,
+        request: request,
+      }),
+    );
+
+    //const a = requestReports.filter((x) => existingRequestReports.includes(x));
+
+    return await this.requestReportRepository.save(requestReports);
   }
 
-  findAll() {
-    return `This action returns all requestReport`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} requestReport`;
+  findAll(requestId: number) {
+    return this.requestReportRepository.find({
+      where: {
+        request: {
+          id: requestId,
+        },
+      },
+    });
   }
 }

@@ -153,8 +153,6 @@ export class RequestController {
 
   //TODO add cron schedule
 
-  //TODO add request quality assurance (request-report)
-
   // @ApiResponses({
   //   200: [RequestEquipmentResponseDto],
   //   404: ErrorMessageResponseDto,

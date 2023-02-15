@@ -1,6 +1,6 @@
 export class UserInfoResponseDto {
   id: number;
-  role: string; //todo enum
+  role: string; //TODO enum
   client: {
     id?: number;
   };
