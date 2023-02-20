@@ -6,6 +6,12 @@ export class AlreadyExistsError extends HttpException {
   }
 }
 
+export class BadParametersError extends HttpException {
+  constructor(data = '') {
+    super(`Bad parameters ${data}`, HttpStatus.BAD_REQUEST);
+  }
+}
+
 export class NotExistsError extends HttpException {
   constructor(data = '') {
     super(`Not exists ${data}`, HttpStatus.NOT_FOUND);

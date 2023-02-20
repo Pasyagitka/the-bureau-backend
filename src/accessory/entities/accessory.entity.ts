@@ -15,8 +15,10 @@ export class Accessory {
   name: string;
 
   @ManyToOne(() => Equipment, (equipment) => equipment.accessories)
-  @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
   equipment: Equipment;
+
+  @JoinColumn([{ name: 'equipmentId', referencedColumnName: 'id' }])
+  equipmentId: number;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, name: 'price', default: 0 })
   price: number;

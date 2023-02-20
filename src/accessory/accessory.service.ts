@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { NotExistsError } from '../common/exceptions';
+import { In, Repository } from 'typeorm';
+import { BadParametersError, NotExistsError } from '../common/exceptions';
 import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { Equipment } from '../equipment/entities/equipment.entity';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
@@ -54,17 +54,17 @@ export class AccessoryService {
   //TODO return db errors
 
   async import(importAccessoriesDto: CreateAccessoryDto[]): Promise<Accessory[]> {
+    const equipmentIds = importAccessoriesDto.map((i) => i.equipmentId);
+    const idsCount = await this.equipmentRepository.count({ where: { id: In(equipmentIds) } });
+    if (idsCount !== equipmentIds.length) throw new BadParametersError('equipment');
     const items = await Promise.all(
-      //TODO rewrite for perfomance (equipment)
       importAccessoriesDto.map(async (createAccessoryDto) => {
-        const equipment = await this.equipmentRepository.findOne({
-          where: { id: createAccessoryDto.equipmentId },
+        return this.accessoryRepository.create({
+          sku: createAccessoryDto.sku,
+          name: createAccessoryDto.name,
+          price: createAccessoryDto.price,
+          equipmentId: createAccessoryDto.equipmentId,
         });
-        if (!equipment) throw new NotExistsError('equipment');
-
-        const item = this.accessoryRepository.create(createAccessoryDto);
-        item.equipment = equipment;
-        return item;
       }),
     );
     return await this.accessoryRepository.save(items);
