@@ -8,6 +8,7 @@ import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 async function bootstrap() {
+  //TODO move logger creating here
   const app = await NestFactory.create(AppModule);
   const reflector = app.get(Reflector);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));

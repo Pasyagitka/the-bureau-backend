@@ -28,7 +28,6 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { StageModule } from './stage/stage.module';
 import { ToolModule } from './tool/tool.module';
 import { UserModule } from './user/user.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,6 +37,7 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({ ...configService.get('database') }),
+      dataSourceFactory: async (options) => new DataSource(options).initialize(),
     }),
     MailerModule.forRootAsync({
       inject: [ConfigService],
@@ -85,6 +85,4 @@ import { UserModule } from './user/user.module';
     },
   ],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

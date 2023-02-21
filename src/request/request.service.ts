@@ -80,7 +80,6 @@ export class RequestService {
 
   async findAll(): Promise<Request[]> {
     return this.requestRepository.find({
-      //TODO do not return creds
       relations: ['client.user', 'address', 'client', 'stage'],
       order: { id: 'DESC' },
     });
