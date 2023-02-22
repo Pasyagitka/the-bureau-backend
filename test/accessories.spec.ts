@@ -2,10 +2,25 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
+import { setupApp } from '../src/main';
 
 describe('Accessory', () => {
   let app: INestApplication;
   let accessToken: string;
+
+  const testAccessory = {
+    sku: '12345',
+    name: 'accessory',
+    equipmentId: 1,
+    price: 10,
+  };
+
+  const excpectedAccessory = {
+    id: expect.any(Number),
+    sku: expect.any(String),
+    equipmentId: expect.any(Number),
+    price: expect.any(Number),
+  };
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -14,29 +29,79 @@ describe('Accessory', () => {
     app = moduleRef.createNestApplication();
 
     const getToken = async (app): Promise<string> => {
-      const authData = await request(app.getHttpServer()).post('/api/authorization/signin').send({
+      const authData = await request(app.getHttpServer()).post('/api/auth/login').send({
         login: 'admin',
         password: 'admin',
       });
       return authData.body.access_token;
     };
-    accessToken = await getToken(app);
-    console.log(accessToken);
+    setupApp(app);
     await app.init();
+    accessToken = await getToken(app);
   });
 
-  it(`/GET accessory`, () => {
+  it(`/GET accessories`, () => {
     const req = request(app.getHttpServer())
-      .get('/accessory')
+      .get('/api/accessory')
       .set('Authorization', `Bearer ${accessToken}`)
+      .query({ limit: 10, offset: 0 })
       .expect(200);
+    return req;
+  });
+
+  it(`Create accessory`, async () => {
+    expect.assertions(2);
+    const req = await request(app.getHttpServer())
+      .post('/api/accessory')
+      .send(testAccessory)
+      .set('Authorization', `Bearer ${accessToken}`);
+    expect(req.status).toBe(200);
+    expect(req.body).toEqual({ ...excpectedAccessory, ...testAccessory });
     console.log(req);
     return req;
   });
 
+  it(`/GET accessory`, () => {
+    const req = request(app.getHttpServer())
+      .get('/api/accessory/1')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    return req;
+  });
+
+  it('/GET accessories (unauthorized)', async () => {
+    expect.assertions(1);
+    const response = await request(app.getHttpServer()).get('/api/accessory');
+    expect(response.status).toBe(401);
+  });
+
   it('/GET accessory (unauthorized)', async () => {
     expect.assertions(1);
-    const response = await request(app.getHttpServer()).get('/accessory');
+    const response = await request(app.getHttpServer()).get('/api/accessory/1');
+    expect(response.status).toBe(401);
+  });
+
+  it('/POST create accessory (unauthorized)', async () => {
+    expect.assertions(1);
+    const response = await request(app.getHttpServer()).post('/api/accessory');
+    expect(response.status).toBe(401);
+  });
+
+  it('/POST import accessory (unauthorized)', async () => {
+    expect.assertions(1);
+    const response = await request(app.getHttpServer()).post('/api/accessory/import');
+    expect(response.status).toBe(401);
+  });
+
+  it('/PATCH accessory (unauthorized)', async () => {
+    expect.assertions(1);
+    const response = await request(app.getHttpServer()).patch('/api/accessory/1');
+    expect(response.status).toBe(401);
+  });
+
+  it('/DELETE accessory (unauthorized)', async () => {
+    expect.assertions(1);
+    const response = await request(app.getHttpServer()).delete('/api/accessory/1');
     expect(response.status).toBe(401);
   });
 
