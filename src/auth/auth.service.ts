@@ -12,7 +12,7 @@ import {
   BadResetPasswordLinkError,
   NotActivatedError,
   NotExistsError,
-  WrongPasswordError
+  WrongPasswordError,
 } from '../common/exceptions';
 import { UserService } from '../user/user.service';
 import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
@@ -34,7 +34,7 @@ export class AuthService {
     }
     if (!user.isActivated) throw new NotActivatedError(`${user.login}`);
     const isPassEquals = await bcrypt.compare(pass, user.password);
-    console.log(pass, user.password, isPassEquals);
+    //console.log(pass, user.password, isPassEquals);
     if (!isPassEquals) {
       throw new WrongPasswordError();
     }
@@ -54,7 +54,7 @@ export class AuthService {
         id: user.brigadier?.id,
       },
     };
-    console.log('payload', payload);
+    //console.log('payload', payload);
     return {
       access_token: this.jwtService.sign(payload),
     };

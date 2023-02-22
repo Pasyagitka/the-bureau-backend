@@ -49,7 +49,8 @@ export class RequestService {
     for (let i = 0; i < reqEq.length; i++) {
       if (!(await this.equipmentRepository.findOne({ where: { id: reqEq[i].equipment } })))
         throw new NotExistsError(`equipment ${reqEq[i].equipment}`);
-      requestEquipment.push(//todo perf
+      requestEquipment.push(
+        //TODO perf
         this.requestEquipmentRepository.create({
           equipment: { id: reqEq[i].equipment },
           quantity: reqEq[i].quantity,
@@ -64,7 +65,7 @@ export class RequestService {
       },
     });
     if (!client) throw new NotExistsError('client');
-    console.log(user, client);
+    //console.log(user, client);
 
     const request = this.requestRepository.create({
       mountingDate: createRequestDto.mountingDate,

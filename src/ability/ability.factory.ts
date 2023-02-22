@@ -26,7 +26,7 @@ export class AbilityFactory {
   defineAbility(user: User) {
     const { can, cannot, build } = new AbilityBuilder(Ability as AbilityClass<AppAbility>);
 
-    console.log('AbilityFactory', user);
+    //console.log('AbilityFactory', user);
 
     switch (user.role) {
       case Role.Admin: {

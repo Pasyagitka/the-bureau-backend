@@ -8,8 +8,13 @@ import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 async function bootstrap() {
-  //TODO move logger creating here
+  //TODO move logger creating here (reconfigure winston)
   const app = await NestFactory.create(AppModule);
+  setupApp(app);
+  await app.listen(process.env.PORT);
+}
+
+export function setupApp(app: INestApplication) {
   const reflector = app.get(Reflector);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.useGlobalPipes(
@@ -27,7 +32,6 @@ async function bootstrap() {
   app.useGlobalGuards(new AbilitiesGuard(reflector, new AbilityFactory()));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
   app.getHttpAdapter().getInstance().disable('x-powered-by');
-  await app.listen(process.env.PORT);
 }
 
 function createSwagger(app: INestApplication, basePath: string) {

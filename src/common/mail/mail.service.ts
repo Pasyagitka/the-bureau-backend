@@ -1,6 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { EmailError } from '../exceptions';
 
 @Injectable()
 export class MailService {
@@ -23,7 +22,7 @@ export class MailService {
       });
     } catch (err) {
       console.log(err);
-      //throw new BadRequestException(err.message); филтьтр не ловит
+      //throw new BadRequestException(err.message); TODO филтьтр не ловит
     }
   }
 
