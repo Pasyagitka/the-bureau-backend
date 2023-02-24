@@ -67,7 +67,6 @@ export class ToolService {
   async remove(id: number): Promise<Tool> {
     const item = await this.toolsRepository.findOne({
       where: { id },
-      relations: ['brigadierTools'],
     });
     if (!item) throw new NotExistsError('tool');
     return this.toolsRepository.softRemove(item);

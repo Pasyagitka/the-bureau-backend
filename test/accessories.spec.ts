@@ -15,11 +15,16 @@ describe('Accessory', () => {
     price: 10,
   };
 
-  const excpectedAccessory = {
+  const expectedAccessory = {
     id: expect.any(Number),
     sku: expect.any(String),
-    equipmentId: expect.any(Number),
+    name: expect.any(String),
     price: expect.any(Number),
+    equipment: {
+      id: expect.any(Number),
+      mounting: expect.any(String),
+      type: expect.any(String),
+    },
   };
 
   beforeAll(async () => {
@@ -56,17 +61,16 @@ describe('Accessory', () => {
       .send(testAccessory)
       .set('Authorization', `Bearer ${accessToken}`);
     expect(req.status).toBe(200);
-    expect(req.body).toEqual({ ...excpectedAccessory, ...testAccessory });
-    console.log(req);
-    return req;
+    expect(req.body).toEqual(expectedAccessory);
   });
 
-  it(`/GET accessory`, () => {
-    const req = request(app.getHttpServer())
+  it(`/GET accessory`, async () => {
+    expect.assertions(2);
+    const req = await request(app.getHttpServer())
       .get('/api/accessory/1')
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200);
-    return req;
+      .set('Authorization', `Bearer ${accessToken}`);
+    expect(req.status).toBe(200);
+    expect(req.body).toEqual(expectedAccessory);
   });
 
   it('/GET accessories (unauthorized)', async () => {

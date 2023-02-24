@@ -41,7 +41,7 @@ export class BrigadierService {
   async remove(id: number) {
     const item = await this.brigadierRepository.findOneOrFail({
       where: { id },
-      relations: ['brigadierTools', 'schedules', 'user'],
+      relations: ['schedules', 'user'],
     });
     return await this.brigadierRepository.softRemove(item);
   }
