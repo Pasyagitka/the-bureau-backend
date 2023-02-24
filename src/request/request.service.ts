@@ -16,14 +16,16 @@ import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { Request } from './entities/request.entity';
+import { RequestRepository } from './request.repository';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const carbone = require('carbone');
 @Injectable()
 export class RequestService {
   constructor(
     private dataSource: DataSource,
-    @InjectRepository(Request)
-    private requestRepository: Repository<Request>,
+    private requestRepository: RequestRepository,
+    // @InjectRepository(Request)
+    // private requestRepository: Repository<Request>,
     @InjectRepository(RequestEquipment)
     private requestEquipmentRepository: Repository<RequestEquipment>,
     @InjectRepository(Equipment)
@@ -85,6 +87,8 @@ export class RequestService {
       order: { id: 'DESC' },
     });
   }
+
+  //TODO check CASL
 
   async get(id: number): Promise<Request> {
     return await this.requestRepository.findOne({
@@ -291,8 +295,9 @@ export class RequestService {
 
   async getFullReport(id: number): Promise<Buffer> {
     const templatePath = './assets/full-request-template.docx';
-    const request = await this.getRequestWithEquipment(id);
-    if (!request) throw new NotExistsError('request');
+    const request = await this.requestRepository.getFullRequest();
+    // const request = await this.getRequestWithEquipment(id);
+    // if (!request) throw new NotExistsError('request');
     const requestAccessories = await this.getRequestAccessories(request.id); //TODO убрать эти запросы (в репозиторий?)
     const requestTools = await this.getRequestTools(request.id);
     const data = {

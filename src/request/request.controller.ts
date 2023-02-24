@@ -16,6 +16,7 @@ import { RequestToolResponseDto } from './dto/request-tool-response.dto';
 import { UpdateRequestByAdminDto } from './dto/update-request-by-admin.dto';
 import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.dto';
 import { Request } from './entities/request.entity';
+import { RequestRepository } from './request.repository';
 import { RequestService } from './request.service';
 
 //TODO manage app routes
@@ -23,7 +24,7 @@ import { RequestService } from './request.service';
 @ApiTags('Requests')
 @Controller('request')
 export class RequestController {
-  constructor(private readonly requestService: RequestService) {}
+  constructor(private readonly requestService: RequestService, private readonly requestRep: RequestRepository) {}
 
   @ApiResponses({
     201: RequestResponseDto,

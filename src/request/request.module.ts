@@ -11,6 +11,7 @@ import { Address } from './entities/address.entity';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { Request } from './entities/request.entity';
 import { RequestController } from './request.controller';
+import { RequestRepository } from './request.repository';
 import { RequestService } from './request.service';
 import { RequestSubscriber } from './subscribers/request.subscriber';
 
@@ -21,6 +22,6 @@ import { RequestSubscriber } from './subscribers/request.subscriber';
     ScheduleModule,
   ],
   controllers: [RequestController],
-  providers: [RequestService, RequestSubscriber],
+  providers: [RequestService, RequestSubscriber, RequestRepository],
 })
 export class RequestModule {}
