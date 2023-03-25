@@ -122,7 +122,7 @@ export class RequestController {
     );
   }
 
-  //TODO create report (accessories; rental; schedule)
+  //TODO create report (accessories; schedule)
 
   @ApiResponses({
     200: [ClientRequestResponseDto],

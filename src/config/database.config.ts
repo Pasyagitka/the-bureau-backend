@@ -21,7 +21,6 @@ export default registerAs('database', () => {
     //   Tool,
     //   Request,
     //   RequestEquipment,
-    //   Rental,
     //   RequestReport,
     //   Schedule,
     //   User,
