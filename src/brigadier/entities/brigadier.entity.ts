@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { RequestReport } from 'src/request-report/entities/request-report.entity';
 import {
   Column,
   DeleteDateColumn,
@@ -40,6 +41,9 @@ export class Brigadier {
 
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];
+
+  @OneToMany(() => RequestReport, (requestReport) => requestReport.brigadier)
+  reports: RequestReport[];
 
   @OneToMany(() => Schedule, (schedule) => schedule.brigadier, { cascade: true, onDelete: 'CASCADE' })
   schedules: Schedule[];
