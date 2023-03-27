@@ -3,7 +3,6 @@ import { Accessory } from '../../accessory/entities/accessory.entity';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
 import { Equipment } from '../../equipment/entities/equipment.entity';
-import { Rental } from '../../rental/entities/rental.entity';
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { Stage } from '../../stage/entities/stage.entity';
@@ -26,7 +25,6 @@ export type Subjects =
       | typeof Brigadier
       | typeof Client
       | typeof Request
-      | typeof Rental
       | typeof Schedule
       | typeof Tool
       | typeof User

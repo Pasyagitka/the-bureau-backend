@@ -1,5 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { Rental } from '../../../src/rental/entities/rental.entity';
 import {
   Column,
   DeleteDateColumn,
@@ -38,9 +37,6 @@ export class Brigadier {
   @OneToOne(() => User, (user) => user.brigadier, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
-
-  @OneToMany(() => Rental, (brigadierRental) => brigadierRental.brigadier, { cascade: true, onDelete: 'CASCADE' })
-  brigadierRentals: Rental[];
 
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];

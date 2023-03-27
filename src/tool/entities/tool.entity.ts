@@ -1,15 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Rental } from '../../rental/entities/rental.entity';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Stage } from '../../stage/entities/stage.entity';
 
 @Index('tool_pkey', ['id'], { unique: true })
@@ -33,9 +23,6 @@ export class Tool {
   @ManyToOne(() => Stage, (stage) => stage.tools)
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
-
-  @OneToMany(() => Rental, (toolRentals) => toolRentals.tool, { cascade: true, onDelete: 'CASCADE' })
-  toolRentals: Rental[];
 
   @Exclude()
   @DeleteDateColumn()

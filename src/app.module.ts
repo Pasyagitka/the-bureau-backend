@@ -21,7 +21,6 @@ import jwtConfiguration from './config/jwt.config';
 import mailConfiguration from './config/mail.config';
 import winstonConfiguration from './config/winston.config';
 import { EquipmentModule } from './equipment/equipment.module';
-import { RentalModule } from './rental/rental.module';
 import { RequestReportModule } from './request-report/request-report.module';
 import { RequestModule } from './request/request.module';
 import { ScheduleModule } from './schedule/schedule.module';
@@ -52,7 +51,6 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     RequestModule,
-    RentalModule,
     UserModule,
     AccessoryModule,
     BrigadierModule,
