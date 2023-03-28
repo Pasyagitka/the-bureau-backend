@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { RequestReport } from 'src/request-report/entities/request-report.entity';
+import { Invoice } from '../../invoice/entities/invoice.entity';
+import { RequestReport } from '../../request-report/entities/request-report.entity';
 import {
   Column,
   DeleteDateColumn,
@@ -8,7 +9,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
@@ -41,6 +42,9 @@ export class Brigadier {
 
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];
+
+  @OneToMany(() => Invoice, (invoice) => invoice.customer)
+  invoices: Invoice[];
 
   @OneToMany(() => RequestReport, (requestReport) => requestReport.brigadier)
   reports: RequestReport[];
