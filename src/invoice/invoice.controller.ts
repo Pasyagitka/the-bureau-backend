@@ -1,4 +1,4 @@
-import { Controller, Post, Body, StreamableFile, Get, Param, Res } from '@nestjs/common';
+import { Controller, Post, Body, StreamableFile, Get, Param, Res, Query } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -10,6 +10,9 @@ import { Action } from '../ability/types';
 import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { Invoice } from './entities/invoice.entity';
 import { Response } from 'express';
+import { InvoiceResponseDto } from './dto/invoice-response.dto';
+import { PaginatedResponse } from '../common/pagination/paginate.dto';
+import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 
 @ApiAuth()
 @ApiTags('Invoices')
@@ -27,6 +30,36 @@ export class InvoiceController {
   @CheckAbilities({ action: Action.Create, subject: Invoice })
   create(@Body() createInvoiceDto: CreateInvoiceDto) {
     return this.invoiceService.create(createInvoiceDto);
+  }
+
+  @ApiResponses({
+    200: PaginatedResponse(InvoiceResponseDto),
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get invoices (paginated)' })
+  @Get()
+  @CheckAbilities({ action: Action.Read, subject: Invoice })
+  async findAll(@Query() query: PaginatedQuery) {
+    const [data, total] = await this.invoiceService.findAll(query);
+    return {
+      data: data.map((i) => new InvoiceResponseDto(i)),
+      total,
+    };
+  }
+
+  @ApiResponses({
+    200: PaginatedResponse(InvoiceResponseDto),
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get invoices for brigadier (paginated)' })
+  @Get('brigadier/:brigadierId')
+  @CheckAbilities({ action: Action.Read, subject: Invoice }) //TODO add permissions check CASL
+  async getForBrigadier(@Param('brigadierId') brigadierId: number, @Query() query: PaginatedQuery) {
+    const [data, total] = await this.invoiceService.getForBrigadier(brigadierId, query);
+    return {
+      data: data.map((i) => new InvoiceResponseDto(i)),
+      total,
+    };
   }
 
   @ApiResponses({

@@ -8,7 +8,7 @@ import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { InvoiceItem } from './entities/invoice-items.entity';
 import { Invoice } from './entities/invoice.entity';
 import * as carbone from 'carbone';
-
+import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 @Injectable()
 export class InvoiceService {
   constructor(
@@ -45,6 +45,30 @@ export class InvoiceService {
     invoice.total = invoiceItems.reduce((acc, curr) => acc + (Number(curr.sum) || 0), 0);
     await this.invoiceRepository.save(invoice);
     return { message: 'OK' }; //TODO constructor
+  }
+
+  async findAll(query: PaginatedQuery) {//TODO add filter options
+    return this.invoiceRepository.findAndCount({
+      relations: { customer: true },
+      order: { id: 'ASC' },
+      skip: query.offset,
+      take: query.limit,
+    });
+  }
+
+  async getForBrigadier(customerId: number, query: PaginatedQuery) {
+    const invoices = await this.invoiceRepository.findAndCount({
+      where: {
+        customer: {
+          id: customerId,
+        },
+      },
+      relations: { customer: true },
+      order: { id: 'ASC' },
+      skip: query.offset,
+      take: query.limit,
+    });
+    return invoices;
   }
 
   async getInvoice(id: number): Promise<Buffer> {
