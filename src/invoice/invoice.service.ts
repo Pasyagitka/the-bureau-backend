@@ -7,6 +7,7 @@ import { Repository, In } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { InvoiceItem } from './entities/invoice-items.entity';
 import { Invoice } from './entities/invoice.entity';
+import * as carbone from 'carbone';
 
 @Injectable()
 export class InvoiceService {
@@ -44,5 +45,35 @@ export class InvoiceService {
     invoice.total = invoiceItems.reduce((acc, curr) => acc + (Number(curr.sum) || 0), 0);
     await this.invoiceRepository.save(invoice);
     return { message: 'OK' }; //TODO constructor
+  }
+
+  async getInvoice(id: number): Promise<Buffer> {
+    const templatePath = './assets/accessory-invoice-template.docx';
+    const invoice = await this.invoiceRepository.findOne({
+      where: { id },
+      relations: {
+        items: {
+          accessory: true,
+        },
+        customer: true,
+      },
+    });
+    const data = {
+      invoice: {
+        id: invoice.id,
+        total: invoice.total,
+      },
+      customer: {
+        contactNumber: invoice.customer.contactNumber,
+        name: `${invoice.customer.firstname} ${invoice.customer.patronymic} ${invoice.customer.surname}`,
+      },
+      items: invoice.items,
+    };
+    return new Promise((resolve, reject) => {
+      carbone.render(templatePath, data, function (err, result) {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
   }
 }
