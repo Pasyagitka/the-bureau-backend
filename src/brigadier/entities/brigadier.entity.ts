@@ -9,6 +9,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
+import { Invoice } from '../../invoice/entities/invoice.entity';
+import { RequestReport } from '../../request-report/entities/request-report.entity';
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { User } from '../../user/entities/user.entity';
@@ -40,6 +42,12 @@ export class Brigadier {
 
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];
+
+  @OneToMany(() => Invoice, (invoice) => invoice.customer)
+  invoices: Invoice[];
+
+  @OneToMany(() => RequestReport, (requestReport) => requestReport.brigadier)
+  reports: RequestReport[];
 
   @OneToMany(() => Schedule, (schedule) => schedule.brigadier, { cascade: true, onDelete: 'CASCADE' })
   schedules: Schedule[];

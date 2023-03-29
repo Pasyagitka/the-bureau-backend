@@ -1,4 +1,5 @@
 import { Ability, InferSubjects } from '@casl/ability';
+import { Invoice } from 'src/invoice/entities/invoice.entity';
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
@@ -29,6 +30,7 @@ export type Subjects =
       | typeof Tool
       | typeof User
       | typeof Stage
+      | typeof Invoice
     >
   | 'all';
 
