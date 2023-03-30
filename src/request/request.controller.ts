@@ -55,7 +55,7 @@ export class RequestController {
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({ summary: 'Get weekly report (schedule) for one brigadier' })
-  @Get(':brigadierId/weekly-report')
+  @Get('/weekly-report/:brigadierId')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getWeeklyReportForBrigadier(@Param('brigadierId') id: string) {
     return (await this.requestService.getWeeklyReportForBrigadier(+id)).map((i) => new RequestResponseDto(i));
@@ -172,7 +172,7 @@ export class RequestController {
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({ summary: 'Update request status (InProcessing, Completed) (brigadier)' })
-  @Patch(':id/update/brigadier')
+  @Patch('brigadier/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByBrigadier(
     @Param('id') id: string,
@@ -190,7 +190,7 @@ export class RequestController {
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({ summary: 'Update request status (all) (admin)' })
-  @Patch(':id/update/admin')
+  @Patch('admin/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByAdmin(@Param('id') id: string, @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto) {
     return new RequestResponseDto(await this.requestService.updateByAdmin(+id, updateRequestBrigadierDto));

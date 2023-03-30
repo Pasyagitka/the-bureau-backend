@@ -39,6 +39,7 @@ export class AccessoryController {
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({ summary: 'Import accessories from .json' })
+  @CheckAbilities({ action: Action.Create, subject: Accessory })
   @Post('/import')
   async import(@Body() importAccessoriesDto: CreateAccessoryDto[]) {
     const data = await this.accessoryService.import(importAccessoriesDto);

@@ -4,6 +4,9 @@ import { Exclude, Expose, Type } from 'class-transformer';
 @Exclude()
 export class ToolResponseDto {
   @Expose()
+  id: number;
+
+  @Expose()
   name: string;
 
   @Expose()

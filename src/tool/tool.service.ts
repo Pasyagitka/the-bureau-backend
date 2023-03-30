@@ -51,6 +51,21 @@ export class ToolService {
     return item;
   }
 
+  // async import(importToolsDto: CreateToolDto[]): Promise<Tool[]> {
+  //   const stageIds = importToolsDto.map((i) => i.stageId);
+  //   const idsCount = await this.stageRepository.count({ where: { id: In(stageIds) } });
+  //   if (idsCount !== stageIds.length) throw new BadParametersError('stage');
+  //   const items = await Promise.all(
+  //     importToolsDto.map(async (createToolDto) => {
+  //       return this.toolsRepository.create({
+  //         name: createToolDto.name,
+  //         stage: createToolDto.stageId,
+  //       });
+  //     }),
+  //   );
+  //   return await this.accessoryRepository.save(items);
+  // }
+
   async update(id: number, updateToolDto: UpdateToolDto): Promise<Tool> {
     const tool = await this.toolsRepository.findOne({ where: { id } });
     if (!tool) throw new NotExistsError('tool');
