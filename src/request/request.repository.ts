@@ -15,23 +15,25 @@ export class RequestRepository extends Repository<Request> {
     super(Request, dataSource.createEntityManager());
   }
 
-  async getFullRequest() {
-    return this.dataSource
-      .createQueryBuilder()
-      .select('request')
-      .from(Request, 'request')
-      .leftJoinAndMapOne('address', Address, 'address', 'request.addressId = address.id')
-      .leftJoinAndMapOne('client', Client, 'client', 'request.clientId = client.id')
-      .leftJoinAndMapOne('stage', Stage, 'stage', 'request.stageId = stage.id')
-      .leftJoinAndMapOne('tool', Tool, 'tool', 'tool.stageId = stage.id')
-      .leftJoinAndMapOne(
-        'request_equipment',
-        RequestEquipment,
-        'request_equipment',
-        'request_equipment.requestId = request_equipment.id',
-      )
-      .leftJoinAndMapOne('equipment', Equipment, 'equipment', 'equipment.requestId = request.id')
-      .leftJoinAndMapOne('accessory', Accessory, 'accessory', 'accessory.stageId = accessory.id')
-      .getRawOne();
+  async getFullRequest() { //TODO rewrite query
+    return (
+      this.dataSource
+        .createQueryBuilder()
+        .select('request')
+        .from(Request, 'request')
+        .leftJoinAndMapOne('address', Address, 'address', 'request.addressId = address.id')
+        .leftJoinAndMapOne('client', Client, 'client', 'request.clientId = client.id')
+        .leftJoinAndMapOne('stage', Stage, 'stage', 'request.stageId = stage.id')
+        .leftJoinAndMapOne('tool', Tool, 'tool', 'tool.stageId = stage.id')
+        .leftJoinAndMapOne(
+          'request_equipment',
+          RequestEquipment,
+          'request_equipment',
+          'request_equipment.requestId = request_equipment.id',
+        )
+        .leftJoinAndMapOne('equipment', Equipment, 'equipment', 'equipment.id = request_equipment.equipmentId')
+        //.leftJoinAndMapOne('accessory', Accessory, 'accessory', 'accessory.equipmentId = accessory.id')
+        .getRawOne() //TODO ???
+    );
   }
 }

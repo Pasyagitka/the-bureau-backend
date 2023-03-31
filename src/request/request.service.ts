@@ -295,9 +295,9 @@ export class RequestService {
 
   async getFullReport(id: number): Promise<Buffer> {
     const templatePath = './assets/full-request-template.docx';
-    const request = await this.requestRepository.getFullRequest();
-    // const request = await this.getRequestWithEquipment(id);
-    // if (!request) throw new NotExistsError('request');
+    //const request = await this.requestRepository.getFullRequest();
+    const request = await this.getRequestWithEquipment(id);
+    if (!request) throw new NotExistsError('request');
     const requestAccessories = await this.getRequestAccessories(request.id); //TODO убрать эти запросы (в репозиторий?)
     const requestTools = await this.getRequestTools(request.id);
     const data = {
