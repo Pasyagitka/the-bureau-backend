@@ -101,7 +101,7 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @ApiOperation({ summary: 'Get tools for request (based on request equipment)' })
+  @ApiOperation({ summary: 'Get accessories for request (based on request equipment)' })
   @Get(':id/accessories')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getAccessories(@Param('id') id: string) {
