@@ -94,12 +94,21 @@ export class RequestService {
     return await this.requestRepository.findOne({
       where: { id },
       relations: {
-        client: true,
+        client: {
+          user: true,
+        },
         brigadier: true,
         address: true,
         stage: true,
         requestEquipment: {
           equipment: true,
+        },
+      },
+      select: {
+        client: {
+          user: {
+            email: true,
+          },
         },
       },
     });
