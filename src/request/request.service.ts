@@ -194,6 +194,18 @@ export class RequestService {
       .getRawMany();
   }
 
+  async getCalendarAdmin() {
+    return await this.dataSource
+      .createQueryBuilder()
+      .select('request.id', 'requestId')
+      .addSelect('request.brigadierId', 'brigadierId')
+      .addSelect('request.mountingDate', 'mountingDate')
+      .addSelect('request.status', 'status')
+      .from(Request, 'request')
+      .where('request.brigadierId is not null')
+      .getRawMany();
+  }
+
   async getWeeklyReportForBrigadier(id: number) {
     //TODO check brigadierExisits
     return await this.dataSource

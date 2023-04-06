@@ -18,6 +18,7 @@ import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.d
 import { Request } from './entities/request.entity';
 import { RequestRepository } from './request.repository';
 import { RequestService } from './request.service';
+import { CalendarResponseDto } from './dto/calendar-response.dto';
 
 //TODO manage app routes
 @ApiAuth()
@@ -47,6 +48,17 @@ export class RequestController {
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getWeeklyReport() {
     return (await this.requestService.getWeeklyReport()).map((i) => new RequestResponseDto(i));
+  }
+
+  @ApiResponses({
+    200: [ReportResponseDto],
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get calendar (schedule) for all brigadiers (admin)' })
+  @Get('/calendar/admin')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  async getCalendarAdmin() {
+    return (await this.requestService.getCalendarAdmin()).map((i) => new CalendarResponseDto(i));
   }
 
   @ApiResponses({
