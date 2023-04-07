@@ -83,7 +83,7 @@ export class RequestService {
 
   async findAll(): Promise<Request[]> {
     return this.requestRepository.find({
-      relations: ['client.user', 'address', 'client', 'stage'],
+      relations: ['client.user', 'address', 'client', 'stage', 'brigadier'],
       order: { id: 'DESC' },
     });
   }
@@ -197,12 +197,17 @@ export class RequestService {
   async getCalendarAdmin() {
     return await this.dataSource
       .createQueryBuilder()
+      .from(Request, 'request')
+      .leftJoinAndMapOne('brigadier', Brigadier, 'brigadier', 'brigadier.id = request.brigadierId')
+      .where('request.brigadierId is not null')
       .select('request.id', 'requestId')
       .addSelect('request.brigadierId', 'brigadierId')
       .addSelect('request.mountingDate', 'mountingDate')
       .addSelect('request.status', 'status')
-      .from(Request, 'request')
-      .where('request.brigadierId is not null')
+      .addSelect(
+        "CONCAT(brigadier.surname, ' ', SUBSTRING(brigadier.firstname, 1, 1), '.', SUBSTRING(brigadier.patronymic, 1, 1), '.')",
+        'brigadier',
+      )
       .getRawMany();
   }
 

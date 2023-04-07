@@ -9,6 +9,9 @@ export class CalendarResponseDto {
   brigadierId: number;
 
   @Expose()
+  brigadier: string;
+
+  @Expose()
   requestId: number;
 
   @Expose()
