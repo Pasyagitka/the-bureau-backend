@@ -22,4 +22,9 @@ export class CreateAccessoryDto {
   //@IsPositive()
   @IsDecimal()
   price: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsPositive()
+  quantity: number;
 }

@@ -16,6 +16,9 @@ export class AccessoryResponseDto {
   price: number;
 
   @Expose()
+  quantity_in_stock: number;
+
+  @Expose()
   @Type(() => EquipmentResponseDto)
   equipment: EquipmentResponseDto;
 

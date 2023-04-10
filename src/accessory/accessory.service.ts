@@ -64,6 +64,7 @@ export class AccessoryService {
           name: createAccessoryDto.name,
           price: createAccessoryDto.price,
           equipmentId: createAccessoryDto.equipmentId,
+          quantity_in_stock: createAccessoryDto.quantity,
         });
       }),
     );
@@ -86,6 +87,7 @@ export class AccessoryService {
     accessory.equipment = equipment;
     accessory.name = updateAccessoryDto.name;
     accessory.price = updateAccessoryDto.price;
+    accessory.quantity_in_stock = updateAccessoryDto.quantity;
     return this.accessoryRepository.save(accessory);
   }
 
