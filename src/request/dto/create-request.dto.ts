@@ -29,11 +29,6 @@ class AddressDto {
   @IsString()
   @MaxLength(50)
   @IsNotEmpty()
-  country: string;
-
-  @IsString()
-  @MaxLength(50)
-  @IsNotEmpty()
   city: string;
 
   @IsString()
@@ -41,24 +36,28 @@ class AddressDto {
   @IsNotEmpty()
   street: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  house: number;
-
-  @IsOptional()
   @IsString()
-  @MaxLength(5)
-  corpus: string | null;
+  @MaxLength(50)
+  @IsNotEmpty()
+  house: string;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
   flat: number | null;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(50)
+  lat: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(50)
+  lon: string;
 }
 
 export class CreateRequestDto {
-
   @Transform(({ value }) => value && new Date(value))
   @IsDate()
   @MinDate(new Date())

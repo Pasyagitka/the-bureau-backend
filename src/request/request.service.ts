@@ -49,7 +49,11 @@ export class RequestService {
 
     const reqEq = createRequestDto.requestEquipment;
     for (let i = 0; i < reqEq.length; i++) {
-      if (!(await this.equipmentRepository.findOne({ where: { id: reqEq[i].equipment } })))
+      if (
+        !(await this.equipmentRepository.findOne({
+          where: { id: reqEq[i].equipment },
+        }))
+      )
         throw new NotExistsError(`equipment ${reqEq[i].equipment}`);
       requestEquipment.push(
         //TODO perf
@@ -337,9 +341,9 @@ export class RequestService {
         contactNumber: request.client.contactNumber,
       },
       client: `${request.client.firstname} ${request.client.patronymic} ${request.client.surname}`,
-      address: `${request.address?.country}, г. ${request.address?.city}, ул.${request.address?.street}, дом ${
-        request.address?.house
-      }${request.address?.corpus ?? ''} ${request.address?.flat ?? ''}`,
+      address: `г. ${request.address?.city}, ул.${request.address?.street}, дом ${request.address?.house} ${
+        request.address?.flat ?? ''
+      }`,
       equipment: request.requestEquipment.map((x) => ({
         type: x.equipment.type,
         mounting: x.equipment.mounting,

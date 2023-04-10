@@ -24,22 +24,22 @@ export class AddressResponseDto {
   id: number;
 
   @Expose()
-  country: string;
-
-  @Expose()
   city: string;
 
   @Expose()
   street: string;
 
   @Expose()
-  house: number;
-
-  @Expose()
-  corpus: string;
+  house: string;
 
   @Expose()
   flat: number;
+
+  @Expose()
+  lat: string;
+
+  @Expose()
+  lon: string;
 }
 
 @Exclude()

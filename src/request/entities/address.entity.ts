@@ -7,23 +7,23 @@ export class Address {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('text', { name: 'country', default: 'Беларусь' })
-  country: string;
-
   @Column('text', { name: 'city' })
   city: string;
 
   @Column('text', { name: 'street' })
   street: string;
 
-  @Column('integer', { name: 'house' })
-  house: number;
-
-  @Column('text', { name: 'corpus', nullable: true })
-  corpus: string | null;
+  @Column('text', { name: 'house', nullable: true }) //TODO remove nullable
+  house: string;
 
   @Column('integer', { name: 'flat', nullable: true })
   flat: number | null;
+
+  @Column('text', { name: 'lat', nullable: true })
+  lat: string;
+
+  @Column('text', { name: 'lon', nullable: true })
+  lon: string;
 
   @Exclude()
   @DeleteDateColumn({ type: 'timestamptz' })

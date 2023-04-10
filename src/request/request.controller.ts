@@ -43,7 +43,9 @@ export class RequestController {
     200: [ReportResponseDto],
     500: ErrorMessageResponseDto,
   })
-  @ApiOperation({ summary: 'Get weekly report (schedule) for all brigadiers (admin)' })
+  @ApiOperation({
+    summary: 'Get weekly report (schedule) for all brigadiers (admin)',
+  })
   @Get('/weekly-report')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getWeeklyReport() {
@@ -54,7 +56,9 @@ export class RequestController {
     200: [CalendarResponseDto],
     500: ErrorMessageResponseDto,
   })
-  @ApiOperation({ summary: 'Get calendar (schedule) for all brigadiers (admin)' })
+  @ApiOperation({
+    summary: 'Get calendar (schedule) for all brigadiers (admin)',
+  })
   @Get('/calendar')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getCalendar() {
@@ -124,7 +128,9 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @ApiOperation({ summary: 'Get accessories for request (based on request equipment)' })
+  @ApiOperation({
+    summary: 'Get accessories for request (based on request equipment)',
+  })
   @Get(':id/accessories')
   @CheckAbilities({ action: Action.Read, subject: Request })
   async getAccessories(@Param('id') id: string) {
@@ -192,7 +198,9 @@ export class RequestController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @ApiOperation({ summary: 'Update request status (InProcessing, Completed) (brigadier)' })
+  @ApiOperation({
+    summary: 'Update request status (InProcessing, Completed) (brigadier)',
+  })
   @Patch('brigadier/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByBrigadier(
