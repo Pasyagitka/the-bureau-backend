@@ -1,0 +1,1 @@
+docker exec thebureau-postgres pg_dump -U postgres -d postgres > update.sql
