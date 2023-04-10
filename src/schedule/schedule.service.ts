@@ -58,6 +58,16 @@ export class ScheduleService {
     return schedule;
   }
 
+  async getForRequest(id: number) {
+    const schedules = await this.scheduleRepository.find({
+      where: { requestId: id },
+      relations: { brigadier: true },
+      withDeleted: true,
+      order: { modifiedDate: 'DESC' },
+    });
+    return schedules;
+  }
+
   async removeByRequestId(requestId: number) {
     const items = await this.scheduleRepository.find({
       relations: { request: true, brigadier: true },

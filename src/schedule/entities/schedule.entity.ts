@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  Column,
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Request } from '../../request/entities/request.entity';
@@ -24,6 +25,9 @@ export class Schedule {
   @ManyToOne(() => Request, (request) => request.schedules)
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
   request: Request;
+
+  @Column({nullable: true})
+  requestId: number;
 
   @CreateDateColumn({ name: 'modifiedDate' })
   modifiedDate: Date;

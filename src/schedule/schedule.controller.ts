@@ -8,6 +8,7 @@ import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dt
 import { ScheduleResponseDto } from './dto/schedule-response.dto';
 import { Schedule } from './entities/schedule.entity';
 import { ScheduleService } from './schedule.service';
+import { RequestScheduleResponseDto } from './dto/request-schedule.response';
 
 @ApiAuth()
 @ApiTags('Schedules')
@@ -20,9 +21,20 @@ export class ScheduleController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @Get(':id')
+  @Get('brigadier/:id')
   @CheckAbilities({ action: Action.Read, subject: Schedule })
   async getBrigadierSchedule(@Param('id') id: string, @Req() req) {
     return (await this.scheduleService.getBrigadierSchedule(+id, req.user)).map((i) => new ScheduleResponseDto(i));
+  }
+
+  @ApiResponses({
+    200: [RequestScheduleResponseDto],
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Get(':id')
+  @CheckAbilities({ action: Action.Read, subject: Schedule })
+  async getForRequest(@Param('id') id: number) {
+    return (await this.scheduleService.getForRequest(id)).map((i) => new RequestScheduleResponseDto(i));
   }
 }
