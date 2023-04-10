@@ -10,7 +10,7 @@ import { User } from '../user/entities/user.entity';
 import { Action, AppAbility, Subjects } from './types';
 
 type RequestBrigadier = Request & {
-  'brigadier.user.id': Request['brigadier']['user']['id'];
+  'brigadier.userId': Request['brigadier']['userId'];
 };
 
 type RequestClient = Request & {
@@ -42,10 +42,10 @@ export class AbilityFactory {
         cannot<ScheduleBrigadier>(Action.Read, Schedule, { 'brigadier.user.id': { $ne: user.id } }).because(
           'You are not allowed to view this schedule.',
         );
-        cannot<RequestBrigadier>(Action.Read, Request, { 'brigadier.user.id': { $ne: user.id } }).because(
+        cannot<RequestBrigadier>(Action.Read, Request, { 'brigadier.userId': { $ne: user.id } }).because(
           'You are not allowed to view this request.',
         );
-        cannot<RequestBrigadier>(Action.Update, Request, { 'brigadier.user.id': { $ne: user.id } }).because(
+        cannot<RequestBrigadier>(Action.Update, Request, { 'brigadier.userId': { $ne: user.id } }).because(
           'You are not allowed to update this request.',
         );
         cannot(Action.Update, Brigadier, { id: { $ne: user.brigadier?.id } }).because(

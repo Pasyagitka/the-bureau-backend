@@ -12,7 +12,7 @@ import {
   BadResetPasswordLinkError,
   NotActivatedError,
   NotExistsError,
-  WrongPasswordError,
+  WrongPasswordError
 } from '../common/exceptions';
 import { UserService } from '../user/user.service';
 import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
@@ -147,7 +147,7 @@ export class AuthService {
 
   async getUser(token) {
     const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
-    const user = this.usersService.getWithInfo(decoded.sub);
+    const user = await this.usersService.getWithInfo(decoded.sub);
     if (!user) throw new NotExistsError('user by token');
     return user;
   }

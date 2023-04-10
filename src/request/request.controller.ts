@@ -7,6 +7,7 @@ import { ApiResponses } from '../common/decorators/api-responses.decorator';
 import { ApiAuth } from '../common/decorators/auth.decorator';
 import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { BrigadierRequestResponseDto } from './dto/brigadier-request-response.dto';
+import { CalendarResponseDto } from './dto/calendar-response.dto';
 import { ClientRequestResponseDto } from './dto/client-request-response.dto';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { ReportResponseDto } from './dto/report-response.dto';
@@ -18,7 +19,6 @@ import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.d
 import { Request } from './entities/request.entity';
 import { RequestRepository } from './request.repository';
 import { RequestService } from './request.service';
-import { CalendarResponseDto } from './dto/calendar-response.dto';
 
 //TODO manage app routes
 @ApiAuth()
@@ -174,8 +174,6 @@ export class RequestController {
     });
     return new StreamableFile(report);
   }
-
-  //TODO add cron schedule
 
   // @ApiResponses({
   //   200: [RequestEquipmentResponseDto],
