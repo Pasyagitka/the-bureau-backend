@@ -93,8 +93,6 @@ export class UserService {
     return this.usersRepository.save(user);
   }
 
-  //TODO do not return users pd
-
   async findAll() {
     return await this.usersRepository.find();
   }

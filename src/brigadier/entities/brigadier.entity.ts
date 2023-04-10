@@ -40,6 +40,9 @@ export class Brigadier {
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
+  @Column({ nullable: true })
+  userId: number;
+
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
   requests: Request[];
 
