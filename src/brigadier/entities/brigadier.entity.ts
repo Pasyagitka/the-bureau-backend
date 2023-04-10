@@ -56,6 +56,6 @@ export class Brigadier {
   schedules: Schedule[];
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

@@ -16,6 +16,6 @@ export class Tool {
   stage: Stage;
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

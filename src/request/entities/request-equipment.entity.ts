@@ -1,13 +1,5 @@
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Equipment } from '../../equipment/entities/equipment.entity';
 import { Request } from './request.entity';
 
@@ -29,6 +21,6 @@ export class RequestEquipment {
   request: Request;
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

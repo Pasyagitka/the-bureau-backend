@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Column, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Request } from '../../request/entities/request.entity';
 
 @Index('request_report_pkey', ['id'], { unique: true })
@@ -17,7 +17,7 @@ export class RequestReport {
   request: Request;
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 
   @ManyToOne(() => Brigadier, (brigadier) => brigadier.reports)

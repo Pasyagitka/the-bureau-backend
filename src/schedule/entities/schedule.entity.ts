@@ -1,13 +1,13 @@
 import { Exclude } from 'class-transformer';
 import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
-  DeleteDateColumn,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  Column,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Request } from '../../request/entities/request.entity';
@@ -26,13 +26,13 @@ export class Schedule {
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
   request: Request;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   requestId: number;
 
-  @CreateDateColumn({ name: 'modifiedDate' })
+  @CreateDateColumn({ name: 'modifiedDate', type: 'timestamptz' })
   modifiedDate: Date;
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

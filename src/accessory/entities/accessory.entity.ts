@@ -7,7 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Equipment } from '../../equipment/entities/equipment.entity';
 import { InvoiceItem } from '../../invoice/entities/invoice-items.entity';
@@ -40,6 +40,6 @@ export class Accessory {
   invoiceItems: InvoiceItem[];
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

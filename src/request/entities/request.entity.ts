@@ -9,7 +9,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
@@ -26,7 +26,7 @@ export class Request {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @CreateDateColumn({ name: 'registerDate' })
+  @CreateDateColumn({ name: 'registerDate', type: 'timestamptz' })
   registerDate: Date;
 
   @Column('date', { name: 'mountingDate', nullable: true })
@@ -77,6 +77,6 @@ export class Request {
   schedules: Schedule[];
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

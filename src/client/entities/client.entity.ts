@@ -1,8 +1,13 @@
 import { Exclude } from 'class-transformer';
 import {
-  Column, DeleteDateColumn, Entity,
+  Column,
+  DeleteDateColumn,
+  Entity,
   Index,
-  JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Request } from '../../request/entities/request.entity';
 import { User } from '../../user/entities/user.entity';
@@ -33,6 +38,6 @@ export class Client {
   requests: Request[];
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

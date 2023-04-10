@@ -33,6 +33,6 @@ export class Equipment {
   requestEquipment: RequestEquipment[];
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

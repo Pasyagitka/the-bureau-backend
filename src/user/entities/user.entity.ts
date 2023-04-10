@@ -45,6 +45,6 @@ export class User {
   brigadier: Brigadier;
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }

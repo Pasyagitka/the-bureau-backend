@@ -26,6 +26,6 @@ export class Address {
   flat: number | null;
 
   @Exclude()
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
 }
