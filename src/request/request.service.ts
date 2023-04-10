@@ -194,8 +194,8 @@ export class RequestService {
       .getRawMany();
   }
 
-  async getCalendarAdmin() {
-    return await this.dataSource
+  async getCalendar(brigadierId?: number) {
+    const query = this.dataSource
       .createQueryBuilder()
       .from(Request, 'request')
       .leftJoinAndMapOne('brigadier', Brigadier, 'brigadier', 'brigadier.id = request.brigadierId')
@@ -207,8 +207,11 @@ export class RequestService {
       .addSelect(
         "CONCAT(brigadier.surname, ' ', SUBSTRING(brigadier.firstname, 1, 1), '.', SUBSTRING(brigadier.patronymic, 1, 1), '.')",
         'brigadier',
-      )
-      .getRawMany();
+      );
+    if (brigadierId) {
+      query.andWhere('request.brigadierId = :brigadierId', { brigadierId });
+    }
+    return query.getRawMany();
   }
 
   async getWeeklyReportForBrigadier(id: number) {

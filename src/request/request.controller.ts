@@ -51,14 +51,25 @@ export class RequestController {
   }
 
   @ApiResponses({
-    200: [ReportResponseDto],
+    200: [CalendarResponseDto],
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({ summary: 'Get calendar (schedule) for all brigadiers (admin)' })
-  @Get('/calendar/admin')
+  @Get('/calendar')
   @CheckAbilities({ action: Action.Read, subject: Request })
-  async getCalendarAdmin() {
-    return (await this.requestService.getCalendarAdmin()).map((i) => new CalendarResponseDto(i));
+  async getCalendar() {
+    return (await this.requestService.getCalendar()).map((i) => new CalendarResponseDto(i));
+  }
+
+  @ApiResponses({
+    200: [CalendarResponseDto],
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get calendar (schedule) for obe brigadier' })
+  @Get('/calendar/:brigadierId')
+  @CheckAbilities({ action: Action.Read, subject: Request })
+  async getCalendarForBrigadier(@Param('brigadierId') brigadierId: number) {
+    return (await this.requestService.getCalendar(brigadierId)).map((i) => new CalendarResponseDto(i));
   }
 
   @ApiResponses({
