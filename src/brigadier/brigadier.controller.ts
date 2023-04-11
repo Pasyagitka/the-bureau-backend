@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
@@ -7,6 +7,8 @@ import { ApiAuth } from '../common/decorators/auth.decorator';
 import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { BrigadierService } from './brigadier.service';
 import { BrigadierResponseDto } from './dto/brigadier-response.dto';
+import { RecommendedBrigadierResponseDto } from './dto/recommended-brigadier-response.dto';
+import { RecommendedQuery } from './dto/recommended-query.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
 
@@ -24,6 +26,16 @@ export class BrigadierController {
   @CheckAbilities({ action: Action.Read, subject: Brigadier })
   async findAll() {
     return (await this.brigadierService.findAll()).map((i) => new BrigadierResponseDto(i));
+  }
+
+  @ApiResponses({
+    200: [RecommendedBrigadierResponseDto],
+    500: ErrorMessageResponseDto,
+  })
+  @Get('/recommended')
+  @CheckAbilities({ action: Action.Read, subject: Brigadier })
+  async getRecommendedBrigadiers(@Query() query: RecommendedQuery) {
+    return (await this.brigadierService.getAvailableForDate(query)).map((i) => new RecommendedBrigadierResponseDto(i));
   }
 
   @ApiResponses({

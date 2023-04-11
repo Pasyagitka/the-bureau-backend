@@ -9,10 +9,11 @@ import { ApiAuth } from '../common/decorators/auth.decorator';
 import { RequestReportResponseDto } from './dto/request-report.response.dto';
 import { RequestReportService } from './request-report.service';
 import { UpsertRequestReportDto } from './dto/upsert-request-report.dto';
+import { Patch } from '@nestjs/common/decorators';
 
 @ApiAuth()
 @ApiTags('Request Report')
-@Controller(':requestId/request-report')
+@Controller('request-report/:requestId')
 export class RequestReportController {
   constructor(private readonly requestReportService: RequestReportService) {}
 
@@ -23,9 +24,9 @@ export class RequestReportController {
     500: ErrorMessageResponseDto,
   })
   @Post()
-  @CheckAbilities({ action: Action.Create, subject: Accessory })
-  upsert(@Param('requestId') requestId: number, @Body() createRequestReportDto: [UpsertRequestReportDto]) {
-    return this.requestReportService.upsert(requestId, createRequestReportDto);
+  //@CheckAbilities({ action: Action.Create, subject: Accessory })
+  patch(@Param('requestId') requestId: number, @Body() createRequestReportDto: [UpsertRequestReportDto]) {
+    return this.requestReportService.patch(requestId, createRequestReportDto);
   }
 
   @ApiResponses({
@@ -33,7 +34,7 @@ export class RequestReportController {
     500: ErrorMessageResponseDto,
   })
   @Get()
-  @CheckAbilities({ action: Action.Read, subject: Accessory })
+  //@CheckAbilities({ action: Action.Read, subject: Accessory })
   findAll(@Param('requestId') requestId: number) {
     return this.requestReportService.findAll(requestId);
   }

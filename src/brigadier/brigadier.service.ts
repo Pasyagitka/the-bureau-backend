@@ -6,6 +6,7 @@ import { AbilityFactory } from '../ability/ability.factory';
 import { Action } from '../ability/types';
 import { NotExistsError } from '../common/exceptions';
 import { User } from '../user/entities/user.entity';
+import { RecommendedQuery } from './dto/recommended-query.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
 
@@ -29,10 +30,11 @@ export class BrigadierService {
     return await this.brigadierRepository.findOne({ where: { id }, relations: { user: true } });
   }
 
-  async getAvailableForDate(date: Date) {
+  async getAvailableForDate(query: RecommendedQuery) {
     return this.dataSource.query(
       `select 
         available_brigadiers.id,
+        concat_ws(' ', available_brigadiers.surname, available_brigadiers.firstname, available_brigadiers.patronymic) full_name,
         count(case date_part('week', "mountingDate") when date_part('week', now()) then 1 else null end) week_request_count
       from
         (select 
@@ -41,9 +43,9 @@ export class BrigadierService {
         left join (select * from request where "mountingDate" = $1) r on r."brigadierId" = b.id
           group by b.id having count(r.id) = 0) as available_brigadiers 
       left join request r on r."brigadierId" = available_brigadiers.id
-      group by available_brigadiers.id
+      group by available_brigadiers.id, available_brigadiers.surname, available_brigadiers.firstname, available_brigadiers.patronymic
       order by week_request_count asc`,
-      [date],
+      [query.date],
     );
   }
 

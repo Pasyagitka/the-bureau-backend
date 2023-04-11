@@ -16,6 +16,9 @@ export class RequestReport {
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])
   request: Request;
 
+  @Column()
+  requestId: number;
+
   @Exclude()
   @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
