@@ -1,7 +1,7 @@
 import { ForbiddenError } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { AbilityFactory } from '../ability/ability.factory';
 import { Action } from '../ability/types';
 import { NotExistsError } from '../common/exceptions';
@@ -15,6 +15,7 @@ export class BrigadierService {
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
     private readonly abilityFactory: AbilityFactory,
+    private readonly dataSource: DataSource,
   ) {}
 
   async findAll(): Promise<Brigadier[]> {
@@ -26,6 +27,24 @@ export class BrigadierService {
 
   async get(id: number): Promise<Brigadier> {
     return await this.brigadierRepository.findOne({ where: { id }, relations: { user: true } });
+  }
+
+  async getAvailableForDate(date: Date) {
+    return this.dataSource.query(
+      `select 
+        available_brigadiers.id,
+        count(case date_part('week', "mountingDate") when date_part('week', now()) then 1 else null end) week_request_count
+      from
+        (select 
+          b.*
+        from brigadier b 
+        left join (select * from request where "mountingDate" = $1) r on r."brigadierId" = b.id
+          group by b.id having count(r.id) = 0) as available_brigadiers 
+      left join request r on r."brigadierId" = available_brigadiers.id
+      group by available_brigadiers.id
+      order by week_request_count asc`,
+      [date],
+    );
   }
 
   async update(id: number, updateBrigadierDto: UpdateBrigadierDto, user: User): Promise<Brigadier> {
