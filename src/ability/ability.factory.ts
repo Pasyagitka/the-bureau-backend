@@ -8,6 +8,7 @@ import { Request } from '../request/entities/request.entity';
 import { Schedule } from '../schedule/entities/schedule.entity';
 import { User } from '../user/entities/user.entity';
 import { Action, AppAbility, Subjects } from './types';
+import { Accessory } from 'src/accessory/entities/accessory.entity';
 
 type RequestBrigadier = Request & {
   'brigadier.userId': Request['brigadier']['userId'];
@@ -35,6 +36,7 @@ export class AbilityFactory {
         break;
       }
       case Role.Brigadier: {
+        can([Action.Read], Accessory); //TODO
         can([Action.Read, Action.Update], Brigadier);
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], User);

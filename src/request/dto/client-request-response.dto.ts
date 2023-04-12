@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ClientResponseDto } from '../../client/dto/client-response.dto';
-import { RequestEquipmentResponseDto, StageResponseDto } from './brigadier-request-response.dto';
+import { AddressResponseDto, RequestEquipmentResponseDto, StageResponseDto } from './brigadier-request-response.dto';
 
 @Exclude()
 export class ClientRequestResponseDto {
@@ -25,8 +25,8 @@ export class ClientRequestResponseDto {
   @Expose()
   stage: StageResponseDto;
 
-  // @Expose()
-  // address: AddressResponseDto;
+  @Expose()
+  address: AddressResponseDto;
 
   // @Expose()
   // brigadier: BrigadierResponseDto;
