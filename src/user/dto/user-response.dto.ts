@@ -16,6 +16,9 @@ export class UserResponseDto {
   @Expose()
   role: string;
 
+  @Expose()
+  isActivated: boolean;
+
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);
   }
