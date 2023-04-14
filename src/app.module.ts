@@ -28,6 +28,7 @@ import { StageModule } from './stage/stage.module';
 import { ToolModule } from './tool/tool.module';
 import { UserModule } from './user/user.module';
 import { InvoiceModule } from './invoice/invoice.module';
+import { StatisticsModule } from './statistics/statistics.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
@@ -67,6 +68,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     RequestReportModule,
     InvoiceModule,
     CloudinaryModule,
+    StatisticsModule,
   ],
   controllers: [],
   providers: [

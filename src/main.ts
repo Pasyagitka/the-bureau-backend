@@ -51,6 +51,7 @@ function createSwagger(app: INestApplication, basePath: string) {
     .addTag('Request Report', 'CRUD for working with request reports (quality control)')
     .addTag('Schedules')
     .addTag('Stages', 'Requests for working with stages (enum)')
+    .addTag('Statistics')
     .addTag('Tools', 'CRUD for working with tools in storage')
     .addTag('Users')
     .build();
