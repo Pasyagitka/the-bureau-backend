@@ -1,7 +1,7 @@
 import { ForbiddenError } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { AbilityFactory } from '../ability/ability.factory';
 import { Action } from '../ability/types';
 import { NotExistsError } from '../common/exceptions';
@@ -15,6 +15,7 @@ export class ClientService {
     @InjectRepository(Client)
     private clientRepository: Repository<Client>,
     private readonly abilityFactory: AbilityFactory,
+    private readonly dataSource: DataSource,
   ) {}
 
   async findAll(): Promise<Client[]> {

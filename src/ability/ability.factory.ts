@@ -15,11 +15,11 @@ type RequestBrigadier = Request & {
 };
 
 type RequestClient = Request & {
-  'client.user.id': Request['client']['user']['id'];
+  'client.userId': Request['client']['userId'];
 };
 
 type ScheduleBrigadier = Schedule & {
-  'brigadier.user.id': Schedule['brigadier']['user']['id'];
+  'brigadier.userId': Schedule['brigadier']['userId'];
 };
 
 @Injectable()
@@ -41,7 +41,7 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], User);
         can(Action.Read, Schedule);
-        cannot<ScheduleBrigadier>(Action.Read, Schedule, { 'brigadier.user.id': { $ne: user.id } }).because(
+        cannot<ScheduleBrigadier>(Action.Read, Schedule, { 'brigadier.userId': { $ne: user.id } }).because(
           'You are not allowed to view this schedule.',
         );
         cannot<RequestBrigadier>(Action.Read, Request, { 'brigadier.userId': { $ne: user.id } }).because(
@@ -65,7 +65,7 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], Client);
         can([Action.Update], User);
         cannot<RequestClient>(Action.Read, Request, {
-          'client.user.id': { $ne: user.id },
+          'client.userId': { $ne: user.id },
         }).because('You are not allowed to view this request.');
         // cannot([Action.Create, Action.Delete], User).because('You are not the admin!');
         cannot([Action.Update], Client, { id: { $ne: user.client?.id } }).because(

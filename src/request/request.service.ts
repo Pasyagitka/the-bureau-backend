@@ -98,7 +98,7 @@ export class RequestService {
     return await this.requestRepository.findOne({
       where: { id },
       relations: {
-        client: true,
+        client: { user: true },
         brigadier: true,
         address: true,
         stage: true,
@@ -271,7 +271,7 @@ export class RequestService {
     const requests = await this.requestRepository.find({
       where: { client: { id: clientId } },
       relations: {
-        client: true,
+        client: { user: true },
         brigadier: true,
         address: true,
         requestEquipment: {

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDecimal, IsNumber, IsOptional, IsPositive, IsString, MaxLength } from 'class-validator';
+import { IsDecimal, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateAccessoryDto {
   @ApiPropertyOptional()
@@ -25,6 +25,6 @@ export class CreateAccessoryDto {
 
   @ApiProperty()
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   quantity: number;
 }

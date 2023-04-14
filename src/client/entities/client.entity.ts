@@ -7,7 +7,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Request } from '../../request/entities/request.entity';
 import { User } from '../../user/entities/user.entity';
@@ -33,6 +33,9 @@ export class Client {
   @OneToOne(() => User, (user) => user.client, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
+
+  @Column()
+  userId: number;
 
   @OneToMany(() => Request, (request) => request.client)
   requests: Request[];

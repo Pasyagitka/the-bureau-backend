@@ -7,7 +7,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Invoice } from '../../invoice/entities/invoice.entity';
 import { RequestReport } from '../../request-report/entities/request-report.entity';
@@ -40,7 +40,7 @@ export class Brigadier {
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-  @Column({ nullable: true })
+  @Column()
   userId: number;
 
   @OneToMany(() => Request, (request) => request.brigadier, { cascade: true, onDelete: 'SET NULL' })
