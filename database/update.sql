@@ -79,9 +79,10 @@ CREATE TABLE public.accessory (
     id integer NOT NULL,
     sku text,
     name text NOT NULL,
-    "deletedAt" timestamp without time zone,
     "equipmentId" integer,
-    price numeric(6,2) DEFAULT '0'::numeric NOT NULL
+    price numeric(6,2) DEFAULT '0'::numeric NOT NULL,
+    quantity_in_stock integer DEFAULT 0 NOT NULL,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -115,13 +116,13 @@ ALTER SEQUENCE public.accessory_id_seq OWNED BY public.accessory.id;
 
 CREATE TABLE public.address (
     id integer NOT NULL,
-    country text DEFAULT 'Беларусь'::text NOT NULL,
     city text NOT NULL,
     street text NOT NULL,
-    house integer NOT NULL,
-    corpus text,
     flat integer,
-    "deletedAt" timestamp without time zone
+    "deletedAt" timestamp with time zone,
+    lat text,
+    lon text,
+    house text
 );
 
 
@@ -160,8 +161,8 @@ CREATE TABLE public.brigadier (
     patronymic text NOT NULL,
     "contactNumber" text NOT NULL,
     "isApproved" boolean DEFAULT false NOT NULL,
-    "deletedAt" timestamp without time zone,
-    "userId" integer
+    "userId" integer,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -190,6 +191,42 @@ ALTER SEQUENCE public.brigadier_id_seq OWNED BY public.brigadier.id;
 
 
 --
+-- Name: brigadier_tool; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.brigadier_tool (
+    id integer NOT NULL,
+    quantity integer DEFAULT 1 NOT NULL,
+    "brigadierId" integer,
+    "toolId" integer
+);
+
+
+ALTER TABLE public.brigadier_tool OWNER TO postgres;
+
+--
+-- Name: brigadier_tool_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.brigadier_tool_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.brigadier_tool_id_seq OWNER TO postgres;
+
+--
+-- Name: brigadier_tool_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.brigadier_tool_id_seq OWNED BY public.brigadier_tool.id;
+
+
+--
 -- Name: client; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -199,8 +236,8 @@ CREATE TABLE public.client (
     surname text NOT NULL,
     patronymic text NOT NULL,
     "contactNumber" text NOT NULL,
-    "deletedAt" timestamp without time zone,
-    "userId" integer
+    "userId" integer,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -236,7 +273,7 @@ CREATE TABLE public.equipment (
     id integer NOT NULL,
     type text NOT NULL,
     mounting public.equipment_mounting_enum DEFAULT 'Пол'::public.equipment_mounting_enum NOT NULL,
-    "deletedAt" timestamp without time zone
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -265,20 +302,93 @@ ALTER SEQUENCE public.equipment_id_seq OWNED BY public.equipment.id;
 
 
 --
+-- Name: invoice; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.invoice (
+    id integer NOT NULL,
+    "totalPrice" numeric(6,2) DEFAULT '0'::numeric NOT NULL,
+    "customerId" integer
+);
+
+
+ALTER TABLE public.invoice OWNER TO postgres;
+
+--
+-- Name: invoice_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.invoice_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.invoice_id_seq OWNER TO postgres;
+
+--
+-- Name: invoice_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.invoice_id_seq OWNED BY public.invoice.id;
+
+
+--
+-- Name: invoice_item; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.invoice_item (
+    id integer NOT NULL,
+    quantity integer DEFAULT 0 NOT NULL,
+    price numeric(6,2) DEFAULT '0'::numeric NOT NULL,
+    sum numeric(6,2) DEFAULT '0'::numeric NOT NULL,
+    "invoiceId" integer,
+    "accessoryId" integer
+);
+
+
+ALTER TABLE public.invoice_item OWNER TO postgres;
+
+--
+-- Name: invoice_item_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.invoice_item_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.invoice_item_id_seq OWNER TO postgres;
+
+--
+-- Name: invoice_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.invoice_item_id_seq OWNED BY public.invoice_item.id;
+
+
+--
 -- Name: request; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.request (
     id integer NOT NULL,
-    "registerDate" timestamp without time zone DEFAULT now() NOT NULL,
-    "mountingDate" date,
     comment text,
     status public.request_status_enum DEFAULT 'InProcessing'::public.request_status_enum NOT NULL,
-    "deletedAt" timestamp without time zone,
     "addressId" integer,
     "brigadierId" integer,
     "clientId" integer,
-    "stageId" integer
+    "stageId" integer,
+    "registerDate" timestamp with time zone DEFAULT now() NOT NULL,
+    "mountingDate" date,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -291,9 +401,9 @@ ALTER TABLE public.request OWNER TO postgres;
 CREATE TABLE public.request_equipment (
     id integer NOT NULL,
     quantity integer DEFAULT 1 NOT NULL,
-    "deletedAt" timestamp without time zone,
     "equipmentId" integer,
-    "requestId" integer
+    "requestId" integer,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -350,9 +460,9 @@ ALTER SEQUENCE public.request_id_seq OWNED BY public.request.id;
 CREATE TABLE public.request_report (
     id integer NOT NULL,
     file text NOT NULL,
-    "deletedAt" timestamp without time zone,
-    "requestId" integer,
-    "brigadierId" integer
+    "requestId" integer NOT NULL,
+    "brigadierId" integer,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -386,10 +496,10 @@ ALTER SEQUENCE public.request_report_id_seq OWNED BY public.request_report.id;
 
 CREATE TABLE public.schedule (
     id integer NOT NULL,
-    "modifiedDate" timestamp without time zone DEFAULT now() NOT NULL,
-    "deletedAt" timestamp without time zone,
     "brigadierId" integer,
-    "requestId" integer
+    "requestId" integer,
+    "modifiedDate" timestamp with time zone DEFAULT now() NOT NULL,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -458,11 +568,8 @@ ALTER SEQUENCE public.stage_id_seq OWNED BY public.stage.id;
 CREATE TABLE public.tool (
     id integer NOT NULL,
     name text NOT NULL,
-    "deletedAt" timestamp without time zone,
     "stageId" integer,
-    quantity_total integer DEFAULT 0 NOT NULL,
-    quantity_in_stock integer DEFAULT 0 NOT NULL,
-    rental_price numeric(6,2) DEFAULT '0'::numeric NOT NULL
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -504,7 +611,7 @@ CREATE TABLE public."user" (
     "temporaryPassword" text,
     "isActivated" boolean DEFAULT false NOT NULL,
     role public.user_role_enum DEFAULT 'Client'::public.user_role_enum NOT NULL,
-    "deletedAt" timestamp without time zone
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -554,6 +661,13 @@ ALTER TABLE ONLY public.brigadier ALTER COLUMN id SET DEFAULT nextval('public.br
 
 
 --
+-- Name: brigadier_tool id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brigadier_tool ALTER COLUMN id SET DEFAULT nextval('public.brigadier_tool_id_seq'::regclass);
+
+
+--
 -- Name: client id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -565,6 +679,20 @@ ALTER TABLE ONLY public.client ALTER COLUMN id SET DEFAULT nextval('public.clien
 --
 
 ALTER TABLE ONLY public.equipment ALTER COLUMN id SET DEFAULT nextval('public.equipment_id_seq'::regclass);
+
+
+--
+-- Name: invoice id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice ALTER COLUMN id SET DEFAULT nextval('public.invoice_id_seq'::regclass);
+
+
+--
+-- Name: invoice_item id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice_item ALTER COLUMN id SET DEFAULT nextval('public.invoice_item_id_seq'::regclass);
 
 
 --
@@ -620,18 +748,18 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 -- Data for Name: accessory; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.accessory (id, sku, name, "deletedAt", "equipmentId", price) FROM stdin;
-3	\N	Болт	\N	3	0.00
-4	11331	Гайка	\N	4	0.00
-2	\N	Гайка	\N	3	0.00
-5		Пресс-муфта	\N	2	0.00
-6	\N	Трубааа	2022-12-21 14:51:03.414241	3	0.00
-7	string	string	\N	1	0.00
-1	string	string	\N	2	0.00
-10	\N	sswfwefwef	\N	1	0.00
-11	\N	sswfwefwef	\N	1	0.00
-12	\N	wefwef	\N	1	0.00
-13	\N	ergergerg	\N	1	0.00
+COPY public.accessory (id, sku, name, "equipmentId", price, quantity_in_stock, "deletedAt") FROM stdin;
+3	\N	Болт	3	0.00	0	\N
+4	11331	Гайка	4	0.00	0	\N
+2	\N	Гайка	3	0.00	0	\N
+5		Пресс-муфта	2	0.00	0	\N
+7	string	string	1	0.00	0	\N
+1	string	string	2	0.00	0	\N
+10	\N	sswfwefwef	1	0.00	0	\N
+11	\N	sswfwefwef	1	0.00	0	\N
+12	\N	wefwef	1	0.00	0	\N
+13	\N	ergergerg	1	0.00	0	\N
+14	string	string	1	1.00	0	\N
 \.
 
 
@@ -639,11 +767,18 @@ COPY public.accessory (id, sku, name, "deletedAt", "equipmentId", price) FROM st
 -- Data for Name: address; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.address (id, country, city, street, house, corpus, flat, "deletedAt") FROM stdin;
-1	Belarus	Минск	Черниговская	5	\N	\N	\N
-2	Belarus	Гродно	Советская	818	\N	\N	\N
-35	Belarus	Минск	Рижская	77	а	22	\N
-36	Belarus	Минск	аоаоа	5	а	88	\N
+COPY public.address (id, city, street, flat, "deletedAt", lat, lon, house) FROM stdin;
+38	Минск	Черниговская	\N	\N	53.8628267	27.5302989	5
+40	Минск	Червякова	\N	\N	53.9212048	27.5502992	3
+41	Майский	Новая	\N	\N	52.9531688	30.1000025	1
+42	Алексичский	Юбилейная	3233	\N	51.9354584	29.6907746	1
+1	Минск	Черниговская	\N	\N	53.8628267\t27.5302989	53.8628267\t27.5302989	\N
+2	Гродно	Советская	\N	\N	53.8628267\t27.5302989	53.8628267\t27.5302989	\N
+37	Пашковский	Минское	\N	\N	51.9354584	29.6907746	\N
+36	Минск	аоаоа	88	\N	53.8628267\t27.5302989	29.6907746	\N
+35	Минск	Рижская	22	\N	53.8628267\t27.5302989	27.5302989	\N
+39	Колодищанский	Агатовая	\N	\N	53.8628267	27.5302990	5
+43	Минск	Черниговская	3	\N	53.8628267	27.5302989	5
 \.
 
 
@@ -651,12 +786,20 @@ COPY public.address (id, country, city, street, house, corpus, flat, "deletedAt"
 -- Data for Name: brigadier; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "isApproved", "deletedAt", "userId") FROM stdin;
-1	Егор	Егоров	Егорович	375446352712	f	\N	3
-2	Бригадир	Бригадиров	Бригад	375446352713	f	\N	4
-3	енвевк	Цыкуыыу	екевмроиол	375446352713	f	\N	5
-4	имя	фамилия	пнгпн	375447586976	f	\N	8
-5	brigadier6	brigadier6	brigadier6	375445657565	f	\N	9
+COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "isApproved", "userId", "deletedAt") FROM stdin;
+1	Егор	Егоров	Егорович	375446352712	f	3	\N
+2	Бригадир	Бригадиров	Бригад	375446352713	f	4	\N
+3	енвевк	Цыкуыыу	екевмроиол	375446352713	f	5	\N
+4	имя	фамилия	пнгпн	375447586976	f	8	\N
+5	brigadier6	brigadier6	brigadier6	375445657565	f	9	\N
+\.
+
+
+--
+-- Data for Name: brigadier_tool; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.brigadier_tool (id, quantity, "brigadierId", "toolId") FROM stdin;
 \.
 
 
@@ -664,11 +807,11 @@ COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "isA
 -- Data for Name: client; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.client (id, firstname, surname, patronymic, "contactNumber", "deletedAt", "userId") FROM stdin;
-2	Алексей	Алексеев	Алексеевич	375446782833	\N	6
-3	Андрей	Андреев	Андреевич	375446788882	\N	7
-1	клукеркер	клиент1	клиент1	375445634337	\N	2
-4	4444	string	string	+375445678695	\N	10
+COPY public.client (id, firstname, surname, patronymic, "contactNumber", "userId", "deletedAt") FROM stdin;
+2	Алексей	Алексеев	Алексеевич	375446782833	6	\N
+3	Андрей	Андреев	Андреевич	375446788882	7	\N
+1	клукеркер	клиент1	клиент1	375445634337	2	\N
+4	4444	string	string	+375445678695	10	\N
 \.
 
 
@@ -681,7 +824,121 @@ COPY public.equipment (id, type, mounting, "deletedAt") FROM stdin;
 2	Конвектор внутрипольный	Пол	\N
 3	Радиатор настенный	Стена	\N
 4	Конвектор настенный	Стена	\N
-5	уцацуацуацуауа	Пол	2022-12-21 13:28:08.253777
+5	уцацуацуацуауа	Пол	\N
+\.
+
+
+--
+-- Data for Name: invoice; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.invoice (id, "totalPrice", "customerId") FROM stdin;
+1	0.00	1
+2	0.00	1
+3	0.00	1
+4	0.00	1
+5	0.00	1
+6	0.00	1
+7	0.00	1
+8	0.00	1
+9	0.00	1
+10	0.00	1
+11	0.00	1
+12	0.00	1
+13	0.00	1
+14	0.00	1
+15	0.00	1
+16	0.00	1
+17	0.00	1
+18	0.00	1
+19	0.00	1
+20	0.00	1
+21	0.00	1
+22	0.00	1
+23	0.00	1
+24	0.00	1
+25	0.00	1
+26	0.00	1
+27	0.00	1
+28	0.00	1
+29	0.00	1
+30	0.00	1
+31	0.00	1
+32	0.00	1
+33	0.00	1
+34	0.00	1
+35	0.00	1
+36	0.00	1
+37	0.00	1
+38	0.00	1
+39	0.00	1
+40	0.00	1
+41	0.00	1
+42	0.00	1
+43	0.00	1
+44	0.00	1
+45	0.00	1
+46	0.00	1
+47	0.00	1
+48	0.00	1
+49	0.00	1
+\.
+
+
+--
+-- Data for Name: invoice_item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.invoice_item (id, quantity, price, sum, "invoiceId", "accessoryId") FROM stdin;
+1	1	0.00	0.00	1	1
+2	1	0.00	0.00	2	1
+3	1	0.00	0.00	3	1
+4	1	0.00	0.00	4	1
+5	1	0.00	0.00	5	1
+6	1	0.00	0.00	6	1
+7	1	0.00	0.00	7	1
+8	1	0.00	0.00	8	1
+9	1	0.00	0.00	9	1
+10	1	0.00	0.00	10	1
+11	1	0.00	0.00	11	1
+12	1	0.00	0.00	12	1
+13	1	0.00	0.00	13	1
+14	1	0.00	0.00	14	1
+15	1	0.00	0.00	15	1
+16	1	0.00	0.00	16	1
+17	1	0.00	0.00	17	1
+18	1	0.00	0.00	18	1
+19	1	0.00	0.00	19	1
+20	1	0.00	0.00	20	1
+21	1	0.00	0.00	21	1
+22	1	0.00	0.00	22	1
+23	1	0.00	0.00	23	1
+24	1	0.00	0.00	24	1
+25	1	0.00	0.00	25	1
+26	1	0.00	0.00	26	1
+27	1	0.00	0.00	27	1
+28	1	0.00	0.00	28	1
+29	1	0.00	0.00	29	1
+30	1	0.00	0.00	30	1
+31	1	0.00	0.00	31	1
+32	1	0.00	0.00	32	1
+33	1	0.00	0.00	33	1
+34	1	0.00	0.00	34	1
+35	1	0.00	0.00	35	1
+36	1	0.00	0.00	36	1
+37	1	0.00	0.00	37	1
+38	1	0.00	0.00	38	1
+39	1	0.00	0.00	39	1
+40	1	0.00	0.00	40	1
+41	1	0.00	0.00	41	1
+42	1	0.00	0.00	42	1
+43	1	0.00	0.00	43	1
+44	1	0.00	0.00	44	1
+45	1	0.00	0.00	45	1
+46	1	0.00	0.00	46	1
+47	1	0.00	0.00	47	1
+48	1	0.00	0.00	48	1
+49	1	0.00	0.00	49	1
 \.
 
 
@@ -689,11 +946,18 @@ COPY public.equipment (id, type, mounting, "deletedAt") FROM stdin;
 -- Data for Name: request; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.request (id, "registerDate", "mountingDate", comment, status, "deletedAt", "addressId", "brigadierId", "clientId", "stageId") FROM stdin;
-2	2022-12-21 13:16:46.682945	2022-12-22	ощшпуо	InProcessing	\N	2	2	2	2
-1	2022-12-21 13:06:18.488413	2022-12-22	Частный дом	InProcessing	\N	1	1	1	2
-35	2022-12-21 13:27:52.050773	2022-12-23	Код от домофона - 1488	Completed	\N	35	2	2	1
-36	2022-12-21 14:53:23.453788	2022-12-22	ршрш	Completed	\N	36	1	1	3
+COPY public.request (id, comment, status, "addressId", "brigadierId", "clientId", "stageId", "registerDate", "mountingDate", "deletedAt") FROM stdin;
+37	Ссауцауца	InProcessing	37	\N	1	3	2023-04-10 15:54:13.859508+00	2023-04-14	\N
+38	Ми	Completed	38	\N	1	3	2023-04-10 16:12:38.575215+00	2023-04-14	\N
+39	цйвцувац	Approved	39	3	1	1	2023-04-10 16:17:25.904217+00	2023-04-19	\N
+43	ч	InProcessing	43	4	1	1	2023-04-11 16:24:38.641458+00	2023-04-13	\N
+42	\N	Approved	42	3	1	1	2023-04-10 16:22:45.021688+00	2023-04-12	\N
+41	у	Approved	41	4	1	2	2023-04-10 16:22:26.303009+00	2023-04-12	\N
+40	ацуацуа	Approved	40	5	1	1	2023-04-10 16:19:56.659743+00	2023-04-19	\N
+36	ршрш	Completed	36	4	1	3	2023-04-10 13:42:10.120677+00	2023-04-14	\N
+1	Частный дом	InProcessing	1	3	1	2	2023-04-10 13:42:10.120677+00	2023-04-14	\N
+2	ощшпуо	InProcessing	2	2	2	2	2023-04-10 13:42:10.120677+00	2023-04-14	\N
+35	Код от домофона - 1444	Completed	35	5	2	1	2023-04-10 13:42:10.120677+00	2023-04-14	\N
 \.
 
 
@@ -701,15 +965,26 @@ COPY public.request (id, "registerDate", "mountingDate", comment, status, "delet
 -- Data for Name: request_equipment; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.request_equipment (id, quantity, "deletedAt", "equipmentId", "requestId") FROM stdin;
-1	1	\N	2	1
-2	2	\N	3	1
-3	3	\N	3	2
-4	2	\N	4	2
-36	1	\N	1	35
-37	2	\N	3	35
-38	5	\N	2	36
-39	2	\N	3	36
+COPY public.request_equipment (id, quantity, "equipmentId", "requestId", "deletedAt") FROM stdin;
+1	1	2	1	\N
+2	2	3	1	\N
+3	3	3	2	\N
+4	2	4	2	\N
+36	1	1	35	\N
+37	2	3	35	\N
+38	5	2	36	\N
+39	2	3	36	\N
+40	2	1	37	\N
+41	2	2	38	\N
+42	1	3	38	\N
+43	1	3	39	\N
+44	1	1	39	\N
+45	1	1	40	\N
+46	1	3	41	\N
+47	1	2	42	\N
+48	1	3	42	\N
+49	1	2	43	\N
+50	2	5	43	\N
 \.
 
 
@@ -717,9 +992,10 @@ COPY public.request_equipment (id, quantity, "deletedAt", "equipmentId", "reques
 -- Data for Name: request_report; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.request_report (id, file, "deletedAt", "requestId", "brigadierId") FROM stdin;
-1	i	\N	1	1
-2	ergerg	2022-12-21 13:17:02.833	1	2
+COPY public.request_report (id, file, "requestId", "brigadierId", "deletedAt") FROM stdin;
+4	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N
+6	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N
+7	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N
 \.
 
 
@@ -727,12 +1003,26 @@ COPY public.request_report (id, file, "deletedAt", "requestId", "brigadierId") F
 -- Data for Name: schedule; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.schedule (id, "modifiedDate", "deletedAt", "brigadierId", "requestId") FROM stdin;
-2	2022-12-21 13:16:58.974247	\N	2	2
-1	2022-12-21 13:06:29.573892	2022-12-21 13:17:02.833219	2	1
-3	2022-12-21 13:17:02.853318	\N	1	1
-35	2022-12-21 13:28:22.65024	\N	2	35
-36	2022-12-21 14:53:41.234152	\N	1	36
+COPY public.schedule (id, "brigadierId", "requestId", "modifiedDate", "deletedAt") FROM stdin;
+2	2	2	2023-04-10 13:43:06.76568+00	2023-04-10 13:45:25.551463+00
+37	4	2	2023-04-10 13:43:06.76568+00	2023-04-10 13:45:25.551463+00
+38	5	2	2023-04-10 13:45:25.567173+00	2023-04-10 13:56:41.290951+00
+39	1	2	2023-04-10 13:56:41.306064+00	2023-04-10 13:57:52.95603+00
+40	3	2	2023-04-10 13:57:52.968508+00	2023-04-10 13:58:02.13772+00
+42	3	39	2023-04-11 17:10:38.264681+00	\N
+43	4	43	2023-04-11 17:10:47.394625+00	\N
+44	3	42	2023-04-11 17:10:57.337226+00	\N
+45	4	41	2023-04-11 17:11:05.840257+00	\N
+46	5	40	2023-04-11 17:11:32.729533+00	\N
+36	1	36	2023-04-10 13:43:06.76568+00	2023-04-11 17:11:40.758166+00
+47	4	36	2023-04-11 17:11:40.794872+00	\N
+35	2	35	2023-04-10 13:43:06.76568+00	2023-04-11 17:11:53.412735+00
+48	5	35	2023-04-11 17:11:53.428056+00	\N
+1	2	1	2023-04-10 13:43:06.76568+00	2023-04-11 17:12:04.198308+00
+3	1	1	2023-04-10 13:43:06.76568+00	2023-04-11 17:12:04.198308+00
+49	3	1	2023-04-11 17:12:04.210811+00	\N
+41	1	2	2023-04-10 13:58:02.148001+00	2023-04-11 17:12:13.63709+00
+50	2	2	2023-04-11 17:12:13.647558+00	\N
 \.
 
 
@@ -751,13 +1041,13 @@ COPY public.stage (id, stage) FROM stdin;
 -- Data for Name: tool; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tool (id, name, "deletedAt", "stageId", quantity_total, quantity_in_stock, rental_price) FROM stdin;
-1	Перфоратор	\N	2	0	0	0.00
-2	Рулетка	\N	3	0	0	0.00
-4	Молоток	\N	3	0	0	0.00
-5	Линейка	\N	3	0	0	0.00
-6	t2r3443t	2022-12-21 13:25:42.606261	2	0	0	0.00
-3	Ножницs	\N	1	0	0	0.00
+COPY public.tool (id, name, "stageId", "deletedAt") FROM stdin;
+1	Перфоратор	2	\N
+2	Рулетка	3	\N
+4	Молоток	3	\N
+5	Линейка	3	\N
+6	t2r3443t	2	\N
+3	Ножницs	1	\N
 \.
 
 
@@ -783,14 +1073,14 @@ COPY public."user" (id, login, email, password, "resetPasswordLink", "activation
 -- Name: accessory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.accessory_id_seq', 13, true);
+SELECT pg_catalog.setval('public.accessory_id_seq', 14, true);
 
 
 --
 -- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_id_seq', 36, true);
+SELECT pg_catalog.setval('public.address_id_seq', 43, true);
 
 
 --
@@ -798,6 +1088,13 @@ SELECT pg_catalog.setval('public.address_id_seq', 36, true);
 --
 
 SELECT pg_catalog.setval('public.brigadier_id_seq', 5, true);
+
+
+--
+-- Name: brigadier_tool_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.brigadier_tool_id_seq', 1, false);
 
 
 --
@@ -815,31 +1112,45 @@ SELECT pg_catalog.setval('public.equipment_id_seq', 5, true);
 
 
 --
+-- Name: invoice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.invoice_id_seq', 49, true);
+
+
+--
+-- Name: invoice_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.invoice_item_id_seq', 49, true);
+
+
+--
 -- Name: request_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_equipment_id_seq', 39, true);
+SELECT pg_catalog.setval('public.request_equipment_id_seq', 50, true);
 
 
 --
 -- Name: request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_id_seq', 36, true);
+SELECT pg_catalog.setval('public.request_id_seq', 43, true);
 
 
 --
 -- Name: request_report_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_report_id_seq', 1, true);
+SELECT pg_catalog.setval('public.request_report_id_seq', 7, true);
 
 
 --
 -- Name: schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.schedule_id_seq', 36, true);
+SELECT pg_catalog.setval('public.schedule_id_seq', 50, true);
 
 
 --
@@ -880,6 +1191,14 @@ ALTER TABLE ONLY public.request_report
 
 
 --
+-- Name: invoice PK_15d25c200d9bcd8a33f698daf18; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice
+    ADD CONSTRAINT "PK_15d25c200d9bcd8a33f698daf18" PRIMARY KEY (id);
+
+
+--
 -- Name: request PK_167d324701e6867f189aed52e18; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -896,11 +1215,27 @@ ALTER TABLE ONLY public.schedule
 
 
 --
+-- Name: brigadier_tool PK_1c383a052004a2ad706cff5f66d; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brigadier_tool
+    ADD CONSTRAINT "PK_1c383a052004a2ad706cff5f66d" PRIMARY KEY (id);
+
+
+--
 -- Name: tool PK_3bf5b1016a384916073184f99b7; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.tool
     ADD CONSTRAINT "PK_3bf5b1016a384916073184f99b7" PRIMARY KEY (id);
+
+
+--
+-- Name: invoice_item PK_621317346abdf61295516f3cb76; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice_item
+    ADD CONSTRAINT "PK_621317346abdf61295516f3cb76" PRIMARY KEY (id);
 
 
 --
@@ -976,19 +1311,19 @@ ALTER TABLE ONLY public.client
 
 
 --
--- Name: brigadier REL_c4e9124b1ee7a27d9fd2c3d8d7; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.brigadier
-    ADD CONSTRAINT "REL_c4e9124b1ee7a27d9fd2c3d8d7" UNIQUE ("userId");
-
-
---
 -- Name: user UQ_a62473490b3e4578fd683235c5e; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."user"
     ADD CONSTRAINT "UQ_a62473490b3e4578fd683235c5e" UNIQUE (login);
+
+
+--
+-- Name: brigadier UQ_c4e9124b1ee7a27d9fd2c3d8d70; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brigadier
+    ADD CONSTRAINT "UQ_c4e9124b1ee7a27d9fd2c3d8d70" UNIQUE ("userId");
 
 
 --
@@ -1028,10 +1363,31 @@ CREATE UNIQUE INDEX brigadier_pkey ON public.brigadier USING btree (id);
 
 
 --
+-- Name: brigadier_tool_pkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX brigadier_tool_pkey ON public.brigadier_tool USING btree (id);
+
+
+--
 -- Name: client_pkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX client_pkey ON public.client USING btree (id);
+
+
+--
+-- Name: invoice_item_pkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX invoice_item_pkey ON public.invoice_item USING btree (id);
+
+
+--
+-- Name: invoice_pkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX invoice_pkey ON public.invoice USING btree (id);
 
 
 --
@@ -1100,6 +1456,22 @@ ALTER TABLE ONLY public.request
 
 
 --
+-- Name: invoice_item FK_553d5aac210d22fdca5c8d48ead; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice_item
+    ADD CONSTRAINT "FK_553d5aac210d22fdca5c8d48ead" FOREIGN KEY ("invoiceId") REFERENCES public.invoice(id);
+
+
+--
+-- Name: invoice_item FK_665e1dd6d822f2cfcff5143cd02; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice_item
+    ADD CONSTRAINT "FK_665e1dd6d822f2cfcff5143cd02" FOREIGN KEY ("accessoryId") REFERENCES public.accessory(id);
+
+
+--
 -- Name: request_report FK_83083584fa7b09fdd819fa0771d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1113,6 +1485,22 @@ ALTER TABLE ONLY public.request_report
 
 ALTER TABLE ONLY public.request_report
     ADD CONSTRAINT "FK_8e5c322972abbb979259f37b376" FOREIGN KEY ("brigadierId") REFERENCES public.brigadier(id);
+
+
+--
+-- Name: brigadier_tool FK_90ba6279640c0c38da67c0fea00; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brigadier_tool
+    ADD CONSTRAINT "FK_90ba6279640c0c38da67c0fea00" FOREIGN KEY ("toolId") REFERENCES public.tool(id);
+
+
+--
+-- Name: invoice FK_925aa26ea12c28a6adb614445ee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.invoice
+    ADD CONSTRAINT "FK_925aa26ea12c28a6adb614445ee" FOREIGN KEY ("customerId") REFERENCES public.brigadier(id);
 
 
 --
@@ -1185,6 +1573,14 @@ ALTER TABLE ONLY public.request
 
 ALTER TABLE ONLY public.tool
     ADD CONSTRAINT "FK_e11e3f20a86dc84bd996bbd9f57" FOREIGN KEY ("stageId") REFERENCES public.stage(id);
+
+
+--
+-- Name: brigadier_tool FK_f47e2bb876b7bfcd84308af1fe2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brigadier_tool
+    ADD CONSTRAINT "FK_f47e2bb876b7bfcd84308af1fe2" FOREIGN KEY ("brigadierId") REFERENCES public.brigadier(id);
 
 
 --
