@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { Accessory } from '../accessory/entities/accessory.entity';
@@ -8,8 +8,9 @@ import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dt
 import { ApiAuth } from '../common/decorators/auth.decorator';
 import { RequestReportResponseDto } from './dto/request-report.response.dto';
 import { RequestReportService } from './request-report.service';
-import { UpsertRequestReportDto } from './dto/upsert-request-report.dto';
-import { Patch } from '@nestjs/common/decorators';
+import { PatchRequestReportDto } from './dto/patch-request-report.dto';
+import { Patch, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiAuth()
 @ApiTags('Request Report')
@@ -23,10 +24,26 @@ export class RequestReportController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('files'))
   @Post()
   //@CheckAbilities({ action: Action.Create, subject: Accessory })
-  patch(@Param('requestId') requestId: number, @Body() createRequestReportDto: [UpsertRequestReportDto]) {
-    return this.requestReportService.patch(requestId, createRequestReportDto);
+  patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.requestReportService.patch(requestId, files);
   }
 
   @ApiResponses({
