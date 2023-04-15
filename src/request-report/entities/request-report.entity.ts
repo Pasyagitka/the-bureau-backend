@@ -29,4 +29,7 @@ export class RequestReport {
   @ManyToOne(() => Brigadier, (brigadier) => brigadier.reports)
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
   brigadier: Brigadier;
+
+  @Column({ nullable: true }) //todo remove nullable
+  brigadierId: number;
 }

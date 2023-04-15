@@ -5,8 +5,11 @@ import { NotExistsError } from '../common/exceptions';
 import { DataSource, In, Not, Repository } from 'typeorm';
 import { Request } from '../request/entities/request.entity';
 import { RequestReport } from './entities/request-report.entity';
-import { PatchRequestReportDto } from './dto/patch-request-report.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { User } from '../user/entities/user.entity';
+import { ForbiddenError } from '@casl/ability';
+import { Action } from '../ability/types';
+import { AbilityFactory } from '../ability/ability.factory';
 
 @Injectable()
 export class RequestReportService {
@@ -15,14 +18,18 @@ export class RequestReportService {
     private requestRepository: Repository<Request>,
     @InjectRepository(RequestReport)
     private requestReportRepository: Repository<RequestReport>,
+    private readonly abilityFactory: AbilityFactory,
     private cloudinary: CloudinaryService,
     private dataSource: DataSource,
   ) {}
 
-  async patch(requestId: number, files: Array<Express.Multer.File>) {
+  async patch(requestId: number, files: Array<Express.Multer.File>, user: User) {
     return await this.dataSource.transaction(async (transaction) => {
       const request = await transaction.getRepository(Request).findOne({ where: { id: requestId } });
       if (!request) throw new NotExistsError('request');
+
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Update, request);
 
       //const incomingReportFiles = patchRequestReportDto.map((i) => i.file);
       const incomingReportFiles = files;
@@ -55,6 +62,7 @@ export class RequestReportService {
             url: x.secure_url,
             requestId: requestId,
             public_id: x.public_id,
+            brigadierId: user.brigadier.id,
           }),
         );
 
@@ -78,13 +86,20 @@ export class RequestReportService {
     });
   }
 
-  findAll(requestId: number) {
-    return this.requestReportRepository.find({
+  async findAll(requestId: number, user: User) {
+    const request = await this.requestRepository.findOne({ where: { id: requestId } });
+    if (!request) throw new NotExistsError('request');
+    const reports = await this.requestReportRepository.find({
       where: {
         request: {
           id: requestId,
         },
       },
     });
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, request);
+
+    return reports;
   }
 }

@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
@@ -59,6 +61,19 @@ export class BrigadierController {
   @CheckAbilities({ action: Action.Update, subject: Brigadier })
   async update(@Param('id') id: string, @Body() updateBrigadierDto: UpdateBrigadierDto, @Req() req) {
     return new BrigadierResponseDto(await this.brigadierService.update(+id, updateBrigadierDto, req.user));
+  }
+
+  @ApiResponses({
+    200: MessageResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch('avatar/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  @CheckAbilities({ action: Action.Update, subject: Brigadier })
+  async uploadAvatar(@Param('id') id: string, @UploadedFile() file: Express.Multer.File, @Req() req) {
+    return await this.brigadierService.uploadAvatar(+id, file, req.user);
   }
 
   @ApiResponses({

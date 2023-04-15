@@ -8,7 +8,8 @@ import { Request } from '../request/entities/request.entity';
 import { Schedule } from '../schedule/entities/schedule.entity';
 import { User } from '../user/entities/user.entity';
 import { Action, AppAbility, Subjects } from './types';
-import { Accessory } from 'src/accessory/entities/accessory.entity';
+import { Accessory } from '../accessory/entities/accessory.entity';
+import { RequestReport } from '../request-report/entities/request-report.entity';
 
 type RequestBrigadier = Request & {
   'brigadier.userId': Request['brigadier']['userId'];
@@ -39,6 +40,7 @@ export class AbilityFactory {
         can([Action.Read], Accessory); //TODO
         can([Action.Read, Action.Update], Brigadier);
         can([Action.Read, Action.Update], Request);
+        can([Action.Read, Action.Update], RequestReport);
         can([Action.Read, Action.Update], User);
         can(Action.Read, Schedule);
         cannot<ScheduleBrigadier>(Action.Read, Schedule, { 'brigadier.userId': { $ne: user.id } }).because(

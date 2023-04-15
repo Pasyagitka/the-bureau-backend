@@ -1,16 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
-import { Accessory } from '../accessory/entities/accessory.entity';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
 import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { ApiAuth } from '../common/decorators/auth.decorator';
 import { RequestReportResponseDto } from './dto/request-report.response.dto';
 import { RequestReportService } from './request-report.service';
-import { PatchRequestReportDto } from './dto/patch-request-report.dto';
-import { Patch, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
+import { Req, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { RequestReport } from './entities/request-report.entity';
 
 @ApiAuth()
 @ApiTags('Request Report')
@@ -41,18 +40,19 @@ export class RequestReportController {
   })
   @UseInterceptors(FilesInterceptor('files'))
   @Post()
-  //@CheckAbilities({ action: Action.Create, subject: Accessory })
-  patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>) {
-    return this.requestReportService.patch(requestId, files);
+  @CheckAbilities({ action: Action.Update, subject: RequestReport })
+  patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>, @Req() req) {
+    return this.requestReportService.patch(requestId, files, req.user);
   }
 
   @ApiResponses({
     200: [RequestReportResponseDto],
+    404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
   @Get()
-  //@CheckAbilities({ action: Action.Read, subject: Accessory })
-  findAll(@Param('requestId') requestId: number) {
-    return this.requestReportService.findAll(requestId);
+  @CheckAbilities({ action: Action.Read, subject: RequestReport })
+  findAll(@Param('requestId') requestId: number, @Req() req) {
+    return this.requestReportService.findAll(requestId, req.user);
   }
 }

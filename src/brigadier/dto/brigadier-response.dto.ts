@@ -19,6 +19,9 @@ export class BrigadierResponseDto {
   contactNumber: string;
 
   @Expose()
+  avatarUrl: string;
+
+  @Expose()
   @Type(() => UserResponseDto)
   user: UserResponseDto;
 

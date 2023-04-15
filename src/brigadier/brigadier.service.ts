@@ -1,6 +1,7 @@
 import { ForbiddenError } from '@casl/ability';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { DataSource, Repository } from 'typeorm';
 import { AbilityFactory } from '../ability/ability.factory';
 import { Action } from '../ability/types';
@@ -17,6 +18,7 @@ export class BrigadierService {
     private brigadierRepository: Repository<Brigadier>,
     private readonly abilityFactory: AbilityFactory,
     private readonly dataSource: DataSource,
+    private cloudinary: CloudinaryService,
   ) {}
 
   async findAll(): Promise<Brigadier[]> {
@@ -47,6 +49,28 @@ export class BrigadierService {
       order by week_request_count asc`,
       [query.date],
     );
+  }
+
+  async uploadAvatar(id: number, file: Express.Multer.File, user: User) {
+    const brigadier = await this.brigadierRepository.findOne({ where: { id } });
+    if (!brigadier) throw new NotExistsError('brigadier');
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Update, brigadier);
+
+    const uploadResult = await this.cloudinary
+      .uploadImage(file, {
+        folder: `brigadiersAvatars/`,
+        overwrite: true,
+        resource_type: 'image',
+        public_id: id,
+      })
+      .catch(() => {
+        throw new BadRequestException('Invalid file type.');
+      });
+    brigadier.avatarUrl = uploadResult.secure_url;
+
+    await this.brigadierRepository.save(brigadier);
   }
 
   async update(id: number, updateBrigadierDto: UpdateBrigadierDto, user: User): Promise<Brigadier> {

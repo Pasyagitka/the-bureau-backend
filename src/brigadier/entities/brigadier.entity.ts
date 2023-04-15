@@ -33,6 +33,9 @@ export class Brigadier {
   @Column('text', { name: 'contactNumber' })
   contactNumber: string;
 
+  @Column('text', { name: 'avatarUrl', nullable: true })
+  avatarUrl: string;
+
   @Column('boolean', { name: 'isApproved', default: () => 'false' })
   isApproved: boolean;
 

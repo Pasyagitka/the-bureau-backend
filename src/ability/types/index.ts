@@ -1,5 +1,6 @@
 import { Ability, InferSubjects } from '@casl/ability';
-import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { Invoice } from '../../invoice/entities/invoice.entity';
+import { RequestReport } from '../../request-report/entities/request-report.entity';
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
@@ -26,6 +27,7 @@ export type Subjects =
       | typeof Brigadier
       | typeof Client
       | typeof Request
+      | typeof RequestReport
       | typeof Schedule
       | typeof Tool
       | typeof User
