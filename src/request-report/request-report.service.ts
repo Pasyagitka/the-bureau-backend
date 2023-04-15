@@ -26,36 +26,55 @@ export class RequestReportService {
 
       //const incomingReportFiles = patchRequestReportDto.map((i) => i.file);
       const incomingReportFiles = files;
-      const existingReportFiles = (await transaction.getRepository(RequestReport).find({ where: { requestId } })).map(
-        (i) => i.file,
-      );
+      const existingReportFiles = await (
+        await transaction.getRepository(RequestReport).find({ where: { requestId } })
+      ).map((x) => x.public_id);
 
-      await transaction.getRepository(RequestReport).delete({
-        requestId,
-        file: Not(In(incomingReportFiles)),
-      });
-
-      const filesToAdd = incomingReportFiles.filter((x) => !existingReportFiles.includes(x.toString()));
+      //const filesToAdd = incomingReportFiles.filter((x) => !existingReportFiles.includes(x.toString()));
 
       const uploadedFilesResults = await Promise.all(
-        files.map(
+        incomingReportFiles.map(
           async (file) =>
-            await this.cloudinary.uploadImage(file).catch(() => {
+            await this.cloudinary
+              .uploadImage(file, {
+                folder: `reports/${requestId}`,
+                overwrite: false,
+                resource_type: 'image',
+                public_id: file.originalname,
+              })
+              .catch(() => {
+                throw new BadRequestException('Invalid file type.');
+              }),
+        ),
+      );
+
+      const requestReportsToAdd = uploadedFilesResults
+        .filter((x) => !existingReportFiles.includes(x.public_id))
+        .map((x) =>
+          transaction.getRepository(RequestReport).create({
+            url: x.secure_url,
+            requestId: requestId,
+            public_id: x.public_id,
+          }),
+        );
+
+      await transaction.getRepository(RequestReport).save(requestReportsToAdd);
+
+      const filesToRemove = await transaction.getRepository(RequestReport).find({
+        where: {
+          requestId,
+          public_id: Not(In(uploadedFilesResults.map((x) => x.public_id))),
+        },
+      });
+      const removedFiles = await Promise.all(
+        filesToRemove.map(
+          async (file) =>
+            await this.cloudinary.removeImage(file.public_id).catch(() => {
               throw new BadRequestException('Invalid file type.');
             }),
         ),
       );
-
-      const requestReportsToAdd = filesToAdd.map((x) =>
-        transaction.getRepository(RequestReport).create({
-          file: x.toString(),
-          requestId: requestId,
-        }),
-      );
-
-      console.log(uploadedFilesResults);
-
-      return await transaction.getRepository(RequestReport).save(requestReportsToAdd);
+      await transaction.remove(filesToRemove);
     });
   }
 

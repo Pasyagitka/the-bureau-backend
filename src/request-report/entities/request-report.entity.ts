@@ -9,8 +9,11 @@ export class RequestReport {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('text', { name: 'file' })
-  file: string;
+  @Column('text', { name: 'public_id', nullable: true })
+  public_id: string;
+
+  @Column('text', { name: 'url' })
+  url: string;
 
   @ManyToOne(() => Request, (request) => request.reports)
   @JoinColumn([{ name: 'requestId', referencedColumnName: 'id' }])

@@ -4,5 +4,5 @@ import { IsString } from 'class-validator';
 export class PatchRequestReportDto {
   @ApiProperty()
   @IsString()
-  file: Express.Multer.File;
+  url: Express.Multer.File;
 }

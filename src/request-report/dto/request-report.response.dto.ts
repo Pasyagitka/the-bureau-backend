@@ -6,7 +6,7 @@ export class RequestReportResponseDto {
   id: number;
 
   @Expose()
-  file: string;
+  url: string;
 
   @Expose()
   requestId: number; //type
