@@ -261,7 +261,8 @@ export class RequestService {
         request.brigadier = newBrigadier;
       }
     }
-    if (updateBrigadierDto.status) request.status = updateBrigadierDto.status;
+    request.status = updateBrigadierDto.status;
+    request.mountingDate = updateBrigadierDto.mountingDate;
     const res = await this.requestRepository.save(request);
 
     return res;
