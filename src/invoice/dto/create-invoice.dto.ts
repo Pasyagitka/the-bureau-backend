@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsArray, ArrayMinSize, ValidateNested, IsNumber, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsArray, ArrayMinSize, ValidateNested, IsNumber, IsPositive, IsOptional } from 'class-validator';
 
 export class CreateInvoiceDto {
   @IsNotEmpty()
@@ -10,9 +10,8 @@ export class CreateInvoiceDto {
   items: AccessoryInvoiceItemDto[];
 
   @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  customerId: number;
+  @IsOptional()
+  customerId?: number; //TODO add
 }
 
 class AccessoryInvoiceItemDto {

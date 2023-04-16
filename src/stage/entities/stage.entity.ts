@@ -11,6 +11,15 @@ export class Stage {
   @Column('text', { name: 'stage' })
   stage: string;
 
+  @Column({
+    type: 'decimal',
+    precision: 6,
+    scale: 2,
+    name: 'mountingPrice',
+    default: 0,
+  })
+  mountingPrice: number;
+
   @OneToMany(() => Request, (request) => request.stage, {
     cascade: true,
     onDelete: 'RESTRICT',

@@ -62,6 +62,17 @@ export class AccessoryController {
   }
 
   @ApiResponses({
+    200: [AccessoryResponseDto],
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get accessories available for invoice' })
+  @Get('available/')
+  @CheckAbilities({ action: Action.Read, subject: Accessory })
+  async getAvaliableForInvoice(): Promise<AccessoryResponseDto[]> {
+    return (await this.accessoryService.getAvaliableForInvoice()).map((i) => new AccessoryResponseDto(i));
+  }
+
+  @ApiResponses({
     200: AccessoryResponseDto,
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,

@@ -10,6 +10,7 @@ import { User } from '../user/entities/user.entity';
 import { Action, AppAbility, Subjects } from './types';
 import { Accessory } from '../accessory/entities/accessory.entity';
 import { RequestReport } from '../request-report/entities/request-report.entity';
+import { Invoice } from '../invoice/entities/invoice.entity';
 
 type RequestBrigadier = Request & {
   'brigadier.userId': Request['brigadier']['userId'];
@@ -39,6 +40,7 @@ export class AbilityFactory {
       case Role.Brigadier: {
         can([Action.Read], Accessory); //TODO
         can([Action.Read, Action.Update], Brigadier);
+        can([Action.Create, Action.Read], Invoice);
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], RequestReport);
         can([Action.Read, Action.Update], User);

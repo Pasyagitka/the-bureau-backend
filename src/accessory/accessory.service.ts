@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, MoreThan, Repository } from 'typeorm';
 import { BadParametersError, NotExistsError } from '../common/exceptions';
 import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { Equipment } from '../equipment/entities/equipment.entity';
@@ -39,6 +39,15 @@ export class AccessoryService {
       throw new NotExistsError('accessory');
     }
     return item;
+  }
+
+  async getAvaliableForInvoice(): Promise<Accessory[]> {
+    return this.accessoryRepository.find({
+      where: {
+        quantity_in_stock: MoreThan(0),
+      },
+      order: { id: 'ASC' },
+    });
   }
 
   async create(createAccessoryDto: CreateAccessoryDto): Promise<Accessory> {

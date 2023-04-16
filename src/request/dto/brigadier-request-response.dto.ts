@@ -50,6 +50,9 @@ export class StageResponseDto {
   @Expose()
   stage: string;
 
+  @Expose()
+  mountingPrice?: number;
+
   constructor(partial: Partial<StageResponseDto>) {
     Object.assign(this, partial);
   }
