@@ -10,6 +10,7 @@ import { RequestReportService } from './request-report.service';
 import { Req, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RequestReport } from './entities/request-report.entity';
+import { Request } from '../request/entities/request.entity';
 
 @ApiAuth()
 @ApiTags('Request Report')
@@ -40,7 +41,7 @@ export class RequestReportController {
   })
   @UseInterceptors(FilesInterceptor('files'))
   @Post()
-  @CheckAbilities({ action: Action.Update, subject: RequestReport })
+  //@CheckAbilities({ action: Action.Update, subject: Request })
   patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>, @Req() req) {
     return this.requestReportService.patch(requestId, files, req.user);
   }
@@ -51,7 +52,7 @@ export class RequestReportController {
     500: ErrorMessageResponseDto,
   })
   @Get()
-  @CheckAbilities({ action: Action.Read, subject: RequestReport })
+  //@CheckAbilities({ action: Action.Read, subject: Request })
   findAll(@Param('requestId') requestId: number, @Req() req) {
     return this.requestReportService.findAll(requestId, req.user);
   }

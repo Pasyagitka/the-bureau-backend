@@ -25,11 +25,12 @@ export class RequestReportService {
 
   async patch(requestId: number, files: Array<Express.Multer.File>, user: User) {
     return await this.dataSource.transaction(async (transaction) => {
-      const request = await transaction.getRepository(Request).findOne({ where: { id: requestId } });
+      const request = await this.requestRepository.findOne({ where: { id: requestId } });
       if (!request) throw new NotExistsError('request');
 
-      const ability = this.abilityFactory.defineAbility(user);
-      ForbiddenError.from(ability).throwUnlessCan(Action.Update, request);
+      // const ability = this.abilityFactory.defineAbility(user);
+      // ForbiddenError.from(ability).throwUnlessCan(Action.Update, request);
+      //TODO casl
 
       //const incomingReportFiles = patchRequestReportDto.map((i) => i.file);
       const incomingReportFiles = files;
@@ -97,9 +98,14 @@ export class RequestReportService {
       },
     });
 
-    const ability = this.abilityFactory.defineAbility(user);
-    ForbiddenError.from(ability).throwUnlessCan(Action.Read, request);
+    const reportImages = await this.cloudinary.getFolderContent(`reports/${requestId}`).catch(() => {
+      throw new BadRequestException('Error.');
+    });
+
+    //const ability = this.abilityFactory.defineAbility(user);
+    //ForbiddenError.from(ability).throwUnlessCan(Action.Read, request);
 
     return reports;
+    //return reportImages;
   }
 }

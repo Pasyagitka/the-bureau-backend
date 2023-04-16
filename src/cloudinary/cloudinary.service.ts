@@ -23,4 +23,13 @@ export class CloudinaryService {
       });
     });
   }
+
+  async getFolderContent(folder: string) {
+    return new Promise((resolve, reject) => {
+      v2.api.resources({ type: 'upload', prefix: folder }, (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      });
+    });
+  }
 }
