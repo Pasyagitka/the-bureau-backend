@@ -332,6 +332,9 @@ export class RequestService {
     if (!request) throw new NotExistsError('request');
     const requestAccessories = await this.getRequestAccessories(request.id); //TODO убрать эти запросы (в репозиторий?)
     const requestTools = await this.getRequestTools(request.id);
+    const allEquipmentCount = request.requestEquipment.reduce((a, v) => a + v.quantity, 0);
+    const fullMountingPrice =
+      (await this.stageRepository.findOne({ where: { id: request.stageId } })).mountingPrice * allEquipmentCount;
     const data = {
       request: {
         id: request.id,
@@ -350,6 +353,7 @@ export class RequestService {
       })),
       tools: requestTools,
       accessories: requestAccessories,
+      mountingPrice: fullMountingPrice,
     };
     return new Promise((resolve, reject) => {
       carbone.render(templatePath, data, function (err, result) {
