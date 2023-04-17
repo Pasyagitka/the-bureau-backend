@@ -47,6 +47,7 @@ ALTER TYPE public.rental_status_enum OWNER TO postgres;
 
 CREATE TYPE public.request_status_enum AS ENUM (
     'InProcessing',
+    'Accepted',
     'Completed',
     'Approved'
 );
@@ -161,8 +162,9 @@ CREATE TABLE public.brigadier (
     patronymic text NOT NULL,
     "contactNumber" text NOT NULL,
     "isApproved" boolean DEFAULT false NOT NULL,
-    "userId" integer,
-    "deletedAt" timestamp with time zone
+    "userId" integer NOT NULL,
+    "deletedAt" timestamp with time zone,
+    "avatarUrl" text
 );
 
 
@@ -191,42 +193,6 @@ ALTER SEQUENCE public.brigadier_id_seq OWNED BY public.brigadier.id;
 
 
 --
--- Name: brigadier_tool; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.brigadier_tool (
-    id integer NOT NULL,
-    quantity integer DEFAULT 1 NOT NULL,
-    "brigadierId" integer,
-    "toolId" integer
-);
-
-
-ALTER TABLE public.brigadier_tool OWNER TO postgres;
-
---
--- Name: brigadier_tool_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.brigadier_tool_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.brigadier_tool_id_seq OWNER TO postgres;
-
---
--- Name: brigadier_tool_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.brigadier_tool_id_seq OWNED BY public.brigadier_tool.id;
-
-
---
 -- Name: client; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -236,7 +202,7 @@ CREATE TABLE public.client (
     surname text NOT NULL,
     patronymic text NOT NULL,
     "contactNumber" text NOT NULL,
-    "userId" integer,
+    "userId" integer NOT NULL,
     "deletedAt" timestamp with time zone
 );
 
@@ -459,10 +425,11 @@ ALTER SEQUENCE public.request_id_seq OWNED BY public.request.id;
 
 CREATE TABLE public.request_report (
     id integer NOT NULL,
-    file text NOT NULL,
+    url text NOT NULL,
     "requestId" integer NOT NULL,
     "brigadierId" integer,
-    "deletedAt" timestamp with time zone
+    "deletedAt" timestamp with time zone,
+    public_id text
 );
 
 
@@ -533,7 +500,8 @@ ALTER SEQUENCE public.schedule_id_seq OWNED BY public.schedule.id;
 
 CREATE TABLE public.stage (
     id integer NOT NULL,
-    stage text NOT NULL
+    stage text NOT NULL,
+    "mountingPrice" numeric(6,2) DEFAULT '0'::numeric NOT NULL
 );
 
 
@@ -661,13 +629,6 @@ ALTER TABLE ONLY public.brigadier ALTER COLUMN id SET DEFAULT nextval('public.br
 
 
 --
--- Name: brigadier_tool id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.brigadier_tool ALTER COLUMN id SET DEFAULT nextval('public.brigadier_tool_id_seq'::regclass);
-
-
---
 -- Name: client id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -749,17 +710,18 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 --
 
 COPY public.accessory (id, sku, name, "equipmentId", price, quantity_in_stock, "deletedAt") FROM stdin;
-3	\N	Болт	3	0.00	0	\N
-4	11331	Гайка	4	0.00	0	\N
-2	\N	Гайка	3	0.00	0	\N
-5		Пресс-муфта	2	0.00	0	\N
-7	string	string	1	0.00	0	\N
-1	string	string	2	0.00	0	\N
-10	\N	sswfwefwef	1	0.00	0	\N
-11	\N	sswfwefwef	1	0.00	0	\N
-12	\N	wefwef	1	0.00	0	\N
-13	\N	ergergerg	1	0.00	0	\N
 14	string	string	1	1.00	0	\N
+3	\N	Болт	3	1.00	0	\N
+4	11331	Гайка	4	1.00	1	\N
+2	\N	Гайка	3	2.00	0	\N
+5		Пресс-муфта	2	2.00	1	\N
+7	string	string	1	1.00	0	\N
+10	\N	sswfwefwef	1	10.00	2	\N
+11	\N	sswfwefwef	1	1.00	0	\N
+12	\N	wefwef	1	1.00	0	\N
+13	\N	ergergerg	1	1.00	0	\N
+15	ergergerg	egerg	3	2.00	0	\N
+1	wefwefwefwfe	string	2	1.00	33	\N
 \.
 
 
@@ -779,6 +741,7 @@ COPY public.address (id, city, street, flat, "deletedAt", lat, lon, house) FROM 
 35	Минск	Рижская	22	\N	53.8628267\t27.5302989	27.5302989	\N
 39	Колодищанский	Агатовая	\N	\N	53.8628267	27.5302990	5
 43	Минск	Черниговская	3	\N	53.8628267	27.5302989	5
+44	Минск	Черниговская	55	\N	53.8628267	27.5302989	5
 \.
 
 
@@ -786,20 +749,12 @@ COPY public.address (id, city, street, flat, "deletedAt", lat, lon, house) FROM 
 -- Data for Name: brigadier; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "isApproved", "userId", "deletedAt") FROM stdin;
-1	Егор	Егоров	Егорович	375446352712	f	3	\N
-2	Бригадир	Бригадиров	Бригад	375446352713	f	4	\N
-3	енвевк	Цыкуыыу	екевмроиол	375446352713	f	5	\N
-4	имя	фамилия	пнгпн	375447586976	f	8	\N
-5	brigadier6	brigadier6	brigadier6	375445657565	f	9	\N
-\.
-
-
---
--- Data for Name: brigadier_tool; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.brigadier_tool (id, quantity, "brigadierId", "toolId") FROM stdin;
+COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "isApproved", "userId", "deletedAt", "avatarUrl") FROM stdin;
+2	Бригадир	Бригадиров	Бригад	375446352713	f	4	\N	\N
+3	енвевк	Цыкуыыу	екевмроиол	375446352713	f	5	\N	\N
+4	имя	фамилия	пнгпн	375447586976	f	8	\N	\N
+5	brigadier6	brigadier6	brigadier6	375445657565	f	9	\N	\N
+1	Егор	Егоров	Егорович	375446352712	f	3	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681568267/brigadiersAvatars/1.png
 \.
 
 
@@ -810,8 +765,8 @@ COPY public.brigadier_tool (id, quantity, "brigadierId", "toolId") FROM stdin;
 COPY public.client (id, firstname, surname, patronymic, "contactNumber", "userId", "deletedAt") FROM stdin;
 2	Алексей	Алексеев	Алексеевич	375446782833	6	\N
 3	Андрей	Андреев	Андреевич	375446788882	7	\N
-1	клукеркер	клиент1	клиент1	375445634337	2	\N
 4	4444	string	string	+375445678695	10	\N
+1	клукерке	клиент	клиент	375445634337	2	\N
 \.
 
 
@@ -820,11 +775,11 @@ COPY public.client (id, firstname, surname, patronymic, "contactNumber", "userId
 --
 
 COPY public.equipment (id, type, mounting, "deletedAt") FROM stdin;
-1	Радиатор напольный	Пол	\N
 2	Конвектор внутрипольный	Пол	\N
 3	Радиатор настенный	Стена	\N
 4	Конвектор настенный	Стена	\N
-5	уцацуацуацуауа	Пол	\N
+1	Радиатор напольный1111	Стена	\N
+5	уцацуацуацуауа	Пол	2023-04-16 14:54:58.603915+00
 \.
 
 
@@ -882,6 +837,7 @@ COPY public.invoice (id, "totalPrice", "customerId") FROM stdin;
 47	0.00	1
 48	0.00	1
 49	0.00	1
+50	0.00	2
 \.
 
 
@@ -939,6 +895,8 @@ COPY public.invoice_item (id, quantity, price, sum, "invoiceId", "accessoryId") 
 47	1	0.00	0.00	47	1
 48	1	0.00	0.00	48	1
 49	1	0.00	0.00	49	1
+50	1	0.00	0.00	50	4
+51	1	0.00	0.00	50	5
 \.
 
 
@@ -950,14 +908,15 @@ COPY public.request (id, comment, status, "addressId", "brigadierId", "clientId"
 37	Ссауцауца	InProcessing	37	\N	1	3	2023-04-10 15:54:13.859508+00	2023-04-14	\N
 38	Ми	Completed	38	\N	1	3	2023-04-10 16:12:38.575215+00	2023-04-14	\N
 39	цйвцувац	Approved	39	3	1	1	2023-04-10 16:17:25.904217+00	2023-04-19	\N
-43	ч	InProcessing	43	4	1	1	2023-04-11 16:24:38.641458+00	2023-04-13	\N
-42	\N	Approved	42	3	1	1	2023-04-10 16:22:45.021688+00	2023-04-12	\N
 41	у	Approved	41	4	1	2	2023-04-10 16:22:26.303009+00	2023-04-12	\N
 40	ацуацуа	Approved	40	5	1	1	2023-04-10 16:19:56.659743+00	2023-04-19	\N
 36	ршрш	Completed	36	4	1	3	2023-04-10 13:42:10.120677+00	2023-04-14	\N
 1	Частный дом	InProcessing	1	3	1	2	2023-04-10 13:42:10.120677+00	2023-04-14	\N
 2	ощшпуо	InProcessing	2	2	2	2	2023-04-10 13:42:10.120677+00	2023-04-14	\N
 35	Код от домофона - 1444	Completed	35	5	2	1	2023-04-10 13:42:10.120677+00	2023-04-14	\N
+42	\N	Approved	42	3	1	1	2023-04-10 16:22:45.021688+00	2023-04-12	\N
+44	Злая осбака	Accepted	44	2	1	3	2023-04-16 15:00:57.835529+00	2023-04-20	\N
+43	ч	Accepted	43	2	1	1	2023-04-11 16:24:38.641458+00	2023-04-16	\N
 \.
 
 
@@ -984,7 +943,10 @@ COPY public.request_equipment (id, quantity, "equipmentId", "requestId", "delete
 47	1	2	42	\N
 48	1	3	42	\N
 49	1	2	43	\N
-50	2	5	43	\N
+51	2	1	44	\N
+52	1	2	44	\N
+53	3	3	44	\N
+50	2	\N	43	\N
 \.
 
 
@@ -992,10 +954,14 @@ COPY public.request_equipment (id, quantity, "equipmentId", "requestId", "delete
 -- Data for Name: request_report; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.request_report (id, file, "requestId", "brigadierId", "deletedAt") FROM stdin;
-4	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N
-6	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N
-7	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N
+COPY public.request_report (id, url, "requestId", "brigadierId", "deletedAt", public_id) FROM stdin;
+4	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N	\N
+6	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N	\N
+7	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N	\N
+8	[object Object]	1	\N	\N	\N
+42	https://res.cloudinary.com/dblablirp/image/upload/v1681655307/reports/2/Screenshot%202023-03-02%20132029.png.png	2	2	\N	reports/2/Screenshot 2023-03-02 132029.png
+45	https://res.cloudinary.com/dblablirp/image/upload/v1681664185/reports/42/Screenshot%202023-03-02%20085600.png.png	42	3	\N	reports/42/Screenshot 2023-03-02 085600.png
+46	https://res.cloudinary.com/dblablirp/image/upload/v1681664185/reports/42/Screenshot%202023-03-05%20154949.png.png	42	3	\N	reports/42/Screenshot 2023-03-05 154949.png
 \.
 
 
@@ -1010,7 +976,6 @@ COPY public.schedule (id, "brigadierId", "requestId", "modifiedDate", "deletedAt
 39	1	2	2023-04-10 13:56:41.306064+00	2023-04-10 13:57:52.95603+00
 40	3	2	2023-04-10 13:57:52.968508+00	2023-04-10 13:58:02.13772+00
 42	3	39	2023-04-11 17:10:38.264681+00	\N
-43	4	43	2023-04-11 17:10:47.394625+00	\N
 44	3	42	2023-04-11 17:10:57.337226+00	\N
 45	4	41	2023-04-11 17:11:05.840257+00	\N
 46	5	40	2023-04-11 17:11:32.729533+00	\N
@@ -1023,6 +988,10 @@ COPY public.schedule (id, "brigadierId", "requestId", "modifiedDate", "deletedAt
 49	3	1	2023-04-11 17:12:04.210811+00	\N
 41	1	2	2023-04-10 13:58:02.148001+00	2023-04-11 17:12:13.63709+00
 50	2	2	2023-04-11 17:12:13.647558+00	\N
+43	4	43	2023-04-11 17:10:47.394625+00	2023-04-16 14:52:34.77109+00
+51	2	43	2023-04-16 14:52:34.802555+00	\N
+52	1	44	2023-04-16 15:02:07.75853+00	2023-04-16 15:41:10.335342+00
+53	2	44	2023-04-16 15:41:10.348003+00	\N
 \.
 
 
@@ -1030,10 +999,10 @@ COPY public.schedule (id, "brigadierId", "requestId", "modifiedDate", "deletedAt
 -- Data for Name: stage; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.stage (id, stage) FROM stdin;
-1	Чистовая
-2	Черновая
-3	Обе
+COPY public.stage (id, stage, "mountingPrice") FROM stdin;
+2	Черновая	150.00
+3	Обе	200.00
+1	Чистовая	70.00
 \.
 
 
@@ -1059,13 +1028,13 @@ COPY public."user" (id, login, email, password, "resetPasswordLink", "activation
 1	admin	lizavetazinovich@gmail.com	$2a$04$zjpv/0CdrBrCi0pjiGQkcufvu707pOX71GfMuZUeLBiZVCeVmblqC	\N	\N	\N	t	Admin	\N
 2	client1	client1@gmail.com	$2a$04$4EYhWTCZiu.QcM27.6BgBu1wg6dID8QOxN3TGTLTxPZ7jZ4XS4RHa	\N	9230c9a8-abc1-4df6-bf01-b14965ba36d5	\N	t	Client	\N
 4	brigadier2	brigadier2@gmail.com	$2a$04$uKTuYJYkoWhp4zIkvfUu.elGlQtTghasUgBmSBInWkBVBMAhtmqWq	\N	b0fda5aa-81ef-4aed-ace6-21c77687491d	\N	t	Brigadier	\N
-3	brigadier1	brigadier1@gmail.com	$2a$04$MsfT7yy8ZK51yRe94BcQ0uuhSQgwr1f617fqY/PguWy7jR1oaJaMK	\N	f8fded90-65dd-46d2-90e8-a48538ca8504	\N	t	Brigadier	\N
-6	client2	client2@gmail.com	$2a$04$yCPypCsf0WnPGWMfvzuSa.ZLSaDVF1D8vFKO4OR6S0FYprKWvx0du	\N	b098fef5-c574-4215-837c-429653428d6b	\N	t	Client	\N
 7	client3	client3@gmail.com	$2a$04$KcTVhzOY.FQ/Y03UuO9/JelvD6Z1OAsPiN3.8xSYoFzRhRPiZ3bGu	\N	28cfa972-a439-4954-9976-1dc2cf2d5b80	\N	t	Client	\N
 5	brigadier3	brigadier3@gmail.com	$2a$04$CYK7AwYeQ4Qw8kg7w0XB1O6zewP9CUIg/14IHOQUkucWetjk0KRim	\N	b3dde61f-c77a-4dec-b29d-12d0dca4a810	\N	t	Brigadier	\N
 8	brigadier4	brigadier4@gmail.com	$2a$04$UVHjMcJryTwAkrlq3yoSDODruNdM4X2GYo/GRIcxxMYSWWWnNeSZq	\N	cc9928a0-2fa9-490f-bb6b-bdb782f77544	\N	t	Brigadier	\N
 9	brigadier6	brigadier6@gmail.com	$2a$04$KEwBy7quVqKb.IMSnw7ozOiBlUWyINOR17zzytInlgQYRSCQrnoqm	\N	542dc62b-c7ad-4d4f-abe4-b1f33a64f390	\N	t	Brigadier	\N
 10	string	string@mail.ru	$2a$04$V2WEH6jUQRAFe79..uf1auTFMLWe9O1y5xRPrtNUHaEpiTl4yZpZS	\N	f998dbef-397b-4716-82b5-ffba7b457be0	\N	t	Client	\N
+3	brigadier1	brigadier1@gmail.com	$2a$04$MsfT7yy8ZK51yRe94BcQ0uuhSQgwr1f617fqY/PguWy7jR1oaJaMK	\N	f8fded90-65dd-46d2-90e8-a48538ca8504	\N	f	Brigadier	\N
+6	client2	client2@gmail.com	$2a$04$yCPypCsf0WnPGWMfvzuSa.ZLSaDVF1D8vFKO4OR6S0FYprKWvx0du	\N	b098fef5-c574-4215-837c-429653428d6b	\N	t	Client	\N
 \.
 
 
@@ -1073,14 +1042,14 @@ COPY public."user" (id, login, email, password, "resetPasswordLink", "activation
 -- Name: accessory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.accessory_id_seq', 14, true);
+SELECT pg_catalog.setval('public.accessory_id_seq', 15, true);
 
 
 --
 -- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_id_seq', 43, true);
+SELECT pg_catalog.setval('public.address_id_seq', 44, true);
 
 
 --
@@ -1088,13 +1057,6 @@ SELECT pg_catalog.setval('public.address_id_seq', 43, true);
 --
 
 SELECT pg_catalog.setval('public.brigadier_id_seq', 5, true);
-
-
---
--- Name: brigadier_tool_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.brigadier_tool_id_seq', 1, false);
 
 
 --
@@ -1115,42 +1077,42 @@ SELECT pg_catalog.setval('public.equipment_id_seq', 5, true);
 -- Name: invoice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.invoice_id_seq', 49, true);
+SELECT pg_catalog.setval('public.invoice_id_seq', 50, true);
 
 
 --
 -- Name: invoice_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.invoice_item_id_seq', 49, true);
+SELECT pg_catalog.setval('public.invoice_item_id_seq', 51, true);
 
 
 --
 -- Name: request_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_equipment_id_seq', 50, true);
+SELECT pg_catalog.setval('public.request_equipment_id_seq', 53, true);
 
 
 --
 -- Name: request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_id_seq', 43, true);
+SELECT pg_catalog.setval('public.request_id_seq', 44, true);
 
 
 --
 -- Name: request_report_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_report_id_seq', 7, true);
+SELECT pg_catalog.setval('public.request_report_id_seq', 46, true);
 
 
 --
 -- Name: schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.schedule_id_seq', 50, true);
+SELECT pg_catalog.setval('public.schedule_id_seq', 53, true);
 
 
 --
@@ -1212,14 +1174,6 @@ ALTER TABLE ONLY public.request
 
 ALTER TABLE ONLY public.schedule
     ADD CONSTRAINT "PK_1c05e42aec7371641193e180046" PRIMARY KEY (id);
-
-
---
--- Name: brigadier_tool PK_1c383a052004a2ad706cff5f66d; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.brigadier_tool
-    ADD CONSTRAINT "PK_1c383a052004a2ad706cff5f66d" PRIMARY KEY (id);
 
 
 --
@@ -1363,13 +1317,6 @@ CREATE UNIQUE INDEX brigadier_pkey ON public.brigadier USING btree (id);
 
 
 --
--- Name: brigadier_tool_pkey; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX brigadier_tool_pkey ON public.brigadier_tool USING btree (id);
-
-
---
 -- Name: client_pkey; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1488,14 +1435,6 @@ ALTER TABLE ONLY public.request_report
 
 
 --
--- Name: brigadier_tool FK_90ba6279640c0c38da67c0fea00; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.brigadier_tool
-    ADD CONSTRAINT "FK_90ba6279640c0c38da67c0fea00" FOREIGN KEY ("toolId") REFERENCES public.tool(id);
-
-
---
 -- Name: invoice FK_925aa26ea12c28a6adb614445ee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1573,14 +1512,6 @@ ALTER TABLE ONLY public.request
 
 ALTER TABLE ONLY public.tool
     ADD CONSTRAINT "FK_e11e3f20a86dc84bd996bbd9f57" FOREIGN KEY ("stageId") REFERENCES public.stage(id);
-
-
---
--- Name: brigadier_tool FK_f47e2bb876b7bfcd84308af1fe2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.brigadier_tool
-    ADD CONSTRAINT "FK_f47e2bb876b7bfcd84308af1fe2" FOREIGN KEY ("brigadierId") REFERENCES public.brigadier(id);
 
 
 --
