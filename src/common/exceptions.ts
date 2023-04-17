@@ -31,7 +31,7 @@ export class BadActivationLinkError extends HttpException {
 
 export class NotActivatedError extends HttpException {
   constructor(data = '') {
-    super(`Account not activated ${data}`, HttpStatus.BAD_REQUEST);
+    super(`Кажется, аккаунт с логином ${data} не активирован. Попробуйте позже.`, HttpStatus.BAD_REQUEST);
   }
 }
 

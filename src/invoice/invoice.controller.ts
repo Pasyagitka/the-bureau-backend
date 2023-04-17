@@ -1,4 +1,4 @@
-import { Controller, Post, Body, StreamableFile, Get, Param, Res, Query } from '@nestjs/common';
+import { Controller, Post, Body, StreamableFile, Get, Param, Res, Query, Req } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -28,8 +28,8 @@ export class InvoiceController {
   })
   @Post()
   @CheckAbilities({ action: Action.Create, subject: Invoice })
-  create(@Body() createInvoiceDto: CreateInvoiceDto) {
-    return this.invoiceService.create(createInvoiceDto);
+  create(@Body() createInvoiceDto: CreateInvoiceDto, @Req() req) {
+    return this.invoiceService.create(createInvoiceDto, req.user);
   }
 
   @ApiResponses({

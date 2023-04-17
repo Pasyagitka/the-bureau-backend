@@ -66,7 +66,7 @@ export class BrigadierService {
         public_id: id,
       })
       .catch(() => {
-        throw new BadRequestException('Invalid file type.');
+        throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
       });
     brigadier.avatarUrl = uploadResult.secure_url;
 

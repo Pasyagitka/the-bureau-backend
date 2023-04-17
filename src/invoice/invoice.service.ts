@@ -9,6 +9,7 @@ import { InvoiceItem } from './entities/invoice-items.entity';
 import { Invoice } from './entities/invoice.entity';
 import * as carbone from 'carbone';
 import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
+import { User } from 'src/user/entities/user.entity';
 @Injectable()
 export class InvoiceService {
   constructor(
@@ -22,7 +23,7 @@ export class InvoiceService {
     private brigadierRepository: Repository<Brigadier>,
   ) {}
 
-  async create(createInvoiceDto: CreateInvoiceDto) {
+  async create(createInvoiceDto: CreateInvoiceDto, user: User) {
     const accessories = await this.accessoryRepository.find({
       where: { id: In(createInvoiceDto.items.map((i) => i.accessoryId)) },
     });
@@ -38,7 +39,9 @@ export class InvoiceService {
         sum: i.quantity * accessory.price,
       });
     });
-    const brigadier = await this.brigadierRepository.findOne({ where: { id: createInvoiceDto.customerId } });
+    const brigadier = await this.brigadierRepository.findOne({
+      where: { id: createInvoiceDto.customerId || user?.brigadier?.id },
+    });
     const invoice = new Invoice();
     invoice.customer = brigadier;
     invoice.items = invoiceItems;
@@ -47,7 +50,8 @@ export class InvoiceService {
     return { message: 'OK' }; //TODO constructor
   }
 
-  async findAll(query: PaginatedQuery) {//TODO add filter options
+  async findAll(query: PaginatedQuery) {
+    //TODO add filter options
     return this.invoiceRepository.findAndCount({
       relations: { customer: true },
       order: { id: 'DESC' },
