@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class AlreadyExistsError extends HttpException {
   constructor(data = '') {
-    super(`Already exists ${data}`, HttpStatus.BAD_REQUEST);
+    super(`Ошибка. Уже существует: ${data}`, HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -14,7 +14,7 @@ export class BadParametersError extends HttpException {
 
 export class NotExistsError extends HttpException {
   constructor(data = '') {
-    super(`Not exists ${data}`, HttpStatus.NOT_FOUND);
+    super(`Ошибка. Не найден(о) ${data}`, HttpStatus.NOT_FOUND);
   }
 }
 
@@ -43,7 +43,7 @@ export class BadResetPasswordLinkError extends HttpException {
 
 export class WrongPasswordError extends HttpException {
   constructor() {
-    super('Wrong password', HttpStatus.BAD_REQUEST);
+    super('Неверный пароль', HttpStatus.BAD_REQUEST);
   }
 }
 

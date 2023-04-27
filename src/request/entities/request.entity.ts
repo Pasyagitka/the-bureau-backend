@@ -9,7 +9,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 import { Client } from '../../client/entities/client.entity';
@@ -56,6 +56,9 @@ export class Request {
   @ManyToOne(() => Stage, (stage) => stage.requests)
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
+
+  @Column()
+  stageId: number;
 
   @Column({
     type: 'enum',

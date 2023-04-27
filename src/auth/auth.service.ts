@@ -12,7 +12,7 @@ import {
   BadResetPasswordLinkError,
   NotActivatedError,
   NotExistsError,
-  WrongPasswordError
+  WrongPasswordError,
 } from '../common/exceptions';
 import { UserService } from '../user/user.service';
 import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
@@ -30,7 +30,7 @@ export class AuthService {
   async validateUser(login: string, pass: string) {
     const user = await this.usersService.findByLogin(login);
     if (!user) {
-      throw new NotExistsError('user (by login)');
+      throw new NotExistsError('пользователь (логин)');
     }
     if (!user.isActivated) throw new NotActivatedError(`${user.login}`);
     const isPassEquals = await bcrypt.compare(pass, user.password);
@@ -134,7 +134,7 @@ export class AuthService {
   async resetConfirm(login, resetPasswordLink) {
     const findUser = await this.usersService.findByLogin(login);
     if (!findUser) {
-      throw new NotExistsError('user (by login)');
+      throw new NotExistsError('пользователь (логин)');
     }
     if (resetPasswordLink !== findUser.resetPasswordLink) {
       throw new BadResetPasswordLinkError();
