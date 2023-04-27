@@ -12,6 +12,9 @@ export class InvoiceItem {
   @JoinColumn([{ name: 'invoiceId', referencedColumnName: 'id' }])
   invoice: Invoice;
 
+  @Column()
+  invoiceId: number;
+
   @ManyToOne(() => Accessory, (accessory) => accessory.invoiceItems)
   @JoinColumn([{ name: 'accessoryId', referencedColumnName: 'id' }])
   accessory: Accessory;

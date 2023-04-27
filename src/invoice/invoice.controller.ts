@@ -13,6 +13,7 @@ import { Response } from 'express';
 import { InvoiceResponseDto } from './dto/invoice-response.dto';
 import { PaginatedResponse } from '../common/pagination/paginate.dto';
 import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
+import { InvoiceItemsResponseDto } from './dto/invoice-items-response.dto';
 
 @ApiAuth()
 @ApiTags('Invoices')
@@ -68,14 +69,27 @@ export class InvoiceController {
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({ summary: 'Get invoice (.docx)' })
-  @Get(':id')
+  @Get(':id/file')
   @CheckAbilities({ action: Action.Read, subject: Invoice })
-  async get(@Param('id') id: number, @Res({ passthrough: true }) res: Response) {
+  async getFile(@Param('id') id: number, @Res({ passthrough: true }) res: Response) {
     const invoice = await this.invoiceService.getInvoice(id);
     res.set({
       'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'Content-Disposition': `attachment; filename="request-${id}-report.docx`,
     });
     return new StreamableFile(invoice);
+  }
+
+  @ApiResponses({
+    200: InvoiceItemsResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get invoice items' })
+  @Get(':id/items')
+  @CheckAbilities({ action: Action.Read, subject: Invoice })
+  async getItems(@Param('id') id: number) {
+    const invoiceItems = await this.invoiceService.getItems(id);
+    return invoiceItems.map((i) => new InvoiceItemsResponseDto(i));
   }
 }

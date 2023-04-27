@@ -104,4 +104,11 @@ export class InvoiceService {
       });
     });
   }
+
+  async getItems(id: number): Promise<InvoiceItem[]> {
+    return this.invoiceItemRepository.find({
+      where: { invoiceId: id },
+      relations: { accessory: true },
+    });
+  }
 }
