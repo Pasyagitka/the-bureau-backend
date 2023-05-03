@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, MoreThan, Repository } from 'typeorm';
+import { Any, ILike, In, MoreThan, Repository } from 'typeorm';
 import { BadParametersError, NotExistsError } from '../common/exceptions';
-import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { Equipment } from '../equipment/entities/equipment.entity';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Accessory } from './entities/accessory.entity';
+import { FindAllQueryDto } from './dto/findAll-query.dto';
 
 @Injectable()
 export class AccessoryService {
@@ -17,7 +17,7 @@ export class AccessoryService {
     private equipmentRepository: Repository<Equipment>,
   ) {}
 
-  async findAll(query: PaginatedQuery) {
+  async findAll(query: FindAllQueryDto) {
     return this.accessoryRepository.findAndCount({
       relations: {
         equipment: true,
@@ -25,6 +25,12 @@ export class AccessoryService {
       order: { id: 'ASC' },
       skip: query.offset,
       take: query.limit,
+      where: {
+        equipment: {
+          id: query.equipmentId && Any(query.equipmentId),
+        },
+        name: query.search && ILike(`%${query.search || ''}%`),
+      },
     });
   }
 

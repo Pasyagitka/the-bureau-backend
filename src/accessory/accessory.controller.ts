@@ -6,13 +6,13 @@ import { ApiResponses } from '../common/decorators/api-responses.decorator';
 import { ApiAuth } from '../common/decorators/auth.decorator';
 import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { PaginatedResponse } from '../common/pagination/paginate.dto';
-import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { PaginatedResponseDto } from '../common/pagination/paginated-response.dto';
 import { AccessoryService } from './accessory.service';
 import { AccessoryResponseDto } from './dto/accessory-response.dto';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Accessory } from './entities/accessory.entity';
+import { FindAllQueryDto } from './dto/findAll-query.dto';
 
 @ApiAuth()
 @ApiTags('Accessories')
@@ -53,7 +53,7 @@ export class AccessoryController {
   @ApiOperation({ summary: 'Get accessories (paginated)' })
   @Get()
   @CheckAbilities({ action: Action.Read, subject: Accessory })
-  async findAll(@Query() query: PaginatedQuery): Promise<PaginatedResponseDto<AccessoryResponseDto>> {
+  async findAll(@Query() query: FindAllQueryDto): Promise<PaginatedResponseDto<AccessoryResponseDto>> {
     const [data, total] = await this.accessoryService.findAll(query);
     return {
       data: data.map((i) => new AccessoryResponseDto(i)),
