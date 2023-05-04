@@ -1,6 +1,7 @@
 import { Accessory } from '../../accessory/entities/accessory.entity';
 import { Index, Entity, ManyToOne, JoinColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Invoice } from './invoice.entity';
+import { InvoiceStatus } from '../types/invoice-status.enum';
 
 @Index('invoice_item_pkey', ['id'], { unique: true })
 @Entity('invoice_item')
@@ -27,4 +28,11 @@ export class InvoiceItem {
 
   @Column({ type: 'decimal', precision: 6, scale: 2, name: 'sum', default: 0 })
   sum: number;
+
+  @Column({
+    type: 'enum',
+    enum: InvoiceStatus,
+    default: InvoiceStatus.CREATED,
+  })
+  status: InvoiceStatus;
 }
