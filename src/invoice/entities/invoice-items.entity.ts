@@ -28,11 +28,4 @@ export class InvoiceItem {
 
   @Column({ type: 'decimal', precision: 6, scale: 2, name: 'sum', default: 0 })
   sum: number;
-
-  @Column({
-    type: 'enum',
-    enum: InvoiceStatus,
-    default: InvoiceStatus.CREATED,
-  })
-  status: InvoiceStatus;
 }
