@@ -13,6 +13,9 @@ export class ToolResponseDto {
   @Type(() => StageResponseDto)
   stage: StageResponseDto;
 
+  @Expose()
+  stageId: number;
+
   constructor(partial: Partial<ToolResponseDto>) {
     Object.assign(this, partial);
   }

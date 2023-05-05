@@ -15,6 +15,9 @@ export class Tool {
   @JoinColumn([{ name: 'stageId', referencedColumnName: 'id' }])
   stage: Stage;
 
+  @Column()
+  stageId: number;
+
   @Exclude()
   @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;
