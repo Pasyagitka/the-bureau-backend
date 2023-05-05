@@ -8,6 +8,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
 
 @Module({
   controllers: [AuthController],
@@ -19,6 +21,7 @@ import { LocalStrategy } from './strategies/local.strategy';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({ ...configService.get('jwt') }),
     }),
+    TypeOrmModule.forFeature([User]),
     MailModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

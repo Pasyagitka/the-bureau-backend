@@ -18,11 +18,17 @@ import { UserService } from '../user/user.service';
 import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
 import { RegisterUserEvent } from './events/register-user.event';
 import { ResetPasswordEvent } from './events/reset-password.event';
+import { ChangePasswordDto } from '../user/dto/change-password.dto';
+import { Repository } from 'typeorm';
+import { User } from '../user/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UserService,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private eventEmitter: EventEmitter2,
   ) {}
@@ -110,6 +116,17 @@ export class AuthService {
       isActivated: true,
       activationLink: null,
     });
+  }
+
+  async changePassword(id: number, changePasswordDto: ChangePasswordDto) {
+    const user = await this.usersRepository.findOneOrFail({ where: { id } });
+    const isPassEquals = await bcrypt.compare(changePasswordDto.oldPassword, user.password);
+    if (!isPassEquals) {
+      throw new WrongPasswordError();
+    }
+    const hashNewPassword = await bcrypt.hash(changePasswordDto.newPassword, 3);
+    user.password = hashNewPassword;
+    return await this.usersRepository.save(user);
   }
 
   async sendResetPassword(email) {

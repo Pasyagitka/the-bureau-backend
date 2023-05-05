@@ -161,17 +161,6 @@ export class UserService {
     return await this.usersRepository.save(user);
   }
 
-  async changePassword(id: number, changePasswordDto: ChangePasswordDto) {
-    const user = await this.usersRepository.findOneOrFail({ where: { id } });
-    const isPassEquals = await bcrypt.compare(changePasswordDto.oldPassword, user.password);
-    if (!isPassEquals) {
-      throw new WrongPasswordError();
-    }
-    const hashNewPassword = await bcrypt.hash(changePasswordDto.newPassword, 3);
-    user.password = hashNewPassword;
-    return await this.usersRepository.save(user);
-  }
-
   async resetPasswordSend(email: string, resetPasswordLink: string, temporaryPassword: string) {
     const user = await this.findByEmail(email);
     user.resetPasswordLink = resetPasswordLink;

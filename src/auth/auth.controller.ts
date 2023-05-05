@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Req, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateBrigadierDto } from '../brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from '../client/dto/create-client.dto';
@@ -14,6 +14,10 @@ import { RegisterResponseDto } from './dto/register-response.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserInfoResponseDto } from './dto/user-info-response.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { Action } from 'rxjs/internal/scheduler/Action';
+import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
+import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -93,6 +97,23 @@ export class AuthController {
       return 'Success reset';
     }
     return 'Failure reset';
+  }
+
+  @ApiResponses({
+    200: MessageResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @ApiAuth()
+  @Patch('change-password')
+  async changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto) {
+    if (req.headers && req.headers.authorization) {
+      const authorization = req.headers.authorization.split(' ')[1];
+      const decoded = await this.authService.getUser(authorization);
+      const res = await this.authService.changePassword(decoded.id, changePasswordDto);
+      return new MessageResponseDto('Пароль успешно изменен');
+    }
   }
 
   @ApiResponses({
