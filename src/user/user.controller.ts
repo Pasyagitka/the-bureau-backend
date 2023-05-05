@@ -9,6 +9,8 @@ import { UserResponseDto } from '../user/dto/user-response.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { MessageResponseDto } from 'src/common/dto/message-response.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiAuth()
 @ApiTags('Users')
@@ -35,6 +37,19 @@ export class UserController {
   @CheckAbilities({ action: Action.Read, subject: User })
   async get(@Param('id') id: string) {
     return new UserResponseDto(await this.userService.get(+id));
+  }
+
+  @ApiResponses({
+    200: MessageResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id/change-password')
+  @CheckAbilities({ action: Action.Update, subject: User })
+  async changePassword(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto) {
+    const res = await this.userService.changePassword(+id, changePasswordDto);
+    return new MessageResponseDto('Пароль успешно изменен');
   }
 
   @ApiResponses({

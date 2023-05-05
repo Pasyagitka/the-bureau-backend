@@ -10,10 +10,11 @@ import { CreateBrigadierDto } from '../brigadier/dto/create-brigadier.dto';
 import { Brigadier } from '../brigadier/entities/brigadier.entity';
 import { CreateClientDto } from '../client/dto/create-client.dto';
 import { Client } from '../client/entities/client.entity';
-import { AlreadyExistsError, NotExistsError } from '../common/exceptions';
+import { AlreadyExistsError, NotExistsError, WrongPasswordError } from '../common/exceptions';
 import { ActivateUserDto } from './dto/activate-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -157,6 +158,17 @@ export class UserService {
     const user = await this.usersRepository.findOneOrFail({ where: { id } });
     user.isActivated = activateUserDto.isActivated || user.isActivated;
     user.activationLink = activateUserDto.activationLink || user.activationLink;
+    return await this.usersRepository.save(user);
+  }
+
+  async changePassword(id: number, changePasswordDto: ChangePasswordDto) {
+    const user = await this.usersRepository.findOneOrFail({ where: { id } });
+    const isPassEquals = await bcrypt.compare(changePasswordDto.oldPassword, user.password);
+    if (!isPassEquals) {
+      throw new WrongPasswordError();
+    }
+    const hashNewPassword = await bcrypt.hash(changePasswordDto.newPassword, 3);
+    user.password = hashNewPassword;
     return await this.usersRepository.save(user);
   }
 
