@@ -14,7 +14,7 @@ export class CreateInvoiceDto {
   customerId?: number; //TODO add
 }
 
-class AccessoryInvoiceItemDto {
+export class AccessoryInvoiceItemDto {
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()

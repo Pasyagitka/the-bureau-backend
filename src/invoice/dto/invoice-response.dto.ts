@@ -13,6 +13,12 @@ export class InvoiceResponseDto {
   @Expose()
   total: number;
 
+  @Expose()
+  status: string;
+
+  @Expose()
+  receiptUrl: string;
+
   constructor(partial: Partial<InvoiceResponseDto>) {
     Object.assign(this, partial);
   }

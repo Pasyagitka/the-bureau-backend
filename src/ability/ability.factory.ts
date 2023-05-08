@@ -25,6 +25,10 @@ type ScheduleBrigadier = Schedule & {
   'brigadier.userId': Schedule['brigadier']['userId'];
 };
 
+type InvoiceCustomer = Invoice & {
+  'customer.userId': Invoice['customer']['userId'];
+};
+
 @Injectable()
 export class AbilityFactory {
   defineAbility(user: User) {
@@ -47,6 +51,7 @@ export class AbilityFactory {
         can([Action.Read, Action.Update], RequestReport);
         can([Action.Read, Action.Update], User);
         can(Action.Read, Schedule);
+        can([Action.Read, Action.Update, Action.Delete], Invoice);
         cannot<ScheduleBrigadier>(Action.Read, Schedule, { 'brigadier.userId': { $ne: user.id } }).because(
           'You are not allowed to view this schedule.',
         );
@@ -59,6 +64,9 @@ export class AbilityFactory {
         cannot(Action.Update, Brigadier, { id: { $ne: user.brigadier?.id } }).because(
           'You are not allowed to update other brigadiers.',
         );
+        cannot<InvoiceCustomer>([Action.Read, Action.Update, Action.Delete], Invoice, {
+          'customer.userId': { $ne: user.id },
+        }).because('You are not allowed to manage this invoice.');
         cannot(Action.Update, User, { id: { $ne: user.id } }).because('You are not allowed to update other users.');
         cannot(Action.ManageAccess, User).because('You are not admin');
 

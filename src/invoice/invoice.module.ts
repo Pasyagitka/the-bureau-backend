@@ -6,9 +6,10 @@ import { Accessory } from '../accessory/entities/accessory.entity';
 import { Invoice } from './entities/invoice.entity';
 import { InvoiceItem } from './entities/invoice-items.entity';
 import { Brigadier } from '../brigadier/entities/brigadier.entity';
+import { AbilityModule } from '../ability/ability.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Accessory, Invoice, InvoiceItem, Brigadier])],
+  imports: [TypeOrmModule.forFeature([Accessory, Invoice, InvoiceItem, Brigadier]), AbilityModule],
   controllers: [InvoiceController],
   providers: [InvoiceService],
 })

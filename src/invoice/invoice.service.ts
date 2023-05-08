@@ -9,7 +9,12 @@ import { InvoiceItem } from './entities/invoice-items.entity';
 import { Invoice } from './entities/invoice.entity';
 import * as carbone from 'carbone';
 import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../user/entities/user.entity';
+import { NotExistsError } from '../common/exceptions';
+import { ForbiddenError } from '@casl/ability';
+import { AbilityFactory } from '../ability/ability.factory';
+import { Action } from '../ability/types';
+
 @Injectable()
 export class InvoiceService {
   constructor(
@@ -21,6 +26,7 @@ export class InvoiceService {
     private invoiceItemRepository: Repository<InvoiceItem>,
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
+    private readonly abilityFactory: AbilityFactory,
   ) {}
 
   async create(createInvoiceDto: CreateInvoiceDto, user: User) {
@@ -47,7 +53,7 @@ export class InvoiceService {
     invoice.items = invoiceItems;
     invoice.total = invoiceItems.reduce((acc, curr) => acc + (Number(curr.sum) || 0), 0);
     await this.invoiceRepository.save(invoice);
-    return { message: 'OK' }; //TODO constructor
+    return { message: 'OK' };
   }
 
   async findAll(query: PaginatedQuery) {
@@ -110,5 +116,63 @@ export class InvoiceService {
       where: { invoiceId: id },
       relations: { accessory: true },
     });
+  }
+
+  async remove(id: number) {
+    const item = await this.invoiceRepository.findOne({
+      where: { id },
+      relations: ['items'],
+    });
+    if (!item) throw new NotExistsError('счет');
+    return await this.invoiceRepository.softRemove(item);
+  }
+
+  async get(id: number): Promise<Invoice> {
+    return this.invoiceRepository.findOne({
+      where: { id },
+    });
+  }
+
+  async update(id: number, updateInvoiceDto: any, user: User): Promise<Invoice> {
+    const invoice = await this.invoiceRepository.findOne({
+      where: { id },
+    });
+    if (!invoice) throw new NotExistsError('счет');
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Update, invoice);
+
+    invoice.status = updateInvoiceDto.status;
+    return await this.invoiceRepository.save(invoice);
+  }
+
+  async updateItems(id: number, updateInvoiceItemsDto: any, user: User) {
+    const invoice = await this.invoiceRepository.findOne({
+      where: { id },
+      relations: { items: true },
+    });
+    if (!invoice) throw new NotExistsError('счет');
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Update, invoice);
+
+    const accessories = await this.accessoryRepository.find({
+      where: { id: In(updateInvoiceItemsDto.items.map((i) => i.accessoryId)) },
+    });
+    if (accessories.length !== updateInvoiceItemsDto.items.length) {
+      throw new BadRequestException('Неверно перечислен список комплектующих');
+    }
+    const invoiceItems = updateInvoiceItemsDto.items.map((i) => {
+      const accessory = accessories.find((x) => x.id === i.accessoryId);
+      return this.invoiceItemRepository.create({
+        accessory,
+        quantity: i.quantity,
+        price: accessory.price,
+        sum: i.quantity * accessory.price,
+      });
+    });
+    invoice.items = invoiceItems;
+    invoice.total = invoiceItems.reduce((acc, curr) => acc + (Number(curr.sum) || 0), 0);
+    return await this.invoiceRepository.save(invoice);
   }
 }

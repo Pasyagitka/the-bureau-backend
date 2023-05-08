@@ -1,7 +1,7 @@
 import { Accessory } from '../../accessory/entities/accessory.entity';
-import { Index, Entity, ManyToOne, JoinColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Index, Entity, ManyToOne, JoinColumn, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
 import { Invoice } from './invoice.entity';
-import { InvoiceStatus } from '../types/invoice-status.enum';
+import { Exclude } from 'class-transformer';
 
 @Index('invoice_item_pkey', ['id'], { unique: true })
 @Entity('invoice_item')
@@ -9,7 +9,7 @@ export class InvoiceItem {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @ManyToOne(() => Invoice, (invoice) => invoice.items)
+  @ManyToOne(() => Invoice, (invoice) => invoice.items, { orphanedRowAction: 'soft-delete' })
   @JoinColumn([{ name: 'invoiceId', referencedColumnName: 'id' }])
   invoice: Invoice;
 
@@ -28,4 +28,8 @@ export class InvoiceItem {
 
   @Column({ type: 'decimal', precision: 6, scale: 2, name: 'sum', default: 0 })
   sum: number;
+
+  @Exclude()
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt?: Date;
 }

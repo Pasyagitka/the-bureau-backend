@@ -1,4 +1,4 @@
-import { Controller, Post, Body, StreamableFile, Get, Param, Res, Query, Req } from '@nestjs/common';
+import { Controller, Post, Body, StreamableFile, Get, Param, Res, Query, Req, Delete, Patch } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -14,6 +14,8 @@ import { InvoiceResponseDto } from './dto/invoice-response.dto';
 import { PaginatedResponse } from '../common/pagination/paginate.dto';
 import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
 import { InvoiceItemsResponseDto } from './dto/invoice-items-response.dto';
+import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { UpdateInvoiceItemsDto } from './dto/update-invoice-items.dto';
 
 @ApiAuth()
 @ApiTags('Invoices')
@@ -91,5 +93,53 @@ export class InvoiceController {
   async getItems(@Param('id') id: number) {
     const invoiceItems = await this.invoiceService.getItems(id);
     return invoiceItems.map((i) => new InvoiceItemsResponseDto(i));
+  }
+
+  @ApiResponses({
+    200: InvoiceResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @ApiOperation({ summary: 'Get invoice' })
+  @Get(':id')
+  @CheckAbilities({ action: Action.Read, subject: Invoice })
+  async get(@Param('id') id: number) {
+    const invoice = await this.invoiceService.get(id);
+    return new InvoiceResponseDto(invoice);
+  }
+
+  @ApiResponses({
+    200: InvoiceResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Delete(':id')
+  @CheckAbilities({ action: Action.Delete, subject: Invoice })
+  async remove(@Param('id') id: string) {
+    return new InvoiceResponseDto(await this.invoiceService.remove(+id));
+  }
+
+  @ApiResponses({
+    200: InvoiceResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id')
+  @CheckAbilities({ action: Action.Update, subject: Invoice })
+  async update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @Req() req) {
+    return new InvoiceResponseDto(await this.invoiceService.update(+id, updateInvoiceDto, req.user));
+  }
+
+  @ApiResponses({
+    200: InvoiceResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id/items')
+  @CheckAbilities({ action: Action.Update, subject: Invoice })
+  async updateItems(@Param('id') id: string, @Body() updateInvoiceItemsDto: UpdateInvoiceItemsDto, @Req() req) {
+    return new InvoiceResponseDto(await this.invoiceService.updateItems(+id, updateInvoiceItemsDto, req.user));
   }
 }
