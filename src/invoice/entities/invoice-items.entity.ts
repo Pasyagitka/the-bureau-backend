@@ -20,6 +20,9 @@ export class InvoiceItem {
   @JoinColumn([{ name: 'accessoryId', referencedColumnName: 'id' }])
   accessory: Accessory;
 
+  @Column()
+  accessoryId: number;
+
   @Column('integer', { name: 'quantity', default: () => '0' })
   quantity: number;
 

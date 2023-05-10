@@ -3,7 +3,7 @@ import { BadRequestException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Accessory } from '../accessory/entities/accessory.entity';
 import { Brigadier } from '../brigadier/entities/brigadier.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, DataSource, LessThan, MoreThan } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { InvoiceItem } from './entities/invoice-items.entity';
 import { Invoice } from './entities/invoice.entity';
@@ -15,6 +15,10 @@ import { ForbiddenError } from '@casl/ability';
 import { AbilityFactory } from '../ability/ability.factory';
 import { Action } from '../ability/types';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { InvoiceStatus } from './types/invoice-status.enum';
+import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class InvoiceService {
@@ -28,6 +32,7 @@ export class InvoiceService {
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
     private cloudinary: CloudinaryService,
+    private dataSource: DataSource,
     private readonly abilityFactory: AbilityFactory,
   ) {}
 
@@ -217,5 +222,76 @@ export class InvoiceService {
     invoice.receiptUrl = uploadResult.secure_url;
 
     await this.invoiceRepository.save(invoice);
+  }
+
+  async updateByStatus(id: number, updateInvoiceDto: UpdateInvoiceDto, user: User): Promise<Invoice> {
+    return await this.dataSource.transaction(async (transaction) => {
+      const invoice = await this.invoiceRepository.findOne({ where: { id }, relations: { items: true } });
+      if (!invoice) throw new NotExistsError('счет');
+
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Update, invoice);
+
+      const invoiceAccessories = await this.accessoryRepository.find({
+        where: { id: In(invoice.items.map((i) => i.accessoryId)) },
+      });
+      switch (updateInvoiceDto.status) {
+        case InvoiceStatus.CREATED: {
+          invoiceAccessories.forEach((x, i) => {
+            x.quantity_in_stock -= invoice.items[i].quantity;
+            x.quantity_reserved += invoice.items[i].quantity;
+          });
+          break;
+        }
+        case InvoiceStatus.PAID: {
+          break;
+        }
+        case InvoiceStatus.APPROVED: {
+          invoiceAccessories.forEach((x, i) => {
+            x.quantity_reserved -= invoice.items[i].quantity;
+          });
+          break;
+        }
+        case InvoiceStatus.EXPIRED: {
+          invoiceAccessories.forEach((x, i) => {
+            x.quantity_in_stock += invoice.items[i].quantity;
+            x.quantity_reserved -= invoice.items[i].quantity;
+          });
+          break;
+        }
+      }
+      await transaction.getRepository(Accessory).save(invoiceAccessories);
+      invoice.status = updateInvoiceDto.status;
+      return await transaction.getRepository(Invoice).save(invoice);
+    });
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async findExpired() {
+    return await this.dataSource.transaction(async (transaction) => {
+      const maxDate = dayjs().subtract(5, 'days').startOf('day').toDate();
+      const expiredInvoices = await this.invoiceRepository.find({
+        where: {
+          status: InvoiceStatus.CREATED,
+          updatedAt: LessThan(maxDate),
+        },
+        relations: { items: true },
+      });
+      await Promise.all(
+        expiredInvoices.map(async (invoice) => {
+          const invoiceAccessories = await this.accessoryRepository.find({
+            where: { id: In(invoice.items.map((i) => i.accessoryId)) },
+          });
+          invoiceAccessories.forEach((x, i) => {
+            x.quantity_in_stock += invoice.items[i].quantity;
+            x.quantity_reserved -= invoice.items[i].quantity;
+          });
+          await transaction.getRepository(Accessory).save(invoiceAccessories);
+          invoice.status = InvoiceStatus.EXPIRED;
+          await transaction.getRepository(Invoice).save(invoice);
+        }),
+      );
+      return await transaction.getRepository(Invoice).softRemove(expiredInvoices);
+    });
   }
 }

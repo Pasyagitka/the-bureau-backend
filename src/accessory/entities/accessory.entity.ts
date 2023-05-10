@@ -42,6 +42,9 @@ export class Accessory {
   @Column('integer', { name: 'quantity_in_stock', default: () => '0' })
   quantity_in_stock: number;
 
+  @Column('integer', { name: 'quantity_reserved', default: () => '0' })
+  quantity_reserved: number;
+
   @OneToMany(() => InvoiceItem, (invoiceItem) => invoiceItem.accessory, {
     cascade: true,
   })

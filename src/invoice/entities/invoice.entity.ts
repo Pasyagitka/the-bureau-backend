@@ -8,6 +8,8 @@ import {
   OneToMany,
   Column,
   DeleteDateColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { InvoiceItem } from './invoice-items.entity';
 import { InvoiceStatus } from '../types/invoice-status.enum';
@@ -45,6 +47,12 @@ export class Invoice {
 
   @Column('text', { name: 'scanUrl', nullable: true })
   scanUrl: string;
+
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 
   @Exclude()
   @DeleteDateColumn({ type: 'timestamptz' })

@@ -139,6 +139,18 @@ export class InvoiceController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @Patch(':id/update-created')
+  @CheckAbilities({ action: Action.Update, subject: Invoice })
+  async updateByStatus(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @Req() req) {
+    return new InvoiceResponseDto(await this.invoiceService.updateByStatus(+id, updateInvoiceDto, req.user));
+  }
+
+  @ApiResponses({
+    200: InvoiceResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
   @Patch(':id')
   @CheckAbilities({ action: Action.Update, subject: Invoice })
   async update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @Req() req) {
@@ -182,4 +194,6 @@ export class InvoiceController {
   async uploadReceipt(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req) {
     return await this.invoiceService.uploadReceipt(+id, file, req.user);
   }
+
+  
 }

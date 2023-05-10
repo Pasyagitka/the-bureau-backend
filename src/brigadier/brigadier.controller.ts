@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Query, Req, UploadedFile } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';

@@ -30,6 +30,7 @@ import { UserModule } from './user/user.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     EventEmitterModule.forRoot({
       delimiter: '.',
     }),
+    NestScheduleModule.forRoot(),
     AuthModule,
     RequestModule,
     UserModule,
