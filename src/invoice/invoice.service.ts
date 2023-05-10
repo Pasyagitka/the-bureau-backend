@@ -184,22 +184,36 @@ export class InvoiceService {
   }
 
   async uploadScan(id: number, file: Express.Multer.File) {
-    const invoice = await this.invoiceRepository.findOne({ where: { id } });
-    if (!invoice) throw new NotExistsError('счет');
+    return await this.dataSource.transaction(async (transaction) => {
+      const invoice = await this.invoiceRepository.findOne({ where: { id } });
+      if (!invoice) throw new NotExistsError('счет');
 
-    const uploadResult = await this.cloudinary
-      .uploadImage(file, {
-        folder: `invoiceScans/`,
-        overwrite: true,
-        resource_type: 'image',
-        public_id: id,
-      })
-      .catch(() => {
-        throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
+      const uploadResult = await this.cloudinary
+        .uploadImage(file, {
+          folder: `invoiceScans/`,
+          overwrite: true,
+          resource_type: 'image',
+          public_id: id,
+        })
+        .catch(() => {
+          throw new BadRequestException(
+            'Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...',
+          );
+        });
+
+      const invoiceAccessories = await this.accessoryRepository.find({
+        where: { id: In(invoice.items.map((i) => i.accessoryId)) },
       });
-    invoice.scanUrl = uploadResult.secure_url;
+      invoiceAccessories.forEach((x, i) => {
+        x.quantity_in_stock -= invoice.items[i].quantity;
+        x.quantity_reserved += invoice.items[i].quantity;
+      });
+      await transaction.getRepository(Accessory).save(invoiceAccessories);
 
-    await this.invoiceRepository.save(invoice);
+      invoice.scanUrl = uploadResult.secure_url;
+      invoice.status = InvoiceStatus.CREATED;
+      return await transaction.getRepository(Invoice).save(invoice);
+    });
   }
 
   async uploadReceipt(id: number, file: Express.Multer.File, user: User) {
@@ -220,7 +234,7 @@ export class InvoiceService {
         throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
       });
     invoice.receiptUrl = uploadResult.secure_url;
-
+    invoice.status = InvoiceStatus.PAID;
     await this.invoiceRepository.save(invoice);
   }
 
@@ -237,10 +251,6 @@ export class InvoiceService {
       });
       switch (updateInvoiceDto.status) {
         case InvoiceStatus.CREATED: {
-          invoiceAccessories.forEach((x, i) => {
-            x.quantity_in_stock -= invoice.items[i].quantity;
-            x.quantity_reserved += invoice.items[i].quantity;
-          });
           break;
         }
         case InvoiceStatus.PAID: {
