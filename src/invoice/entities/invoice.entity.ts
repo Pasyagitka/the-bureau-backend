@@ -43,6 +43,9 @@ export class Invoice {
   @Column('text', { name: 'url', nullable: true })
   receiptUrl: string;
 
+  @Column('text', { name: 'scanUrl', nullable: true })
+  scanUrl: string;
+
   @Exclude()
   @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date;

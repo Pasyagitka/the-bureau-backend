@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
@@ -13,6 +13,7 @@ import { RecommendedBrigadierResponseDto } from './dto/recommended-brigadier-res
 import { RecommendedQuery } from './dto/recommended-query.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
+import { FileUpload } from 'src/common/decorators/file-upload.decorator';
 
 @ApiAuth()
 @ApiTags('Brigadiers')
@@ -69,8 +70,8 @@ export class BrigadierController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
+  @FileUpload()
   @Patch('avatar/:id')
-  @UseInterceptors(FileInterceptor('file'))
   @CheckAbilities({ action: Action.Update, subject: Brigadier })
   async uploadAvatar(@Param('id') id: string, @UploadedFile() file: Express.Multer.File, @Req() req) {
     return await this.brigadierService.uploadAvatar(+id, file, req.user);

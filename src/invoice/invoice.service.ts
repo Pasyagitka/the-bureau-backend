@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UploadedFile } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Accessory } from '../accessory/entities/accessory.entity';
@@ -14,6 +14,7 @@ import { NotExistsError } from '../common/exceptions';
 import { ForbiddenError } from '@casl/ability';
 import { AbilityFactory } from '../ability/ability.factory';
 import { Action } from '../ability/types';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class InvoiceService {
@@ -26,6 +27,7 @@ export class InvoiceService {
     private invoiceItemRepository: Repository<InvoiceItem>,
     @InjectRepository(Brigadier)
     private brigadierRepository: Repository<Brigadier>,
+    private cloudinary: CloudinaryService,
     private readonly abilityFactory: AbilityFactory,
   ) {}
 
@@ -174,5 +176,46 @@ export class InvoiceService {
     invoice.items = invoiceItems;
     invoice.total = invoiceItems.reduce((acc, curr) => acc + (Number(curr.sum) || 0), 0);
     return await this.invoiceRepository.save(invoice);
+  }
+
+  async uploadScan(id: number, file: Express.Multer.File) {
+    const invoice = await this.invoiceRepository.findOne({ where: { id } });
+    if (!invoice) throw new NotExistsError('счет');
+
+    const uploadResult = await this.cloudinary
+      .uploadImage(file, {
+        folder: `invoiceScans/`,
+        overwrite: true,
+        resource_type: 'image',
+        public_id: id,
+      })
+      .catch(() => {
+        throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
+      });
+    invoice.scanUrl = uploadResult.secure_url;
+
+    await this.invoiceRepository.save(invoice);
+  }
+
+  async uploadReceipt(id: number, file: Express.Multer.File, user: User) {
+    const invoice = await this.invoiceRepository.findOne({ where: { id } });
+    if (!invoice) throw new NotExistsError('счет');
+
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Update, invoice);
+
+    const uploadResult = await this.cloudinary
+      .uploadImage(file, {
+        folder: `invoiceReceipts/`,
+        overwrite: true,
+        resource_type: 'image',
+        public_id: id,
+      })
+      .catch(() => {
+        throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
+      });
+    invoice.receiptUrl = uploadResult.secure_url;
+
+    await this.invoiceRepository.save(invoice);
   }
 }

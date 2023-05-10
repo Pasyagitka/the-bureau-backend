@@ -11,6 +11,7 @@ import { Req, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RequestReport } from './entities/request-report.entity';
 import { Request } from '../request/entities/request.entity';
+import { FilesUpload } from 'src/common/decorators/files-upload.decorator';
 
 @ApiAuth()
 @ApiTags('Request Report')
@@ -24,22 +25,7 @@ export class RequestReportController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        files: {
-          type: 'array',
-          items: {
-            type: 'string',
-            format: 'binary',
-          },
-        },
-      },
-    },
-  })
-  @UseInterceptors(FilesInterceptor('files'))
+  @FilesUpload()
   @Post()
   //@CheckAbilities({ action: Action.Update, subject: Request })
   patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>, @Req() req) {

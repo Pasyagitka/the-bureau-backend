@@ -1,4 +1,17 @@
-import { Controller, Post, Body, StreamableFile, Get, Param, Res, Query, Req, Delete, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  StreamableFile,
+  Get,
+  Param,
+  Res,
+  Query,
+  Req,
+  Delete,
+  Patch,
+  UploadedFile,
+} from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -12,10 +25,11 @@ import { Invoice } from './entities/invoice.entity';
 import { Response } from 'express';
 import { InvoiceResponseDto } from './dto/invoice-response.dto';
 import { PaginatedResponse } from '../common/pagination/paginate.dto';
-import { PaginatedQuery } from 'src/common/pagination/paginated-query.dto';
+import { PaginatedQuery } from '../common/pagination/paginated-query.dto';
 import { InvoiceItemsResponseDto } from './dto/invoice-items-response.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { UpdateInvoiceItemsDto } from './dto/update-invoice-items.dto';
+import { FileUpload as FileUpload } from '../common/decorators/file-upload.decorator';
 
 @ApiAuth()
 @ApiTags('Invoices')
@@ -141,5 +155,31 @@ export class InvoiceController {
   @CheckAbilities({ action: Action.Update, subject: Invoice })
   async updateItems(@Param('id') id: string, @Body() updateInvoiceItemsDto: UpdateInvoiceItemsDto, @Req() req) {
     return new InvoiceResponseDto(await this.invoiceService.updateItems(+id, updateInvoiceItemsDto, req.user));
+  }
+
+  @ApiResponses({
+    200: MessageResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id/upload-scan')
+  @FileUpload()
+  @CheckAbilities({ action: Action.Update, subject: Invoice })
+  async uploadScan(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
+    return await this.invoiceService.uploadScan(+id, file);
+  }
+
+  @ApiResponses({
+    200: MessageResponseDto,
+    400: ErrorMessageResponseDto,
+    404: ErrorMessageResponseDto,
+    500: ErrorMessageResponseDto,
+  })
+  @Patch(':id/upload-receipt')
+  @FileUpload()
+  @CheckAbilities({ action: Action.Update, subject: Invoice })
+  async uploadReceipt(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req) {
+    return await this.invoiceService.uploadReceipt(+id, file, req.user);
   }
 }
