@@ -46,7 +46,7 @@ export class AbilityFactory {
         can([Action.Read], Accessory); //TODO
         can([Action.Read], Stage);
         can([Action.Read, Action.Update], Brigadier);
-        can([Action.Create, Action.Read], Invoice);
+        can([Action.Create, Action.Update, Action.Delete, Action.Read], Invoice);
         can([Action.Read, Action.Update], Request);
         can([Action.Read, Action.Update], RequestReport);
         can([Action.Read, Action.Update], User);

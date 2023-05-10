@@ -156,7 +156,7 @@ export class InvoiceService {
   async updateItems(id: number, updateInvoiceItemsDto: any, user: User) {
     const invoice = await this.invoiceRepository.findOne({
       where: { id },
-      relations: { items: true },
+      relations: { items: true, customer: true },
     });
     if (!invoice) throw new NotExistsError('счет');
 
