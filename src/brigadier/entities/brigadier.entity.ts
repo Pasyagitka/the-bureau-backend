@@ -36,8 +36,8 @@ export class Brigadier {
   @Column('text', { name: 'avatarUrl', nullable: true })
   avatarUrl: string;
 
-  @Column('boolean', { name: 'isApproved', default: () => 'false' })
-  isApproved: boolean;
+  // @Column('boolean', { name: 'isApproved', default: () => 'false' })
+  // isApproved: boolean;
 
   @OneToOne(() => User, (user) => user.brigadier, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
