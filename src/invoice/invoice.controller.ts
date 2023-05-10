@@ -139,7 +139,7 @@ export class InvoiceController {
     404: ErrorMessageResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @Patch(':id/update-created')
+  @Patch(':id/update-status')
   @CheckAbilities({ action: Action.Update, subject: Invoice })
   async updateByStatus(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @Req() req) {
     return new InvoiceResponseDto(await this.invoiceService.updateByStatus(+id, updateInvoiceDto, req.user));
