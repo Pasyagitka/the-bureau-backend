@@ -19,6 +19,9 @@ export class InvoiceResponseDto {
   @Expose()
   receiptUrl: string;
 
+  @Expose()
+  scanUrl: string;
+
   constructor(partial: Partial<InvoiceResponseDto>) {
     Object.assign(this, partial);
   }
