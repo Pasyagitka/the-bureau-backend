@@ -43,7 +43,7 @@ export class AbilityFactory {
         break;
       }
       case Role.Brigadier: {
-        can([Action.Read], Accessory); //TODO
+        can([Action.Read], Accessory);
         can([Action.Read], Stage);
         can([Action.Read, Action.Update], Brigadier);
         can([Action.Create, Action.Update, Action.Delete, Action.Read], Invoice);
@@ -53,23 +53,24 @@ export class AbilityFactory {
         can(Action.Read, Schedule);
         can([Action.Read, Action.Update, Action.Delete], Invoice);
         cannot<ScheduleBrigadier>(Action.Read, Schedule, { 'brigadier.userId': { $ne: user.id } }).because(
-          'You are not allowed to view this schedule.',
+          'У вас нет прав на просмотр этой истории работы.',
         );
         cannot<RequestBrigadier>(Action.Read, Request, { 'brigadier.userId': { $ne: user.id } }).because(
-          'You are not allowed to view this request.',
+          'У вас нет прав на просмотр этой заявки.',
         );
         cannot<RequestBrigadier>(Action.Update, Request, { 'brigadier.userId': { $ne: user.id } }).because(
-          'You are not allowed to update this request.',
+          'У вас нет прав на обновление этой заявки.',
         );
         cannot(Action.Update, Brigadier, { id: { $ne: user.brigadier?.id } }).because(
-          'You are not allowed to update other brigadiers.',
+          'У вас нет прав на просмотр данных об этом бригадире.',
         );
         cannot<InvoiceCustomer>([Action.Read, Action.Update, Action.Delete], Invoice, {
           'customer.userId': { $ne: user.id },
-        }).because('You are not allowed to manage this invoice.');
-        cannot(Action.Update, User, { id: { $ne: user.id } }).because('You are not allowed to update other users.');
-        cannot(Action.ManageAccess, User).because('You are not admin');
-
+        }).because('У вас нет прав на управление этим счетом');
+        cannot(Action.Update, User, { id: { $ne: user.id } }).because(
+          'У вас нет прав на редактирование других пользователей.',
+        );
+        cannot(Action.ManageAccess, User).because('Необходимы права администратора');
         break;
       }
       default: {

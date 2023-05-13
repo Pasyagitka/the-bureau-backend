@@ -60,7 +60,6 @@ export class AuthService {
         id: user.brigadier?.id,
       },
     };
-    //console.log('payload', payload);
     return {
       access_token: this.jwtService.sign(payload),
     };

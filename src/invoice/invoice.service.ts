@@ -276,7 +276,7 @@ export class InvoiceService {
     });
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_DAY_AT_NOON)
   async findExpired() {
     return await this.dataSource.transaction(async (transaction) => {
       const maxDate = dayjs().subtract(5, 'days').startOf('day').toDate();
