@@ -185,7 +185,7 @@ export class InvoiceService {
 
   async uploadScan(id: number, file: Express.Multer.File) {
     return await this.dataSource.transaction(async (transaction) => {
-      const invoice = await this.invoiceRepository.findOne({ where: { id } });
+      const invoice = await this.invoiceRepository.findOne({ where: { id }, relations: { items: true } });
       if (!invoice) throw new NotExistsError('счет');
 
       const uploadResult = await this.cloudinary
