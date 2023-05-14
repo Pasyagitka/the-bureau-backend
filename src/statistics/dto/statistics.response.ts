@@ -11,11 +11,14 @@ export class StatisticsResponseDto {
 }
 
 @Exclude()
-export class RequestStatisticsResponseDto {
+export class LabelStatisticsResponseDto {
   @Expose()
   count: number;
 
-  constructor(partial: Partial<RequestStatisticsResponseDto>) {
+  @Expose()
+  label: string;
+
+  constructor(partial: Partial<LabelStatisticsResponseDto>) {
     Object.assign(this, partial);
   }
 }

@@ -194,6 +194,4 @@ export class InvoiceController {
   async uploadReceipt(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req) {
     return await this.invoiceService.uploadReceipt(+id, file, req.user);
   }
-
-  
 }
