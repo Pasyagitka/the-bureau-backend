@@ -70,7 +70,7 @@ export class StatisticsController {
     200: StatisticsResponseDto,
     500: ErrorMessageResponseDto,
   })
-  @Get('installed-equipment')
+  @Get('equipment/installed')
   async getInstalledEquipmentCount(@Query() query: StatisticsQuery) {
     return new StatisticsResponseDto(await this.statisticsService.getEquipmentCount(query));
   }
@@ -79,7 +79,7 @@ export class StatisticsController {
     200: [LabelStatisticsResponseDto],
     500: ErrorMessageResponseDto,
   })
-  @Get('accessories-sold')
+  @Get('accessories/sold')
   async getSoldAccessoriesStatistics(@Query() query: StatisticsQuery) {
     const res = await this.statisticsService.getSoldAccessoriesStatistics(query);
     return res.map((i) => new LabelStatisticsResponseDto(i));
