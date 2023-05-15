@@ -16,7 +16,7 @@ async function bootstrap() {
 
 export function setupApp(app: INestApplication) {
   const reflector = app.get(Reflector);
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  //app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

@@ -81,7 +81,7 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    this.eventEmitter.emit('user.created', new RegisterUserEvent({ email: createClientDto.email, activationLink }));
+    //.eventEmitter.emit('user.created', new RegisterUserEvent({ email: createClientDto.email, activationLink }));
 
     this.loginWithCredentials(createClientDto);
   }
