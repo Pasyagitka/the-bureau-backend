@@ -12,7 +12,7 @@ import { RecommendedBrigadierResponseDto } from './dto/recommended-brigadier-res
 import { RecommendedQuery } from './dto/recommended-query.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
-import { FileUpload } from 'src/common/decorators/file-upload.decorator';
+import { FileUpload } from '../common/decorators/file-upload.decorator';
 
 @ApiAuth()
 @ApiTags('Brigadiers')

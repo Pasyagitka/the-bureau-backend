@@ -14,10 +14,7 @@ import { RegisterResponseDto } from './dto/register-response.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserInfoResponseDto } from './dto/user-info-response.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { Action } from 'rxjs/internal/scheduler/Action';
-import { CheckAbilities } from 'src/ability/decorators/abilities.decorator';
-import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
-import { User } from 'src/user/entities/user.entity';
+import { ChangePasswordDto } from '../user/dto/change-password.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')

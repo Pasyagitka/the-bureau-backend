@@ -1,5 +1,5 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { Brigadier } from 'src/brigadier/entities/brigadier.entity';
+import { Brigadier } from '../../brigadier/entities/brigadier.entity';
 
 @Exclude()
 export class InvoiceResponseDto {

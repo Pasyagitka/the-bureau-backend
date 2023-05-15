@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Accessory } from 'src/accessory/entities/accessory.entity';
-import { Client } from 'src/client/entities/client.entity';
-import { Equipment } from 'src/equipment/entities/equipment.entity';
-import { Stage } from 'src/stage/entities/stage.entity';
-import { Tool } from 'src/tool/entities/tool.entity';
+import { Client } from '../client/entities/client.entity';
+import { Equipment } from '../equipment/entities/equipment.entity';
+import { Stage } from '../stage/entities/stage.entity';
+import { Tool } from '../tool/entities/tool.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { RequestEquipment } from './entities/request-equipment.entity';
@@ -15,7 +14,8 @@ export class RequestRepository extends Repository<Request> {
     super(Request, dataSource.createEntityManager());
   }
 
-  async getFullRequest() { //TODO rewrite query
+  async getFullRequest() {
+    //TODO rewrite query
     return (
       this.dataSource
         .createQueryBuilder()

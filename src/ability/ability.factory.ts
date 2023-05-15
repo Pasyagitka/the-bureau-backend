@@ -11,7 +11,7 @@ import { Action, AppAbility, Subjects } from './types';
 import { Accessory } from '../accessory/entities/accessory.entity';
 import { RequestReport } from '../request-report/entities/request-report.entity';
 import { Invoice } from '../invoice/entities/invoice.entity';
-import { Stage } from 'src/stage/entities/stage.entity';
+import { Stage } from '../stage/entities/stage.entity';
 
 type RequestBrigadier = Request & {
   'brigadier.userId': Request['brigadier']['userId'];

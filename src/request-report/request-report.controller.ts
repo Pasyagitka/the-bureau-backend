@@ -11,7 +11,7 @@ import { Req, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RequestReport } from './entities/request-report.entity';
 import { Request } from '../request/entities/request.entity';
-import { FilesUpload } from 'src/common/decorators/files-upload.decorator';
+import { FilesUpload } from '../common/decorators/files-upload.decorator';
 
 @ApiAuth()
 @ApiTags('Request Report')
