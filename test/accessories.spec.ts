@@ -9,17 +9,20 @@ describe('Accessory', () => {
   let accessToken: string;
 
   const testAccessory = {
-    sku: '12345',
-    name: 'accessory',
+    sku: 'string',
+    name: 'string',
     equipmentId: 1,
-    price: 10,
+    price: '2.90',
+    quantity: 0,
   };
 
   const expectedAccessory = {
     id: expect.any(Number),
     sku: expect.any(String),
     name: expect.any(String),
-    price: expect.any(Number),
+    price: expect.any(String),
+    quantity_in_stock: expect.any(Number),
+    quantity_reserved: expect.any(Number),
     equipment: {
       id: expect.any(Number),
       mounting: expect.any(String),
@@ -60,8 +63,14 @@ describe('Accessory', () => {
       .post('/api/accessory')
       .send(testAccessory)
       .set('Authorization', `Bearer ${accessToken}`);
-    expect(req.status).toBe(200);
-    expect(req.body).toEqual(expectedAccessory);
+    expect(req.status).toBe(201);
+    expect(req.body).toEqual({
+      ...expectedAccessory,
+      sku: 'string',
+      name: 'string',
+      price: '2.90',
+      quantity_in_stock: 0,
+    });
   });
 
   it(`/GET accessory`, async () => {
