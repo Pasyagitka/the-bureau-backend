@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
+import { getToken } from './helpers';
 
 describe('Accessory', () => {
   let app: INestApplication;
@@ -36,13 +37,6 @@ describe('Accessory', () => {
     }).compile();
     app = moduleRef.createNestApplication();
 
-    const getToken = async (app): Promise<string> => {
-      const authData = await request(app.getHttpServer()).post('/api/auth/login').send({
-        login: 'admin',
-        password: 'admin',
-      });
-      return authData.body.access_token;
-    };
     setupApp(app);
     await app.init();
     accessToken = await getToken(app);

@@ -3,6 +3,7 @@ import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
+import { getToken } from './helpers';
 
 describe('Equipment', () => {
   let app: INestApplication;
@@ -15,20 +16,9 @@ describe('Equipment', () => {
     }).compile();
     app = moduleRef.createNestApplication();
 
-    const getToken = async (): Promise<string> => {
-      const authData = await request(app.getHttpServer()).post('/api/auth/login').send({
-        login: 'admin',
-        password: 'admin',
-      });
-      return authData.body.access_token;
-    };
     setupApp(app);
     await app.init();
-    accessToken = await getToken();
-  });
-
-  afterAll(async () => {
-    await app.close();
+    accessToken = await getToken(app);
   });
 
   it('should create an equipment', async () => {
@@ -93,5 +83,9 @@ describe('Equipment', () => {
       .set('Authorization', `Bearer ${accessToken}`);
 
     expect(response.status).toBe(200);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

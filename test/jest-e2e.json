@@ -1,3 +1,9 @@
 {
-  "testMatch": ["**/accessories.spec.ts"]
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": "tools.spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
 }

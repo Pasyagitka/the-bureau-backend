@@ -21,7 +21,7 @@ export class MailService {
                   `,
       });
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       //throw new BadRequestException(err.message); TODO филтьтр не ловит
     }
   }
