@@ -16,7 +16,6 @@ import {
 } from '../common/exceptions';
 import { UserService } from '../user/user.service';
 import { ConfirmResetPasswordEvent } from './events/confirm-reset.event';
-import { RegisterUserEvent } from './events/register-user.event';
 import { ResetPasswordEvent } from './events/reset-password.event';
 import { ChangePasswordDto } from '../user/dto/change-password.dto';
 import { Repository } from 'typeorm';

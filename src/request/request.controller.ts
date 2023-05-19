@@ -19,13 +19,19 @@ import { UpdateRequestByBrigadierDto } from './dto/update-request-by-brigadier.d
 import { Request } from './entities/request.entity';
 import { RequestRepository } from './request.repository';
 import { RequestService } from './request.service';
+import { MailService } from '../common/mail/mail.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 //TODO manage app routes
 @ApiAuth()
 @ApiTags('Requests')
 @Controller('request')
 export class RequestController {
-  constructor(private readonly requestService: RequestService, private readonly requestRep: RequestRepository) {}
+  constructor(
+    private readonly requestService: RequestService,
+    private readonly requestRep: RequestRepository,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   @ApiResponses({
     201: RequestResponseDto,
@@ -199,7 +205,7 @@ export class RequestController {
     500: ErrorMessageResponseDto,
   })
   @ApiOperation({
-    summary: 'Update request status (InProcessing, Completed) (brigadier)',
+    summary: 'Update request status (Accepted, Completed) (brigadier)',
   })
   @Patch('brigadier/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
@@ -208,7 +214,13 @@ export class RequestController {
     @Body() updateRequestStatusDto: UpdateRequestByBrigadierDto,
     @Req() req,
   ) {
-    return new RequestResponseDto(await this.requestService.updateByBrigadier(+id, updateRequestStatusDto, req.user));
+    const res = await this.requestService.updateByBrigadier(+id, updateRequestStatusDto, req.user);
+    this.eventEmitter.emit('request.statusChanged', {
+      email: res.client.user.email,
+      address: res.address,
+      status: res.status,
+    });
+    return new RequestResponseDto(res);
   }
 
   //TODO email при смене статуса
@@ -222,6 +234,15 @@ export class RequestController {
   @Patch('admin/:id')
   @CheckAbilities({ action: Action.Update, subject: Request })
   async updateByAdmin(@Param('id') id: string, @Body() updateRequestBrigadierDto: UpdateRequestByAdminDto) {
-    return new RequestResponseDto(await this.requestService.updateByAdmin(+id, updateRequestBrigadierDto));
+    const res = await this.requestService.updateByAdmin(+id, updateRequestBrigadierDto);
+    if (updateRequestBrigadierDto.brigadier) {
+      this.eventEmitter.emit('request.brigadierChanged', {
+        email: res.brigadierEmail,
+        address: `${res.address?.city || ''}, ул.${res.address?.street || ''}, дом ${res.address?.house || ''} ${
+          res.address?.flat || ''
+        }`,
+      });
+    }
+    return new RequestResponseDto(res);
   }
 }

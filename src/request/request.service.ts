@@ -250,12 +250,15 @@ export class RequestService {
     const request = await this.get(id);
     if (!request) throw new NotExistsError('request');
 
+    let newBrigadier = null;
+
     if (updateBrigadierDto.brigadier !== undefined) {
       if (updateBrigadierDto.brigadier === null) {
         request.brigadier = null;
       } else {
-        const newBrigadier = await this.brigadierRepository.findOne({
+        newBrigadier = await this.brigadierRepository.findOne({
           where: { id: updateBrigadierDto.brigadier },
+          relations: ['user'],
         });
         if (!newBrigadier) throw new NotExistsError('brigadier');
         request.brigadier = newBrigadier;
@@ -265,7 +268,7 @@ export class RequestService {
     request.mountingDate = updateBrigadierDto.mountingDate;
     const res = await this.requestRepository.save(request);
 
-    return res;
+    return { ...res, brigadierEmail: newBrigadier?.user.email };
   }
 
   async getClientRequests(clientId: number, user: User) {
