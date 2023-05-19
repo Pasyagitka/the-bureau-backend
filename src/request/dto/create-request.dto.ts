@@ -12,6 +12,7 @@ import {
   MinDate,
   ValidateNested,
 } from 'class-validator';
+import * as dayjs from 'dayjs';
 
 class RequestEquipmentDto {
   @IsNumber()
@@ -26,19 +27,19 @@ class RequestEquipmentDto {
 }
 
 class AddressDto {
-  @IsString()
-  @MaxLength(50)
-  @IsNotEmpty()
+  @IsString({ message: 'Название города должно быть строкой.' })
+  @MaxLength(50, { message: 'Длина названия города должна быть до $constraint1 символов.' })
+  @IsNotEmpty({ message: 'Укажите город.' })
   city: string;
 
-  @IsString()
-  @MaxLength(50)
-  @IsNotEmpty()
+  @IsString({ message: 'Название улицы должно быть строкой.' })
+  @MaxLength(50, { message: 'Длина названия улицы должна быть до $constraint1 символов.' })
+  @IsNotEmpty({ message: 'Укажите улицу.' })
   street: string;
 
-  @IsString()
-  @MaxLength(50)
-  @IsNotEmpty()
+  @IsString({ message: 'Номер дома должен быть строкой.' })
+  @MaxLength(50, { message: 'Длина номера дома должна быть до $constraint1 символов.' })
+  @IsNotEmpty({ message: 'Укажите номер дома.' })
   house: string;
 
   @IsOptional()
@@ -60,8 +61,8 @@ class AddressDto {
 export class CreateRequestDto {
   @Transform(({ value }) => value && new Date(value))
   @IsDate()
-  @MinDate(new Date())
-  @IsNotEmpty()
+  @MinDate(dayjs().subtract(1, 'day').endOf('day').toDate(), { message: 'Недопустимая дата монтажа.' })
+  @IsNotEmpty({ message: 'Укажите дату монтажа.' })
   mountingDate: Date;
 
   @IsOptional()
@@ -74,7 +75,7 @@ export class CreateRequestDto {
   @IsPositive()
   stage: number;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Адрес.' })
   @Type(() => AddressDto)
   @ValidateNested()
   address: AddressDto;
