@@ -1,5 +1,5 @@
 import { MailerModule } from '@nestjs-modules/mailer';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -41,7 +41,16 @@ import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({ ...configService.get('database') }),
-      dataSourceFactory: async (options) => new DataSource(options).initialize(),
+      dataSourceFactory: async (options) => {
+        const appDataSource = new DataSource(options);
+        try {
+          await appDataSource.initialize();
+          console.log('Data Source has been initialized!');
+          return appDataSource;
+        } catch (e) {
+          console.error('Error during Data Source initialization');
+        }
+      },
     }),
     MailerModule.forRootAsync({
       inject: [ConfigService],

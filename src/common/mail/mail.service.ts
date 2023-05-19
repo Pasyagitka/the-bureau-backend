@@ -7,23 +7,18 @@ export class MailService {
 
   async sendActivationMail(to: string, activationLink: string) {
     const link = `${process.env.API_URL}/auth/activate/${activationLink}`;
-    try {
-      await this.mailerService.sendMail({
-        from: process.env.EMAIL_USERNAME,
-        to,
-        subject: `Activate your account on ${process.env.API_NAME}`,
-        text: 'Thank you for joining us.',
-        html: `
+    await this.mailerService.sendMail({
+      from: process.env.EMAIL_USERNAME,
+      to,
+      subject: `Активируйте свой аккаунт на ${process.env.API_NAME}`,
+      text: 'Спасибо за регистрацию',
+      html: `
                       <div>
-                          <h1>Click the link:</h1>
+                          <h1>Перейдите по ссылке:</h1>
                           <a href="${link}">${link}</a>
                       </div>
                   `,
-      });
-    } catch (err) {
-      //console.log(err);
-      //throw new BadRequestException(err.message); TODO филтьтр не ловит
-    }
+    });
   }
 
   async sendResetPasswordEmail(to: string, login: string, resetPasswordLink: string, password: string) {
@@ -31,12 +26,12 @@ export class MailService {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
-      subject: `Reset your password on ${process.env.API_NAME}`,
+      subject: `Сбросить пароль ${process.env.API_NAME}`,
       text: '',
       html: `
                     <div>
-                        <h1>Confrim:</h1>
-                        <span>Your temporary password: ${password}</span>
+                        <h1>Подтвердить:</h1>
+                        <span>Ваш временный пароль: ${password}</span>
                         <a href="${link}">${link}</a>
                     </div>
                 `,
@@ -47,11 +42,53 @@ export class MailService {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
-      subject: `Your account on ${process.env.API_NAME} is deactivated now`,
+      subject: `Ваш аккаунт на ${process.env.API_NAME} деактивирован`,
       text: '',
       html: `
                 <div>
-                    <span>This is a confirmation that your account has just been deactivated.</span>
+                    <span>Ваш аккаунт деактивирован. Свяжитесь с администратором</span>
+                </div>
+                `,
+    });
+  }
+
+  async sendAccountActivated(to: string) {
+    await this.mailerService.sendMail({
+      from: process.env.EMAIL_USERNAME,
+      to,
+      subject: `Ваш аккаунт на ${process.env.API_NAME} активирован`,
+      text: '',
+      html: `
+                <div>
+                    <span>Поздравляем! Ваш аккаунт активирован. Теперь вы можете войти</span>
+                </div>
+                `,
+    });
+  }
+
+  async sendRequestStatusChanged(to: string, address: string, status: string) {
+    await this.mailerService.sendMail({
+      from: process.env.EMAIL_USERNAME,
+      to,
+      subject: `Статус вашей заявки на ${process.env.API_NAME} изменен`,
+      text: '',
+      html: `
+                <div>
+                    <span>Статус вашей заявки на монтаж на ${address} изменен на ${status}</span>
+                </div>
+                `,
+    });
+  }
+
+  async sendBrigadierChanged(to: string, address: string) {
+    await this.mailerService.sendMail({
+      from: process.env.EMAIL_USERNAME,
+      to,
+      subject: `Вам назначена новая заявка на ${process.env.API_NAME}`,
+      text: '',
+      html: `
+                <div>
+                    <span>Вам назначена новая заявка на монтаж (${address})</span>
                 </div>
                 `,
     });
@@ -61,10 +98,10 @@ export class MailService {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
-      subject: `Your ${process.env.API_NAME} password has been changed`,
+      subject: `Ваш пароль на ${process.env.API_NAME} изменен`,
       html: `
                     <div>
-                        <span>This is a confirmation that the password for your account has just been changed.</span>
+                        <span>Уведомление о том, что ваш пароль изменен.</span>
                     </div>
                 `,
     });
