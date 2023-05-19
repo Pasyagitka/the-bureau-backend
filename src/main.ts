@@ -6,10 +6,15 @@ import { AbilityFactory } from './ability/ability.factory';
 import { AbilitiesGuard } from './ability/guards/abilities.guard';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import * as fs from 'fs';
 
 async function bootstrap() {
   //TODO move logger creating here (reconfigure winston)
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    key: fs.readFileSync(__dirname + '/../cert/cert.key'),
+    cert: fs.readFileSync(__dirname + '/../cert/cert.crt'),
+  };
+  const app = await NestFactory.create(AppModule, { httpsOptions });
   setupApp(app);
   await app.listen(process.env.PORT);
 }
