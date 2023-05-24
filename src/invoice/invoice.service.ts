@@ -192,13 +192,10 @@ export class InvoiceService {
         .uploadImage(file, {
           folder: `invoiceScans/`,
           overwrite: true,
-          resource_type: 'image',
           public_id: id,
         })
-        .catch(() => {
-          throw new BadRequestException(
-            'Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...',
-          );
+        .catch((e) => {
+          throw new BadRequestException('Произошла ошибка при попытке загрузить файл. Попробуйте снова позже...');
         });
 
       const invoiceAccessories = await this.accessoryRepository.find({

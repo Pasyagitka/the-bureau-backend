@@ -11,6 +11,8 @@ import {
   Delete,
   Patch,
   UploadedFile,
+  ParseFilePipe,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -178,7 +180,15 @@ export class InvoiceController {
   @Patch(':id/upload-scan')
   @FileUpload()
   @CheckAbilities({ action: Action.Update, subject: Invoice })
-  async uploadScan(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
+  async uploadScan(
+    @Param('id') id: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'application/pdf' })],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
     return await this.invoiceService.uploadScan(+id, file);
   }
 
