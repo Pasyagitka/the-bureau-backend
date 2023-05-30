@@ -184,7 +184,7 @@ export class InvoiceController {
     @Param('id') id: number,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'application/pdf' })],
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg|pdf)' })],
       }),
     )
     file: Express.Multer.File,

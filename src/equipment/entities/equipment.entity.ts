@@ -14,8 +14,8 @@ export class Equipment {
   type: string;
 
   @OneToMany(() => Accessory, (accessory) => accessory.equipment, {
-    cascade: true,
-    onDelete: 'CASCADE',
+    // cascade: true,
+    // onDelete: 'CASCADE',
   })
   accessories: Accessory[];
 
@@ -27,8 +27,8 @@ export class Equipment {
   mounting: Mounting;
 
   @OneToMany(() => RequestEquipment, (requestEquipment) => requestEquipment.equipment, {
-    cascade: true,
-    onDelete: 'CASCADE',
+    // cascade: true,
+    // onDelete: 'CASCADE',
   })
   requestEquipment: RequestEquipment[];
 

@@ -9,10 +9,10 @@ export class RequestReport {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
   id: number;
 
-  @Column('text', { name: 'public_id', nullable: true })
+  @Column('text', { name: 'mediaId', nullable: true })
   public_id: string;
 
-  @Column('text', { name: 'url' })
+  @Column('text', { name: 'mediaUrl' })
   url: string;
 
   @ManyToOne(() => Request, (request) => request.reports)

@@ -45,9 +45,7 @@ export class Accessory {
   @Column('integer', { name: 'quantity_reserved', default: () => '0' })
   quantity_reserved: number;
 
-  @OneToMany(() => InvoiceItem, (invoiceItem) => invoiceItem.accessory, {
-    cascade: true,
-  })
+  @OneToMany(() => InvoiceItem, (invoiceItem) => invoiceItem.accessory)
   invoiceItems: InvoiceItem[];
 
   @Exclude()

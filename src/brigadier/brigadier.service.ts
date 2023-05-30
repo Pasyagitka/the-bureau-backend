@@ -41,8 +41,10 @@ export class BrigadierService {
       from
         (select 
           b.*
-        from brigadier b 
+        from brigadier b
+        left join "user" u on b."userId"  = u.id
         left join (select * from request where "mountingDate" = $1) r on r."brigadierId" = b.id
+        where u."isActivated"  = true
           group by b.id having count(r.id) = 0) as available_brigadiers 
       left join request r on r."brigadierId" = available_brigadiers.id
       group by available_brigadiers.id, available_brigadiers.surname, available_brigadiers.firstname, available_brigadiers.patronymic

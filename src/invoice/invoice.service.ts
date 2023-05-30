@@ -214,7 +214,7 @@ export class InvoiceService {
   }
 
   async uploadReceipt(id: number, file: Express.Multer.File, user: User) {
-    const invoice = await this.invoiceRepository.findOne({ where: { id } });
+    const invoice = await this.invoiceRepository.findOne({ where: { id }, relations: ['customer'] });
     if (!invoice) throw new NotExistsError('счет');
 
     const ability = this.abilityFactory.defineAbility(user);

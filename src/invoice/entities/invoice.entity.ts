@@ -42,7 +42,7 @@ export class Invoice {
   })
   status: InvoiceStatus;
 
-  @Column('text', { name: 'url', nullable: true })
+  @Column('text', { name: 'receiptUrl', nullable: true })
   receiptUrl: string;
 
   @Column('text', { name: 'scanUrl', nullable: true })
