@@ -1,9 +1,9 @@
-import * as request from 'supertest';
+import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
-import { getToken } from './helpers';
+import { delay, getToken } from './helpers';
 
 describe('Accessory', () => {
   let app: INestApplication;
@@ -40,6 +40,10 @@ describe('Accessory', () => {
     setupApp(app);
     await app.init();
     accessToken = await getToken(app);
+  });
+
+  afterEach(async () => {
+    await delay(500);
   });
 
   it(`/GET accessories`, () => {

@@ -19,7 +19,9 @@ async function bootstrap() {
   //const app = await NestFactory.create(AppModule, { httpsOptions });
   const app = await NestFactory.create(AppModule);
   setupApp(app);
-  await app.listen(process.env.PORT);
+  if (!module.parent) {
+    await app.listen(process.env.PORT || 3000);
+  }
 }
 
 export function setupApp(app: INestApplication) {

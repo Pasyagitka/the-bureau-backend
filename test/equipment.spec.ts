@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
+import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
-import { getToken } from './helpers';
+import { delay, getToken } from './helpers';
 
 describe('Equipment', () => {
   let app: INestApplication;
@@ -19,6 +19,10 @@ describe('Equipment', () => {
     setupApp(app);
     await app.init();
     accessToken = await getToken(app);
+  });
+
+  afterEach(async () => {
+    await delay(500);
   });
 
   it('should create an equipment', async () => {

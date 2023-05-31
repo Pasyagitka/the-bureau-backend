@@ -18,7 +18,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { InvoiceStatus } from './types/invoice-status.enum';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class InvoiceService {

@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
+import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
-import { getToken } from './helpers';
+import { delay, getToken } from './helpers';
 
 describe('Tool', () => {
   let app: INestApplication;
@@ -21,13 +21,17 @@ describe('Tool', () => {
     accessToken = await getToken(app);
   });
 
+  afterEach(async () => {
+    await delay(500);
+  });
+
   afterAll(async () => {
     await app.close();
   });
 
   it('should create a tool', async () => {
     const newTool = {
-      name: 'newTool',
+      name: 'newTool22',
       stageId: 2,
     };
 
@@ -39,7 +43,7 @@ describe('Tool', () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
       id: expect.any(Number),
-      name: 'newTool',
+      name: 'newTool22',
       stage: {
         id: expect.any(Number),
         stage: expect.any(String),
