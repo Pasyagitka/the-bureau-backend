@@ -48,7 +48,6 @@
     "dayjs": "^1.11.7",
     "express-session": "^1.17.3",
     "generate-password": "^1.7.0",
-    "jest-extended": "^3.2.4",
     "json5": "^2.2.3",
     "jsonwebtoken": "^9.0.0",
     "nest-winston": "^1.8.0",
@@ -85,6 +84,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "jest-extended": "^3.2.4",
     "prettier": "^2.8.3",
     "source-map-support": "^0.5.20",
     "supertest": "^6.3.3",
@@ -95,6 +95,7 @@
     "typescript": "^4.7.4"
   },
   "jest": {
+    "setupFilesAfterEnv": ["jest-extended/all"],
     "moduleFileExtensions": [
       "js",
       "json",
@@ -113,7 +114,9 @@
       "!**/coverage/**",
       "!**ormconfig.ts/**",
       "!**.eslintrc.js/**",
-      "!**/common/validators/**"
+      "!**/common/validators/**",
+      "!**/common/mail/**",
+      "!**/auth/**"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",

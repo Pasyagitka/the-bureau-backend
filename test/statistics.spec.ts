@@ -36,6 +36,7 @@ describe('Statistics', () => {
     const req = request(app.getHttpServer())
       .get('/api/statistics/brigadier/top')
       .set('Authorization', `Bearer ${accessToken}`)
+      .query({ month: "2023-06" })
       .expect(200);
     return req;
   });
@@ -52,14 +53,16 @@ describe('Statistics', () => {
     const req = request(app.getHttpServer())
       .get('/api/statistics/request')
       .set('Authorization', `Bearer ${accessToken}`)
+      .query({ month: "2023-06" })
       .expect(200);
     return req;
   });
 
   it(`/GET invoice statistics`, () => {
     const req = request(app.getHttpServer())
-      .get('/api/statistics/request')
+      .get('/api/statistics/invoice')
       .set('Authorization', `Bearer ${accessToken}`)
+      .query({ month: "2023-06" })
       .expect(200);
     return req;
   });
@@ -68,6 +71,7 @@ describe('Statistics', () => {
     const req = request(app.getHttpServer())
       .get('/api/statistics/equipment/installed')
       .set('Authorization', `Bearer ${accessToken}`)
+      .query({ month: "2023-06" })
       .expect(200);
     return req;
   });
@@ -76,6 +80,7 @@ describe('Statistics', () => {
     const req = request(app.getHttpServer())
       .get('/api/statistics/accessories/sold')
       .set('Authorization', `Bearer ${accessToken}`)
+      .query({ month: "2023-06" })
       .expect(200);
     return req;
   });

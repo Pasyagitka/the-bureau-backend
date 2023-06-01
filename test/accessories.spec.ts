@@ -8,6 +8,7 @@ import { delay, getToken } from './helpers';
 describe('Accessory', () => {
   let app: INestApplication;
   let accessToken: string;
+  let maxAccessoryId: number;
 
   const testAccessory = {
     sku: 'string',
@@ -69,12 +70,13 @@ describe('Accessory', () => {
       price: '2.90',
       quantity_in_stock: 0,
     });
+    maxAccessoryId = req.body.id;
   });
 
   it(`/GET accessory`, async () => {
     expect.assertions(2);
     const req = await request(app.getHttpServer())
-      .get('/api/accessory/1')
+      .get(`/api/accessory/${maxAccessoryId}`)
       .set('Authorization', `Bearer ${accessToken}`);
     expect(req.status).toBe(200);
     expect(req.body).toEqual(expectedAccessory);
