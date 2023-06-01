@@ -18,7 +18,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { InvoiceStatus } from './types/invoice-status.enum';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class InvoiceService {
@@ -73,7 +73,7 @@ export class InvoiceService {
     });
   }
 
-  async getForBrigadier(customerId: number, query: PaginatedQuery) {
+  async getForBrigadier(customerId: number, query: PaginatedQuery, user: User) {
     const invoices = await this.invoiceRepository.findAndCount({
       where: {
         customer: {
@@ -85,6 +85,8 @@ export class InvoiceService {
       skip: query.offset,
       take: query.limit,
     });
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, invoices[0][0]);
     return invoices;
   }
 

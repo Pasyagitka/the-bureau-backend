@@ -1,16 +1,11 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { CheckAbilities } from '../ability/decorators/abilities.decorator';
-import { Action } from '../ability/types';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
 import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { ApiAuth } from '../common/decorators/auth.decorator';
 import { RequestReportResponseDto } from './dto/request-report.response.dto';
 import { RequestReportService } from './request-report.service';
-import { Req, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { RequestReport } from './entities/request-report.entity';
-import { Request } from '../request/entities/request.entity';
+import { Req, UploadedFiles } from '@nestjs/common/decorators';
 import { FilesUpload } from '../common/decorators/files-upload.decorator';
 
 @ApiAuth()

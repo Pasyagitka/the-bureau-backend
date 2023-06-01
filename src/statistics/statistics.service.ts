@@ -7,7 +7,7 @@ import { Request } from '../request/entities/request.entity';
 import { RequestStatus } from '../request/types/request-status.enum';
 import { StatisticsQuery } from './dto/statistics.query.dto';
 import { DataSource } from 'typeorm';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { InvoiceStatus } from '../invoice/types/invoice-status.enum';
 import { Invoice } from '../invoice/entities/invoice.entity';
 import { RequestEquipment } from '../request/entities/request-equipment.entity';

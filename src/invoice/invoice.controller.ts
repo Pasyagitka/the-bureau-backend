@@ -73,8 +73,8 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Get invoices for brigadier (paginated)' })
   @Get('brigadier/:brigadierId')
   @CheckAbilities({ action: Action.Read, subject: Invoice }) //TODO add permissions check CASL
-  async getForBrigadier(@Param('brigadierId') brigadierId: number, @Query() query: PaginatedQuery) {
-    const [data, total] = await this.invoiceService.getForBrigadier(brigadierId, query);
+  async getForBrigadier(@Param('brigadierId') brigadierId: number, @Query() query: PaginatedQuery, @Req() req) {
+    const [data, total] = await this.invoiceService.getForBrigadier(brigadierId, query, req.user);
     return {
       data: data.map((i) => new InvoiceResponseDto(i)),
       total,

@@ -12,7 +12,7 @@ import {
   MinDate,
   ValidateNested,
 } from 'class-validator';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 class RequestEquipmentDto {
   @IsNumber()

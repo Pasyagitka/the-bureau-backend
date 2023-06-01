@@ -1,13 +1,14 @@
-import * as request from 'supertest';
+import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
-import { getToken } from './helpers';
+import { delay, getToken } from './helpers';
 
 describe('Accessory', () => {
   let app: INestApplication;
   let accessToken: string;
+  let maxAccessoryId: number;
 
   const testAccessory = {
     sku: 'string',
@@ -42,6 +43,10 @@ describe('Accessory', () => {
     accessToken = await getToken(app);
   });
 
+  afterEach(async () => {
+    await delay(500);
+  });
+
   it(`/GET accessories`, () => {
     const req = request(app.getHttpServer())
       .get('/api/accessory')
@@ -65,12 +70,13 @@ describe('Accessory', () => {
       price: '2.90',
       quantity_in_stock: 0,
     });
+    maxAccessoryId = req.body.id;
   });
 
   it(`/GET accessory`, async () => {
     expect.assertions(2);
     const req = await request(app.getHttpServer())
-      .get('/api/accessory/1')
+      .get(`/api/accessory/${maxAccessoryId}`)
       .set('Authorization', `Bearer ${accessToken}`);
     expect(req.status).toBe(200);
     expect(req.body).toEqual(expectedAccessory);

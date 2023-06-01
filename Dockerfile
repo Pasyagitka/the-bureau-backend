@@ -37,6 +37,4 @@ FROM node:16.17.1 As production
 COPY --chown=node:node --from=build /usr/src/api/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/api/dist ./dist
 
-RUN npm run build
-
-CMD [ "node", "dist/main.js" ]
+CMD [ "node", "dist/src/main.js" ]
