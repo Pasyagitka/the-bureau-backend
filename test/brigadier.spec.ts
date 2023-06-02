@@ -4,6 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/main';
 import { delay, getToken } from './helpers';
+import dayjs from 'dayjs';
 
 describe('Brigadier', () => {
   let app: INestApplication;
@@ -56,6 +57,15 @@ describe('Brigadier', () => {
       .set('Authorization', `Bearer ${accessToken}`);
     expect(req.status).toBe(200);
     expect(req.body).toEqual(expectedBrigadier);
+  });
+
+  it(`/GET recommended brigadiers`, async () => {
+    expect.assertions(2);
+    const req = await request(app.getHttpServer())
+      .get('/api/brigadier/recommended')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .query({ date: dayjs().toDate() });
+    expect(req.status).toBe(200);
   });
 
   it('/GET brigadiers (unauthorized)', async () => {

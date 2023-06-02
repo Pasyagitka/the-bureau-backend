@@ -10,7 +10,8 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
+    "incremental": false,
+    "noEmit": false,
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
@@ -19,5 +20,5 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true
   }, 
-  "files": ["global.d.ts"]
+  //"files": ["global.d.ts"]
 }

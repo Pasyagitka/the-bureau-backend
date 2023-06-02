@@ -51,7 +51,7 @@ describe('Accessory', () => {
     const req = request(app.getHttpServer())
       .get('/api/accessory')
       .set('Authorization', `Bearer ${accessToken}`)
-      .query({ limit: 10, offset: 0 })
+      .query({ limit: 10, offset: 0, equipmentId: '1,2,3,4', search: 'Пресс-муфта' })
       .expect(200);
     return req;
   });
