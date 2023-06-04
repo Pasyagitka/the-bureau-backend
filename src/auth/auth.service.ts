@@ -96,13 +96,14 @@ export class AuthService {
     }
     const hashPassword = await bcrypt.hash(brigadierUser.password, 3);
     const activationLink = uuid.v4();
-    await this.usersService.createBrigadier({
+    const createdBrigadier = await this.usersService.createBrigadier({
       ...brigadierUser,
       password: hashPassword,
       activationLink,
     });
     //this.eventEmitter.emit('user.created', new RegisterUserEvent({ email: brigadierUser.email, activationLink }));
-    this.loginWithCredentials(brigadierUser);
+    //this.loginWithCredentials(brigadierUser);
+    return createdBrigadier;
   }
 
   async activate(activationLink) {

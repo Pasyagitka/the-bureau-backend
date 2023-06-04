@@ -10,6 +10,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
+import { BrigadierModule } from '../brigadier/brigadier.module';
 
 @Module({
   controllers: [AuthController],
@@ -23,6 +24,7 @@ import { User } from '../user/entities/user.entity';
     }),
     TypeOrmModule.forFeature([User]),
     MailModule,
+    BrigadierModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

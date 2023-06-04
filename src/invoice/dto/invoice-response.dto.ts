@@ -22,6 +22,12 @@ export class InvoiceResponseDto {
   @Expose()
   scanUrl: string;
 
+  @Expose()
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
+
   constructor(partial: Partial<InvoiceResponseDto>) {
     Object.assign(this, partial);
   }

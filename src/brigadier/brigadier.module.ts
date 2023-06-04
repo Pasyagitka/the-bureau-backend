@@ -14,5 +14,6 @@ import { Brigadier } from './entities/brigadier.entity';
   imports: [TypeOrmModule.forFeature([User, Brigadier, Tool, Request, Schedule]), CloudinaryModule, AbilityModule],
   controllers: [BrigadierController],
   providers: [BrigadierService],
+  exports: [BrigadierService],
 })
 export class BrigadierModule {}

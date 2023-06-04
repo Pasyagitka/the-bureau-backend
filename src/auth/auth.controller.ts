@@ -1,4 +1,17 @@
-import { Body, Controller, Get, HttpCode, Param, Patch, Post, Req, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Req,
+  Request,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateBrigadierDto } from '../brigadier/dto/create-brigadier.dto';
 import { CreateClientDto } from '../client/dto/create-client.dto';
@@ -15,11 +28,14 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserInfoResponseDto } from './dto/user-info-response.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { ChangePasswordDto } from '../user/dto/change-password.dto';
+import { BrigadierService } from '../brigadier/brigadier.service';
+import { User } from 'src/user/entities/user.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly brigadierService: BrigadierService) {}
 
   //TODO add email account confirmation
   @ApiResponses({
@@ -54,8 +70,17 @@ export class AuthController {
   @HttpCode(200)
   @Public()
   @Post('brigadier/registration')
-  async registerBrigadier(@Body() registerUserDto: CreateBrigadierDto) {
-    return this.authService.registerBrigadier(registerUserDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async registerBrigadier(@UploadedFile() file: Express.Multer.File, @Body() registerUserDto: CreateBrigadierDto) {
+    const authRes = await this.authService.registerBrigadier(registerUserDto);
+    const userObject = {
+      id: authRes?.user?.id,
+      login: authRes?.user?.login,
+      role: authRes?.user?.role,
+      brigadier: { id: authRes?.id },
+    } as User;
+    await this.brigadierService.uploadAvatar(authRes?.id, file, userObject);
+    return authRes;
   }
 
   @ApiResponses({

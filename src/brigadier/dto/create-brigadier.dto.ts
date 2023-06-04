@@ -4,7 +4,7 @@ import { CreateUserDto } from '../../user/dto/create-user.dto';
 export class CreateBrigadierDto extends CreateUserDto {
   @IsNotEmpty({ message: 'Укажите имя.' })
   @IsString({ message: 'Имя должно быть строкой.' })
-  @Length(3, 30, { message: 'Длина имени должна быть от $constraint1 до $constraint2 символов.' })
+  @Length(2, 30, { message: 'Длина имени должна быть от $constraint1 до $constraint2 символов.' })
   firstname: string;
 
   @IsNotEmpty({ message: 'Укажите фамилию.' })

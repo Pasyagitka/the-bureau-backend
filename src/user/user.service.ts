@@ -1,5 +1,5 @@
 import { ForbiddenError } from '@casl/ability';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
@@ -14,7 +14,6 @@ import { AlreadyExistsError, NotExistsError, WrongPasswordError } from '../commo
 import { ActivateUserDto } from './dto/activate-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -76,6 +75,18 @@ export class UserService {
       patronymic: createBrigadierDto.patronymic,
       contactNumber: createBrigadierDto.contactNumber,
     });
+    // const uploadResult = await this.cloudinary
+    //   .uploadImage(file, {
+    //     folder: `brigadiersAvatars/`,
+    //     overwrite: true,
+    //     resource_type: 'image',
+    //     public_id: brigadier.id,
+    //   })
+    //   .catch(() => {
+    //     throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
+    //   });
+    // brigadier.avatarUrl = uploadResult.secure_url;
+
     brigadier.user = user;
     return await this.brigadierRepository.save(brigadier);
   }
