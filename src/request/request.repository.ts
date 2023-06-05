@@ -15,7 +15,6 @@ export class RequestRepository extends Repository<Request> {
   }
 
   async getFullRequest() {
-    //TODO rewrite query
     return (
       this.dataSource
         .createQueryBuilder()
@@ -33,7 +32,7 @@ export class RequestRepository extends Repository<Request> {
         )
         .leftJoinAndMapOne('equipment', Equipment, 'equipment', 'equipment.id = request_equipment.equipmentId')
         //.leftJoinAndMapOne('accessory', Accessory, 'accessory', 'accessory.equipmentId = accessory.id')
-        .getRawOne() //TODO ???
+        .getRawOne()
     );
   }
 }

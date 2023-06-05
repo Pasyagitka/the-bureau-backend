@@ -66,7 +66,6 @@ export class AccessoryService {
     item.equipment = equipment;
     return await this.accessoryRepository.save(item);
   }
-  //TODO return db errors
 
   async import(importAccessoriesDto: CreateAccessoryDto[]): Promise<Accessory[]> {
     const equipmentIds = importAccessoriesDto.map((i) => i.equipmentId);
