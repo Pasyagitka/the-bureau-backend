@@ -93,7 +93,7 @@ export class InvoiceController {
     const invoice = await this.invoiceService.getInvoice(id, req.user);
     res.set({
       'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'Content-Disposition': `attachment; filename="request-${id}-report.docx`,
+      'Content-Disposition': `attachment; filename="invoice-${id}-report.docx`,
     });
     return new StreamableFile(invoice);
   }

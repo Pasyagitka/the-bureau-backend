@@ -102,10 +102,12 @@ export class InvoiceService {
     });
     const ability = this.abilityFactory.defineAbility(user);
     ForbiddenError.from(ability).throwUnlessCan(Action.Read, invoice);
+    if (!invoice) throw new NotExistsError('счет');
     const data = {
       invoice: {
         id: invoice.id,
         total: invoice.total,
+        date: dayjs(invoice.updatedAt).format('DD.MM.YYYY'),
       },
       customer: {
         contactNumber: invoice.customer.contactNumber,
