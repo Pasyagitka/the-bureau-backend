@@ -89,7 +89,7 @@ export class InvoiceService {
     return invoices;
   }
 
-  async getInvoice(id: number): Promise<Buffer> {
+  async getInvoice(id: number, user: User): Promise<Buffer> {
     const templatePath = './assets/accessory-invoice-template.docx';
     const invoice = await this.invoiceRepository.findOne({
       where: { id },
@@ -100,6 +100,8 @@ export class InvoiceService {
         customer: true,
       },
     });
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, invoice);
     const data = {
       invoice: {
         id: invoice.id,
@@ -119,26 +121,35 @@ export class InvoiceService {
     });
   }
 
-  async getItems(id: number): Promise<InvoiceItem[]> {
-    return this.invoiceItemRepository.find({
+  async getItems(id: number, user: User): Promise<InvoiceItem[]> {
+    const invoice = await this.invoiceRepository.findOne({ where: { id } });
+    const invoiceItems = await this.invoiceItemRepository.find({
       where: { invoiceId: id },
       relations: { accessory: true },
     });
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, invoice);
+    return invoiceItems;
   }
 
-  async remove(id: number) {
+  async remove(id: number, user: User) {
     const item = await this.invoiceRepository.findOne({
       where: { id },
       relations: ['items'],
     });
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Delete, item);
     if (!item) throw new NotExistsError('счет');
     return await this.invoiceRepository.softRemove(item);
   }
 
-  async get(id: number): Promise<Invoice> {
-    return this.invoiceRepository.findOne({
+  async get(id: number, user: User): Promise<Invoice> {
+    const item = await this.invoiceRepository.findOne({
       where: { id },
     });
+    const ability = this.abilityFactory.defineAbility(user);
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, item);
+    return item;
   }
 
   async update(id: number, updateInvoiceDto: any, user: User): Promise<Invoice> {
@@ -184,9 +195,12 @@ export class InvoiceService {
     return await this.invoiceRepository.save(invoice);
   }
 
-  async uploadScan(id: number, file: Express.Multer.File) {
+  async uploadScan(id: number, file: Express.Multer.File, user: User) {
     return await this.dataSource.transaction(async (transaction) => {
       const invoice = await this.invoiceRepository.findOne({ where: { id }, relations: { items: true } });
+      const ability = this.abilityFactory.defineAbility(user);
+      ForbiddenError.from(ability).throwUnlessCan(Action.Update, invoice);
+
       if (!invoice) throw new NotExistsError('счет');
 
       const uploadResult = await this.cloudinary
@@ -216,10 +230,10 @@ export class InvoiceService {
 
   async uploadReceipt(id: number, file: Express.Multer.File, user: User) {
     const invoice = await this.invoiceRepository.findOne({ where: { id }, relations: ['customer'] });
-    if (!invoice) throw new NotExistsError('счет');
-
     const ability = this.abilityFactory.defineAbility(user);
     ForbiddenError.from(ability).throwUnlessCan(Action.Update, invoice);
+
+    if (!invoice) throw new NotExistsError('счет');
 
     const uploadResult = await this.cloudinary
       .uploadImage(file, {
