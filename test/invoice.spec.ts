@@ -18,6 +18,8 @@ describe('Invoice', () => {
     status: expect.any(String),
     receiptUrl: expect.toBeOneOf([expect.any(String), null]),
     scanUrl: expect.toBeOneOf([expect.any(String), null]),
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
   };
 
   const createInvoice = {

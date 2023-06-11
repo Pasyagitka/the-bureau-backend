@@ -19,8 +19,8 @@ export async function getBrigadierToken(app: INestApplication): Promise<string> 
 
 export async function getClientToken(app: INestApplication): Promise<string> {
   const authData = await request(app.getHttpServer()).post('/api/auth/login').send({
-    login: 'client1',
-    password: 'client1',
+    login: 'client2',
+    password: 'client2',
   });
   return authData.body.access_token;
 }

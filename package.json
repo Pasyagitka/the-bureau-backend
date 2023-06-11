@@ -48,8 +48,10 @@
     "dayjs": "^1.11.7",
     "express-session": "^1.17.3",
     "generate-password": "^1.7.0",
+    "json2csv": "^6.0.0-alpha.2",
     "json5": "^2.2.3",
     "jsonwebtoken": "^9.0.0",
+    "nest-csv-parser": "^2.0.4",
     "nest-winston": "^1.8.0",
     "nodemailer": "^6.9.0",
     "passport-jwt": "^4.0.1",
@@ -95,7 +97,9 @@
     "typescript": "^4.7.4"
   },
   "jest": {
-    "setupFilesAfterEnv": ["jest-extended/all"],
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
@@ -111,14 +115,29 @@
       "!**/node_modules/**",
       "!**/dist/**",
       "!**/test/**",
+      "!**/database/**",
+      "!**/cert/**",
       "!**/coverage/**",
       "!**ormconfig.ts/**",
+      "!**global.d.ts/**",
+      "!**/common/filters/all-exceptions.filter.ts/**",
+      "!**/config/cloudinary.config.ts/**",
       "!**.eslintrc.js/**",
       "!**/common/validators/**",
+      "!**/cloudinary/**",
       "!**/common/mail/**",
-      "!**/auth/**"
+      "!**/auth/**",
+      "!**/user/dto/reset-password-confirm.dto.ts/**",
+      "!**/user/dto/reset-password-send.dto.ts/**",
+      "!**/user/dto/activate-user.dto.ts/**",
+      "!**/request-report/dto/patch-request-report.dto.ts/**",
+      "!**/request-report/request-report.service.ts/**"
     ],
     "coverageDirectory": "../coverage",
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "the-bureau-backend/dist/"

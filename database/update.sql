@@ -734,20 +734,26 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 COPY public.accessory (id, sku, name, "equipmentId", price, quantity_in_stock, "deletedAt", quantity_reserved) FROM stdin;
 58	1772867	Клан термостатический ГЕРЦ-TS-900V угловой осевой специальный 1/2", латунь, Австрия	4	40.00	0	\N	0
 10	P701600	Пресс-муфта 16х2-16х2, из латуни, Австрия (2шт)	1	30.00	34	2023-04-17 13:39:33.853612+00	0
-14	2123123	Футорка DN18	4	1.00	22	\N	0
+3	35gr4544	Мешки (5шт)	3	1.00	7	\N	5
 12	P701600	Пресс-муфта 16х2-16х2, из латуни, Австрия (2шт)	1	30.00	453	2023-04-17 13:39:36.393632+00	0
 16	P711600	Пресс-угольник 16х2/90, из латуни, Австрия (6шт)	2	22.00	0	2023-04-17 21:36:36.233507+00	0
+13	3C16020	Труба металлополимерная ф16*2 HT, Австрия (10м)	1	50.00	0	\N	0
+14	2123123	Футорка DN18	4	1.00	0	\N	0
 23	835915	Резьбовой адаптер для медных труб, Евроконус 3/4Е-15 2шт./компл	1	22.00	0	\N	0
 56	ME46006	Inoflex гибкая трубка, 3/4"х1/2", DN20 (2 шт./компл), Германия	1	80.00	0	\N	0
+2	P702001	Пресс-муфта переходная 20х2-16х2, латунь	2	15.00	99	2023-06-09 08:28:57.736771+00	3
 59	1772826	Термостатический клапан ГЕРЦ-ТS-90-Н угловой осевой специальный 1/2", из латуни	1	30.00	0	\N	0
 60	965204-AF	Н-образный модуль для нижнего подключения к панельным радиаторам, угловой для двухтрубной системы, с шаровым краном, с/с 50мм Female F1/2" 3/4"Е (ФР)	1	30.00	0	\N	0
+19	0382-02.000	Клапан радиаторный запорно-регулирующий Rаditес проходной, резьба Rp1/2"х1/2", DN15, Kvs=1,36м3/ч, РN10, Тмах=95С, латунь, Италия	1	35.00	0	\N	0
+15	123123	Пресс-переходник угловой ф12х1/2х90	3	2.00	30	\N	0
 18	3452-02.000	Клапан термостатический с преднастройкой Calypso Exact проходной, резьба Rp 1/2", DN15, Kvs=0,86м3/ч, РN10, Тмах=120С, AMETAL, Германия	1	20.00	0	2023-05-16 17:24:53.43711+00	0
 17	3AP1531216	Пресс-переходник угловой ф16х1/2х90	7	11.00	2	2023-05-16 17:26:07.4524+00	0
-5		Крюк двойной L=80мм (5шт)	2	2.00	13	\N	3
-19	0382-02.000	Клапан радиаторный запорно-регулирующий Rаditес проходной, резьба Rp1/2"х1/2", DN15, Kvs=1,36м3/ч, РN10, Тмах=95С, латунь, Италия	1	35.00	2	\N	0
-2	P702001	Пресс-муфта переходная 20х2-16х2, латунь	3	15.00	699	\N	2
-4	\N	Трубка защитная гофрированная ПЭ красная/синяя-25 (10м)	4	10.00	11	\N	0
-15	123123	Пресс-переходник угловой ф12х1/2х90	3	2.00	34	\N	0
+4	4h4h45y4	Трубка защитная гофрированная ПЭ красная/синяя-25 (10м)	4	10.00	10	\N	0
+61	string	string	1	2.90	0	\N	0
+62	string	string	1	2.90	0	\N	0
+63	string	string	1	2.90	0	\N	0
+64	string	string	1	2.90	0	\N	0
+65	string	string	1	2.90	0	\N	0
 1	 	Футорка DN16 3/4" НРх1/2" ВH	2	6.00	318	2023-05-21 13:24:07.55224+00	0
 7	3C20030	Труба металлополимерная ф20*2, Австрия (6м)	2	50.00	34	2023-04-17 13:39:32.675937+00	0
 11	P711600	Пресс-муфта 20х2-20х2, из латуни, Австрия (2шт)	2	80.00	124	2023-04-17 13:39:35.40657+00	0
@@ -756,8 +762,12 @@ COPY public.accessory (id, sku, name, "equipmentId", price, quantity_in_stock, "
 22	P701611	Пресс-переходник 16х2-1/2"н (наружная резьба), из латуни, Австрия (2шт)	4	30.00	0	\N	0
 55	7090LW162	Трубка-Уголок З00мм 16х2 SkinPress new	2	25.00	0	\N	0
 57	ME90652.1	Футорка DN16 3/4" НРх1/2" ВР	2	10.00	0	\N	0
-3	\N	Мешки (5шт)	3	1.00	11	\N	3
-13	3C16020	Труба металлополимерная ф16*2 HT, Австрия (10м)	1	50.00	3	\N	0
+66	string	string	1	2.90	0	\N	0
+67	string	string	1	2.90	0	\N	0
+5	345g45456	Крюк двойной L=80мм (5шт)	2	2.00	13	\N	3
+68	string	string	1	2.90	0	\N	0
+69	string	string	1	2.90	0	\N	0
+70	string	string	1	2.90	0	\N	0
 \.
 
 
@@ -780,6 +790,8 @@ COPY public.address (id, city, street, flat, "deletedAt", lat, lon, house) FROM 
 44	Минск	Михася Лынькова	55	\N	53.925884	27.484477	23Г
 46	Минск	Матусевича	9	\N	53.9164737	27.4398149	88
 47	Минск	Свердлова	4	\N	53.8916811	27.5593988	13А
+48	Минск	Белорусская	\N	\N	53.889247	27.5647148	21
+49	Минск	Притыцкого	\N	\N	53.9083258	27.4221287	4
 \.
 
 
@@ -788,16 +800,16 @@ COPY public.address (id, city, street, flat, "deletedAt", lat, lon, house) FROM 
 --
 
 COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "userId", "deletedAt", "avatarUrl") FROM stdin;
+26	Кирилл	Чернов	Борисович	375293647586	39	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685903209/brigadiersAvatars/26.webp
 1	Егор	Егоров	Егорович	375446352712	3	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681739858/brigadiersAvatars/1.jpg
 3	Мирон 	Кузьмин 	Егорович	375446352713	5	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681739298/brigadiersAvatars/3.jpg
 5	Евгений	Сурков	Константинович	375445657565	9	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681739487/brigadiersAvatars/5.jpg
 4	Александр	Абрамов	Серафимович	375447586976	8	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681739332/brigadiersAvatars/4.jpg
 7	Кирилл	Ермаков	Антонович	375293746584	17	\N	https://res.cloudinary.com/dblablirp/image/upload/v1684180701/brigadiersAvatars/7.png
 8	Иван	Яковлев	Валерьянович	375294758697	19	\N	\N
-9	Елизавета	Зинович	Игоревна	375445634337	20	\N	\N
-10	Игорь	Зинович	Станиславович	375445644787	22	\N	\N
-2	Никита	Тарасов	Сергеевич	375446352713	4	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685288157/brigadiersAvatars/2.png
-6	Самсонов	Максим	Дмитриевич	375293535363	12	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681766860/brigadiersAvatars/6.png
+11	Андрей	Занько	Витальевич	375234567891	24	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685877908/brigadiersAvatars/11.jpg
+2	Никита	Тарасов	Сергеевич	375446352713	4	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685885161/brigadiersAvatars/2.png
+6	Максим	Самсонов	Дмитриевич	375293535363	12	\N	https://res.cloudinary.com/dblablirp/image/upload/v1681766860/brigadiersAvatars/6.png
 \.
 
 
@@ -808,7 +820,6 @@ COPY public.brigadier (id, firstname, surname, patronymic, "contactNumber", "use
 COPY public.client (id, firstname, surname, patronymic, "contactNumber", "userId", "deletedAt") FROM stdin;
 2	Алексей	Алексеев	Алексеевич	375446782833	6	\N
 3	Андрей	Андреев	Андреевич	375446788882	7	\N
-4	Диана	Карпова	Борисовна	+375445678695	10	\N
 1	Анна	Морозова	Тимофеевна	375445634337	2	\N
 5	Федора	Анисимов	Иванович	375446575857	11	\N
 9	Вероника	Кузнецова	Максимовна	375294657689	16	\N
@@ -817,6 +828,8 @@ COPY public.client (id, firstname, surname, patronymic, "contactNumber", "userId
 7	Анна	Воронина	Игоревна	375445634437	14	\N
 8	Виктория	Климова	Артемовна	375445634437	15	\N
 11	Злата	Зинович	Игоревна	375445634337	21	\N
+4	Диана	Карпова	Борисовна	375445678695	10	\N
+12	Ян	Корзун	Юрьич	375123456987	23	\N
 \.
 
 
@@ -828,10 +841,20 @@ COPY public.equipment (id, type, mounting, "deletedAt") FROM stdin;
 2	Конвектор внутрипольный	Пол	\N
 3	Радиатор настенный	Стена	\N
 5	уцацуацуацуауа	Пол	2023-04-16 14:54:58.603915+00
-1	Радиатор напольный	Стена	\N
-4	Конвектор настенный	Пол	\N
 6	цуацуацуацуа	Стена	2023-04-17 13:41:14.578144+00
 7	Стол	Стена	2023-05-16 17:26:07.4524+00
+1	Радиатор напольный	Пол	\N
+4	Конвектор настенный	Стена	\N
+11	updated string	Стена	2023-06-05 14:28:40.226006+00
+12	updated string	Стена	2023-06-05 14:31:06.868915+00
+13	updated string	Стена	2023-06-05 14:33:28.447621+00
+14	updated string	Стена	2023-06-05 14:35:39.510081+00
+15	updated string	Стена	2023-06-05 14:38:13.469779+00
+16	updated string	Стена	2023-06-05 14:40:36.16435+00
+17	updated string	Стена	2023-06-05 14:43:48.538353+00
+18	updated string	Стена	2023-06-05 14:47:00.879834+00
+19	updated string	Стена	2023-06-05 15:48:58.062739+00
+20	updated string	Стена	2023-06-05 15:50:40.662818+00
 \.
 
 
@@ -844,15 +867,35 @@ COPY public.invoice (id, "totalPrice", "customerId", status, "deletedAt", "recei
 54	205.00	2	Created	2023-05-08 07:40:44.564582+00	\N	\N	2023-05-10 12:56:42.833727+00	2023-05-10 12:56:42.833727+00
 55	132.00	1	Created	2023-05-08 08:01:56.490759+00	\N	\N	2023-05-10 12:56:42.833727+00	2023-05-10 12:56:42.833727+00
 59	3.00	2	InProcessing	2023-05-08 13:38:53.237984+00	\N	\N	2023-05-10 12:56:42.833727+00	2023-05-10 12:56:42.833727+00
+63	54.00	2	Created	2023-06-05 14:28:47.847691+00	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685488550/invoiceScans/63.pdf	2023-05-28 17:14:34.248458+00	2023-06-05 14:28:47.847691+00
+64	233.00	11	Paid	2023-06-05 14:30:13.948149+00	https://res.cloudinary.com/dblablirp/image/upload/v1685880393/invoiceReceipts/64.jpg	https://res.cloudinary.com/dblablirp/image/upload/v1685880175/invoiceScans/64.pdf	2023-06-04 11:29:09.777938+00	2023-06-05 14:30:13.948149+00
 56	8.00	2	Expired	2023-05-19 09:00:00.06797+00	\N	\N	2023-05-10 12:56:42.833727+00	2023-05-19 09:00:00.06797+00
 52	1198.00	3	Expired	2023-05-19 09:00:00.06797+00	\N	\N	2023-04-10 12:56:42.833+00	2023-05-19 09:00:00.06797+00
+65	70.00	11	InProcessing	2023-06-05 14:32:38.855647+00	\N	\N	2023-06-04 11:35:44.549986+00	2023-06-05 14:32:38.855647+00
+66	31.00	1	InProcessing	2023-06-05 14:34:54.48965+00	\N	\N	2023-06-04 18:08:02.200846+00	2023-06-05 14:34:54.48965+00
+67	80.00	11	InProcessing	2023-06-05 14:37:19.469186+00	\N	\N	2023-06-04 18:16:41.651975+00	2023-06-05 14:37:19.469186+00
 53	6.00	6	Paid	2023-05-08 08:01:56.49+00	\N	\N	2023-05-10 12:56:42.833727+00	2023-05-10 12:56:42.833727+00
 60	5.00	2	InProcessing	2023-05-08 08:01:56.49+00	\N	https://res.cloudinary.com/dblablirp/image/upload/v1683899814/invoiceScans/60.png	2023-05-10 12:56:42.833727+00	2023-05-12 13:57:36.711506+00
 61	104.00	7	Created	2023-05-08 08:01:56.49+00	\N	https://res.cloudinary.com/dblablirp/image/upload/v1684181297/invoiceScans/61.pdf	2023-05-15 20:00:58.815416+00	2023-05-15 20:08:14.99+00
 57	20.00	2	Paid	2023-05-08 08:01:56.49+00	https://res.cloudinary.com/dblablirp/image/upload/v1685290727/invoiceReceipts/57.jpg	\N	2023-05-10 12:56:42.833727+00	2023-05-28 16:18:47.542302+00
 58	72.00	2	Paid	2023-05-08 08:01:56.49+00	https://res.cloudinary.com/dblablirp/image/upload/v1685290746/invoiceReceipts/58.pdf	\N	2023-05-10 12:56:42.833727+00	2023-05-28 16:19:05.848891+00
-63	54.00	2	Created	\N	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685488550/invoiceScans/63.pdf	2023-05-28 17:14:34.248458+00	2023-05-30 23:15:49.091887+00
+68	35.00	26	InProcessing	2023-06-05 14:39:57.357056+00	\N	\N	2023-06-04 18:29:04.618277+00	2023-06-05 14:39:57.357056+00
+69	13.00	26	InProcessing	2023-06-05 14:43:05.66061+00	\N	\N	2023-06-04 18:29:09.149073+00	2023-06-05 14:43:05.66061+00
+70	2.00	3	InProcessing	2023-06-05 14:46:06.522462+00	\N	\N	2023-06-04 20:26:42.171892+00	2023-06-05 14:46:06.522462+00
+80	15.00	26	InProcessing	\N	\N	\N	2023-06-05 15:47:59.77433+00	2023-06-05 15:47:59.77433+00
 62	249.00	2	Approved	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685292385/invoiceReceipts/62.jpg	https://res.cloudinary.com/dblablirp/image/upload/v1685292319/invoiceScans/62.png	2023-05-28 16:22:04.792702+00	2023-05-30 23:22:58.111288+00
+71	58.00	3	InProcessing	2023-06-05 15:48:02.465057+00	\N	\N	2023-06-04 20:27:18.078735+00	2023-06-05 15:48:02.465057+00
+72	15.00	26	InProcessing	2023-06-05 15:49:50.888111+00	\N	\N	2023-06-05 14:28:45.148075+00	2023-06-05 15:49:50.888111+00
+82	2.00	4	Created	\N	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685982524/invoiceScans/82.pdf	2023-06-05 16:21:16.847962+00	2023-06-05 16:28:42.573475+00
+81	15.00	26	Created	\N	\N	https://res.cloudinary.com/dblablirp/image/upload/v1685982843/invoiceScans/81.pdf	2023-06-05 15:49:48.204396+00	2023-06-05 16:34:00.961466+00
+76	15.00	26	InProcessing	2023-06-05 16:34:13.038688+00	\N	\N	2023-06-05 14:37:16.784446+00	2023-06-05 16:34:13.038688+00
+73	15.00	26	InProcessing	2023-06-05 16:34:13.975398+00	\N	\N	2023-06-05 14:30:11.282658+00	2023-06-05 16:34:13.975398+00
+74	15.00	26	InProcessing	2023-06-05 16:34:14.400255+00	\N	\N	2023-06-05 14:32:36.169677+00	2023-06-05 16:34:14.400255+00
+75	15.00	26	InProcessing	2023-06-05 16:34:14.717906+00	\N	\N	2023-06-05 14:34:51.825497+00	2023-06-05 16:34:14.717906+00
+77	15.00	26	InProcessing	2023-06-05 16:34:15.13266+00	\N	\N	2023-06-05 14:39:54.684142+00	2023-06-05 16:34:15.13266+00
+78	15.00	26	InProcessing	2023-06-05 16:34:16.056654+00	\N	\N	2023-06-05 14:43:02.977382+00	2023-06-05 16:34:16.056654+00
+79	18.00	26	InProcessing	\N	\N	\N	2023-06-05 14:46:03.84968+00	2023-06-05 16:34:31.269556+00
+83	1.00	11	InProcessing	\N	\N	\N	2023-06-05 17:34:07.570539+00	2023-06-05 17:34:07.570539+00
 \.
 
 
@@ -897,9 +940,66 @@ COPY public.invoice_item (id, quantity, price, sum, "invoiceId", "accessoryId", 
 92	3	15.00	45.00	62	2	\N
 93	4	1.00	4.00	62	3	\N
 94	4	50.00	200.00	62	13	\N
-95	3	15.00	45.00	63	2	\N
-96	3	1.00	3.00	63	3	\N
-97	3	2.00	6.00	63	5	\N
+98	2	35.00	70.00	64	19	2023-06-04 11:31:49.36672+00
+99	2	2.00	4.00	64	15	2023-06-04 11:31:49.36672+00
+100	2	1.00	2.00	64	14	2023-06-04 11:31:49.36672+00
+101	2	50.00	100.00	64	13	2023-06-04 11:31:49.36672+00
+102	4	1.00	4.00	64	14	2023-06-04 11:32:13.317137+00
+103	2	35.00	70.00	64	19	2023-06-04 11:32:13.317137+00
+104	4	2.00	8.00	64	15	2023-06-04 11:32:13.317137+00
+105	2	50.00	100.00	64	13	2023-06-04 11:32:13.317137+00
+106	2	15.00	30.00	64	2	2023-06-04 11:32:13.317137+00
+107	4	1.00	4.00	64	14	2023-06-04 11:32:53.157924+00
+108	2	35.00	70.00	64	19	2023-06-04 11:32:53.157924+00
+109	2	15.00	30.00	64	2	2023-06-04 11:32:53.157924+00
+110	4	2.00	8.00	64	15	2023-06-04 11:32:53.157924+00
+111	2	50.00	100.00	64	13	2023-06-04 11:32:53.157924+00
+112	2	10.00	20.00	64	4	2023-06-04 11:32:53.157924+00
+120	1	35.00	35.00	65	19	2023-06-04 11:36:06.752821+00
+121	2	35.00	70.00	65	19	2023-06-04 11:37:15.412489+00
+95	3	15.00	45.00	63	2	2023-06-05 14:28:47.847691+00
+96	3	1.00	3.00	63	3	2023-06-05 14:28:47.847691+00
+97	3	2.00	6.00	63	5	2023-06-05 14:28:47.847691+00
+113	4	1.00	4.00	64	14	2023-06-05 14:30:13.948149+00
+114	2	35.00	70.00	64	19	2023-06-05 14:30:13.948149+00
+115	2	15.00	30.00	64	2	2023-06-05 14:30:13.948149+00
+116	4	2.00	8.00	64	15	2023-06-05 14:30:13.948149+00
+117	2	50.00	100.00	64	13	2023-06-05 14:30:13.948149+00
+118	2	10.00	20.00	64	4	2023-06-05 14:30:13.948149+00
+119	1	1.00	1.00	64	3	2023-06-05 14:30:13.948149+00
+122	2	35.00	70.00	65	19	2023-06-05 14:32:38.855647+00
+123	2	15.00	30.00	66	2	2023-06-05 14:34:54.48965+00
+124	1	1.00	1.00	66	3	2023-06-05 14:34:54.48965+00
+125	5	15.00	75.00	67	2	2023-06-05 14:37:19.469186+00
+126	2	1.00	2.00	67	3	2023-06-05 14:37:19.469186+00
+127	3	1.00	3.00	67	14	2023-06-05 14:37:19.469186+00
+128	2	10.00	20.00	68	4	2023-06-05 14:39:57.357056+00
+129	4	1.00	4.00	68	3	2023-06-05 14:39:57.357056+00
+130	5	2.00	10.00	68	5	2023-06-05 14:39:57.357056+00
+131	1	1.00	1.00	68	14	2023-06-05 14:39:57.357056+00
+132	1	2.00	2.00	69	5	2023-06-05 14:43:05.66061+00
+133	1	10.00	10.00	69	4	2023-06-05 14:43:05.66061+00
+134	1	1.00	1.00	69	3	2023-06-05 14:43:05.66061+00
+135	2	1.00	2.00	70	14	2023-06-05 14:46:06.522462+00
+147	1	15.00	15.00	80	2	\N
+136	4	10.00	40.00	71	4	2023-06-05 15:48:02.465057+00
+137	3	1.00	3.00	71	3	2023-06-05 15:48:02.465057+00
+138	1	15.00	15.00	71	2	2023-06-05 15:48:02.465057+00
+148	1	15.00	15.00	81	2	\N
+139	1	15.00	15.00	72	2	2023-06-05 15:49:50.888111+00
+149	2	1.00	2.00	82	3	\N
+143	1	15.00	15.00	76	2	2023-06-05 16:34:13.038688+00
+140	1	15.00	15.00	73	2	2023-06-05 16:34:13.975398+00
+141	1	15.00	15.00	74	2	2023-06-05 16:34:14.400255+00
+142	1	15.00	15.00	75	2	2023-06-05 16:34:14.717906+00
+144	1	15.00	15.00	77	2	2023-06-05 16:34:15.13266+00
+145	1	15.00	15.00	78	2	2023-06-05 16:34:16.056654+00
+146	1	15.00	15.00	79	2	2023-06-05 16:34:23.02882+00
+152	3	1.00	3.00	79	3	\N
+153	1	15.00	15.00	79	2	\N
+150	1	15.00	15.00	79	2	2023-06-05 16:34:31.269556+00
+151	1	1.00	1.00	79	3	2023-06-05 16:34:31.269556+00
+154	1	1.00	1.00	83	3	\N
 \.
 
 
@@ -922,6 +1022,8 @@ COPY public.request (id, comment, status, "addressId", "brigadierId", "clientId"
 45	3 этаж	Accepted	45	1	3	3	2023-04-17 13:21:09.169174+00	2023-06-06	\N
 44	Злая осбака	Accepted	44	2	1	3	2023-04-16 15:00:57.835529+00	2023-05-23	\N
 47	5 этаж	InProcessing	47	7	1	1	2023-05-30 23:26:17.631006+00	2023-06-01	\N
+48	До 5 этажа, затем полпролета вниз	Approved	48	11	12	3	2023-06-04 10:24:59.916515+00	2023-06-22	\N
+49	5 этаж	InProcessing	49	\N	2	2	2023-06-04 19:23:52.287298+00	2023-06-14	\N
 \.
 
 
@@ -955,6 +1057,12 @@ COPY public.request_equipment (id, quantity, "equipmentId", "requestId", "delete
 57	2	3	46	\N
 50	2	4	43	\N
 58	2	3	47	\N
+59	3	1	48	\N
+60	4	2	48	\N
+61	5	3	48	\N
+62	6	4	48	\N
+63	2	1	49	\N
+64	1	2	49	\N
 \.
 
 
@@ -970,10 +1078,10 @@ COPY public.request_report (id, "mediaUrl", "requestId", "brigadierId", "deleted
 4	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N	\N
 6	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N	\N
 7	https://res.cloudinary.com/dblablirp/image/upload/v1653247002/qcg8wablza0kh3agnt6i.webp	41	\N	\N	\N
-8	[object Object]	1	\N	\N	\N
 42	https://res.cloudinary.com/dblablirp/image/upload/v1681655307/reports/2/Screenshot%202023-03-02%20132029.png.png	2	2	\N	reports/2/Screenshot 2023-03-02 132029.png
 53	https://res.cloudinary.com/dblablirp/image/upload/v1681767247/reports/40/%C3%90%C2%91%C3%90%C2%B5%C3%90%C2%B7%20%C3%90%C2%B8%C3%90%C2%BC%C3%90%C2%B5%C3%90%C2%BD%C3%90%C2%B8.jpg.jpg	40	5	\N	reports/40/ÐÐµÐ· Ð¸Ð¼ÐµÐ½Ð¸.jpg
 54	https://res.cloudinary.com/dblablirp/image/upload/v1681767248/reports/40/02e1034ec8069239a974416cf7ea5f4a.jpg.jpg	40	5	\N	reports/40/02e1034ec8069239a974416cf7ea5f4a.jpg
+55	https://res.cloudinary.com/dblablirp/image/upload/v1685879970/reports/48/david_2.jpg_554688468%20%281%29.jpg.webp	48	11	\N	reports/48/david_2.jpg_554688468 (1).jpg
 \.
 
 
@@ -1007,6 +1115,7 @@ COPY public.schedule (id, "brigadierId", "requestId", "modifiedDate", "deletedAt
 56	2	46	2023-04-18 09:27:39.954001+00	2023-04-18 09:28:50.923798+00
 57	4	46	2023-04-18 09:28:50.939936+00	\N
 58	7	47	2023-05-30 23:26:59.49139+00	\N
+59	11	48	2023-06-04 11:52:56.748668+00	\N
 \.
 
 
@@ -1041,6 +1150,16 @@ COPY public.tool (id, name, "stageId", "deletedAt") FROM stdin;
 17	клещи	2	\N
 1	updatedToolName	1	2023-05-30 21:31:04.149012+00
 19	newTool	1	\N
+20	updated string	2	2023-06-05 14:28:34.998656+00
+21	updated string	2	2023-06-05 14:30:29.307523+00
+22	updated string	2	2023-06-05 14:33:23.045627+00
+23	updated string	2	2023-06-05 14:35:45.550909+00
+24	updated string	2	2023-06-05 14:38:19.559006+00
+25	updated string	2	2023-06-05 14:40:48.866767+00
+26	updated string	2	2023-06-05 14:43:59.805693+00
+27	updated string	2	2023-06-05 14:46:56.027975+00
+28	updated string	2	2023-06-05 15:48:52.958421+00
+29	updated string	2	2023-06-05 15:50:46.638396+00
 \.
 
 
@@ -1049,15 +1168,16 @@ COPY public.tool (id, name, "stageId", "deletedAt") FROM stdin;
 --
 
 COPY public."user" (id, login, email, password, "resetPasswordLink", "activationLink", "temporaryPassword", "isActivated", role, "deletedAt") FROM stdin;
-2	client1	client1@gmail.com	$2a$04$4EYhWTCZiu.QcM27.6BgBu1wg6dID8QOxN3TGTLTxPZ7jZ4XS4RHa	\N	9230c9a8-abc1-4df6-bf01-b14965ba36d5	\N	t	Client	\N
 4	brigadier2	brigadier2@gmail.com	$2a$04$uKTuYJYkoWhp4zIkvfUu.elGlQtTghasUgBmSBInWkBVBMAhtmqWq	\N	b0fda5aa-81ef-4aed-ace6-21c77687491d	\N	t	Brigadier	\N
 7	client3	client3@gmail.com	$2a$04$KcTVhzOY.FQ/Y03UuO9/JelvD6Z1OAsPiN3.8xSYoFzRhRPiZ3bGu	\N	28cfa972-a439-4954-9976-1dc2cf2d5b80	\N	t	Client	\N
 5	brigadier3	brigadier3@gmail.com	$2a$04$CYK7AwYeQ4Qw8kg7w0XB1O6zewP9CUIg/14IHOQUkucWetjk0KRim	\N	b3dde61f-c77a-4dec-b29d-12d0dca4a810	\N	t	Brigadier	\N
 10	string	string@mail.ru	$2a$04$V2WEH6jUQRAFe79..uf1auTFMLWe9O1y5xRPrtNUHaEpiTl4yZpZS	\N	f998dbef-397b-4716-82b5-ffba7b457be0	\N	t	Client	\N
+34	qdwqwd	efdddrdgfi@gmail.com	$2a$04$qeTXbBzB8CG1ZfP5gF9ljuRUWFPIP.FWr55xwIJqGVnWTTTyc/obG	\N	c77f7a24-8edd-4a2b-890b-f4e43a8f9f80	\N	f	Brigadier	\N
 17	ermakov	brigadier66@gmail.com	$2a$04$wBmQZaQGu7HmGqBx0462yukabN4lNVRvoIn1VIcPzjfYBg4bPWcyO	\N	b71412f9-6935-49c3-a7fa-0b2be6ff4b9f	\N	t	Brigadier	\N
-19	lizavetagmail	lizaveta@gmail.com	$2a$04$ZUTttKWUcT9BTi2gk5IYnOMXMAQNFSYW6ElzMlWCMILZBuPCkq3de	\N	e6485cfe-1ae1-4164-bac1-b4b447d9a79f	\N	f	Brigadier	\N
-1	admin	lizavetazinovich@gmail.com	$2a$04$2q2UQ9Vfqgs814vuogahWeUnVrz9aqJ8UxWsHdK1OHE/LpIwRcwEW	\N	\N	\N	t	Admin	\N
+35	fgn	efwngfi@gmail.com	$2a$04$CjccJf6laHBknOhq77QDcO3lNrdSJed2YOcaNimUn2xdg.BKcvvwG	\N	b7103e19-8f6c-4d2a-8ace-058bdab04e56	\N	f	Brigadier	\N
 9	brigadier6	brigadier6@gmail.com	$2a$04$KEwBy7quVqKb.IMSnw7ozOiBlUWyINOR17zzytInlgQYRSCQrnoqm	\N	542dc62b-c7ad-4d4f-abe4-b1f33a64f390	\N	t	Brigadier	\N
+36	wwd	efwwwgfi@gmail.com	$2a$04$Rm0AJLnKx95.OVt7z0p1G.EmYTZQ1SvvvdKYt2F1dAXTs.zr4U7Je	\N	76c23234-bee4-480b-833e-949eb673dc6b	\N	f	Brigadier	\N
+1	admin	lizavetazinovich@gmail.com	$2a$04$WGonfqnhOgluGHnkPvVNCue1dvBHMNt5yLtkrBAVjOVM/tgulJ6Gm	\N	\N	\N	t	Admin	\N
 3	brigadier1	brigadier1@gmail.com	$2a$04$MsfT7yy8ZK51yRe94BcQ0uuhSQgwr1f617fqY/PguWy7jR1oaJaMK	\N	f8fded90-65dd-46d2-90e8-a48538ca8504	\N	t	Brigadier	\N
 11	client6	client6@gmail.com	$2a$04$E/Q9DEw2Qan.dVa/U/v/I.ck4/dRI1zJrrwE.V5w.m471G8rVOnEu	\N	d72f5c36-a422-4b40-9902-75be09db97c4	\N	t	Client	\N
 12	brigadier7	brigadier7@gmail.com	$2a$04$CVHMRQ5fM1i0GxDqq0s5xuj1mZZfUGrdUqze9uW5qy3ZwKidsIGIi	\N	0db44e1b-2d70-48a0-830a-676723589e67	\N	t	Brigadier	\N
@@ -1066,11 +1186,23 @@ COPY public."user" (id, login, email, password, "resetPasswordLink", "activation
 14	client42	lizavetazinovich11@gmail.com	$2a$04$zarRvynekDuk70g9CKiPDuBE6nDGYJUTcjoTQb8j4./.2FiCYIVdS	\N	7515ed1d-0500-482a-945d-06f8f8b4153b	\N	t	Client	\N
 15	client424	lizavetazinovich112@gmail.com	$2a$04$8fwZ0..NgGNZ6fBSO4A1fOhDnBJDLQLK3IkoPzXOOi7utD4OdEgX.	\N	4493b57b-cbc1-4972-aabc-35ffffe32b51	\N	t	Client	\N
 16	kuznetsova	client66@gmail.com	$2a$04$uYWKQIa.X49iH2w1mnWcd.QAj2I9JVy.kb4m6IwqdZMkZhTtkFKG6	\N	932f2476-2dc4-4038-a703-f625bdea0b19	\N	t	Client	\N
+24	AndreiZanko	gyzage@clout.wiki	$2a$04$iNpXsYtzk.TLMdGcptzUsOFfX1h5LSFXUMJVQQZlEOVn8M0FLISwq	\N	5709f85d-f053-4fbc-a3e7-c73c70704069	\N	t	Brigadier	\N
+37	wwds	efwwswgfi@gmail.com	$2a$04$zAr9KKV3qzpKYrEVLS4RWO5/rF1DzWrwAPZi2XbGF5ZLl31wRUuKC	\N	b450e296-2672-4130-8440-cae18f306909	\N	f	Brigadier	\N
+23	YanKorzun	nijute@clout.wiki	$2a$04$U8qeZfRvnvwwC5Xqun.qmu7hgASJWsxy21zJSIiXY9EuKDpg2.rXC	\N	d3cfa2e2-25d4-441b-b568-1ef3083612ec	\N	t	Client	\N
+25	adminqqqeqe	efwjefi@gmail.com	$2a$04$wuC8fW2BW1RQNojV8KWnR./NCXuDUDGUkPVf00a.3seZILtWHClKy	\N	a11e94b2-4e3e-460a-95f3-127ff5b24651	\N	f	Brigadier	\N
 8	brigadier4	brigadier4@gmail.com	$2a$04$UVHjMcJryTwAkrlq3yoSDODruNdM4X2GYo/GRIcxxMYSWWWnNeSZq	\N	cc9928a0-2fa9-490f-bb6b-bdb782f77544	\N	t	Brigadier	\N
 21	brigadier8	brigadier8@gmail.com	$2a$04$bB4tl1Iloc33x5W1c4hu6.vnzrLlxcoNatQhxGS3DLwcMM0H3l4Da	\N	0991c7da-3426-4555-ab4f-e476fb0b7053	\N	t	Client	\N
 22	brigadier9	brigadier9@gmail.com	$2a$04$ndutEpI.kFzenm58Ta0O7uGs.JD6iwIGs0d9CuqpbHR1RAQC.hgZW	\N	e2080090-cb8f-407e-b5bc-a3186dc57368	\N	f	Brigadier	\N
+26	adminqqqeqewef	efwffefwefi@gmail.com	$2a$04$GoFn1lDDkpUcpTTEp.VnBuNi.GKNnMO46k1eTz3Fbx4pcJrwxBlxO	\N	a85c8dce-b717-434c-9c95-bda5b00b06be	\N	f	Brigadier	\N
+27	adminqqqeergqewef	efwffefweergfi@gmail.com	$2a$04$WGxI0vs42A4PjNlJkrH1RuANcTQeCJnqqUlkjIJ7aPvRVAcAqbK3u	\N	62cbdc88-5f50-456b-a204-23a704171c17	\N	f	Brigadier	\N
 18	zinovich	admin@gmail.com	$2a$04$1AvTBh5LRRh9L45K7nJCZu1WBgCiyPArCsrYOLx8WfoegSJZ.cIJK	\N	ccc69c7f-6b3e-4ecb-90ed-07ddfc0ac3b3	\N	f	Client	\N
 20	brigadier11	brigadier11@gmail.com	$2a$04$8ZOVy5HmPHHMo3WUPsP8Zububiit3Sw2NqxXvA3aUrvMhVEmX2oLO	\N	5f2c61c1-85df-43f3-acdf-22ec5af301d1	\N	f	Brigadier	\N
+28	adminqqdqeergqewef	efwffefweedrgfi@gmail.com	$2a$04$YaIjSm9LDAJQB8gIvfB0FurLkKPagu20anGhVF5Jr7P3LF82S6cGG	\N	c3e323ac-6d33-48a6-b846-45c81e8308d8	\N	f	Brigadier	\N
+2	client1	client1@gmail.com	$2a$04$KvzjMAsPRqeJCSz3.nehE.GGT.JlVvSJTTurkJ4zXO/ElBe8.mPGy	\N	9230c9a8-abc1-4df6-bf01-b14965ba36d5	\N	t	Client	\N
+29	adminqqdgqeergqewef	efwffefwegedrgfi@gmail.com	$2a$04$b.RJWKblvyTMXhMDWj.oxewc88rd8g.ogucswxMbNinfnGusvSnZC	\N	ea0cf28a-03ef-48ce-bf05-1a18f396d0f6	\N	f	Brigadier	\N
+38	wfwef	wefw@gmail.com	$2a$04$w1Wq8fLcK3sdJ4wvASEPxuodrpux5KTwxWH.GH6F5a89.tamXHOyC	\N	dc56c0da-7760-430c-aede-ae2fde0cadf8	\N	f	Brigadier	\N
+39	Chernov	bdamqqx@mailto.plus	$2a$04$sZG6ilCZphwRbn.jHzebWeK7Q3Cnhlw.9pfCDc24IgquEduNZgRsG	\N	4d7c131f-a7ff-4e98-bd66-b397ff357da6	\N	f	Brigadier	\N
+19	lizavetagmail	lizaveta@gmail.com	$2a$04$ZUTttKWUcT9BTi2gk5IYnOMXMAQNFSYW6ElzMlWCMILZBuPCkq3de	\N	e6485cfe-1ae1-4164-bac1-b4b447d9a79f	\N	t	Brigadier	\N
 \.
 
 
@@ -1078,77 +1210,77 @@ COPY public."user" (id, login, email, password, "resetPasswordLink", "activation
 -- Name: accessory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.accessory_id_seq', 60, true);
+SELECT pg_catalog.setval('public.accessory_id_seq', 70, true);
 
 
 --
 -- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_id_seq', 47, true);
+SELECT pg_catalog.setval('public.address_id_seq', 49, true);
 
 
 --
 -- Name: brigadier_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.brigadier_id_seq', 10, true);
+SELECT pg_catalog.setval('public.brigadier_id_seq', 26, true);
 
 
 --
 -- Name: client_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.client_id_seq', 11, true);
+SELECT pg_catalog.setval('public.client_id_seq', 12, true);
 
 
 --
 -- Name: equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.equipment_id_seq', 10, true);
+SELECT pg_catalog.setval('public.equipment_id_seq', 20, true);
 
 
 --
 -- Name: invoice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.invoice_id_seq', 63, true);
+SELECT pg_catalog.setval('public.invoice_id_seq', 83, true);
 
 
 --
 -- Name: invoice_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.invoice_item_id_seq', 97, true);
+SELECT pg_catalog.setval('public.invoice_item_id_seq', 154, true);
 
 
 --
 -- Name: request_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_equipment_id_seq', 58, true);
+SELECT pg_catalog.setval('public.request_equipment_id_seq', 64, true);
 
 
 --
 -- Name: request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_id_seq', 47, true);
+SELECT pg_catalog.setval('public.request_id_seq', 49, true);
 
 
 --
 -- Name: request_report_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.request_report_id_seq', 54, true);
+SELECT pg_catalog.setval('public.request_report_id_seq', 55, true);
 
 
 --
 -- Name: schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.schedule_id_seq', 58, true);
+SELECT pg_catalog.setval('public.schedule_id_seq', 59, true);
 
 
 --
@@ -1162,14 +1294,14 @@ SELECT pg_catalog.setval('public.stage_id_seq', 3, true);
 -- Name: tool_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tool_id_seq', 19, true);
+SELECT pg_catalog.setval('public.tool_id_seq', 29, true);
 
 
 --
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 22, true);
+SELECT pg_catalog.setval('public.user_id_seq', 39, true);
 
 
 --

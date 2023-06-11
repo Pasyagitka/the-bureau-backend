@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Any, ILike, In, MoreThan, Repository } from 'typeorm';
-import { BadParametersError, NotExistsError } from '../common/exceptions';
+import { Any, DataSource, DeepPartial, ILike, MoreThan, ObjectLiteral, Repository } from 'typeorm';
+import { NotExistsError } from '../common/exceptions';
 import { Equipment } from '../equipment/entities/equipment.entity';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Accessory } from './entities/accessory.entity';
 import { FindAllQueryDto } from './dto/findAll-query.dto';
+import { CsvParser } from 'nest-csv-parser';
+import { ParsedData } from 'nest-csv-parser/dist';
+import { User } from '../user/entities/user.entity';
+import { Readable } from 'stream';
+import * as carbone from 'carbone';
+import * as json2csv from 'json2csv';
 
 @Injectable()
 export class AccessoryService {
@@ -15,6 +21,8 @@ export class AccessoryService {
     private accessoryRepository: Repository<Accessory>,
     @InjectRepository(Equipment)
     private equipmentRepository: Repository<Equipment>,
+    private readonly csvParser: CsvParser,
+    private readonly dataSource: DataSource,
   ) {}
 
   async findAll(query: FindAllQueryDto) {
@@ -67,22 +75,47 @@ export class AccessoryService {
     return await this.accessoryRepository.save(item);
   }
 
-  async import(importAccessoriesDto: CreateAccessoryDto[]): Promise<Accessory[]> {
-    const equipmentIds = importAccessoriesDto.map((i) => i.equipmentId);
-    const idsCount = await this.equipmentRepository.count({ where: { id: In(equipmentIds) } });
-    if (idsCount !== equipmentIds.length) throw new BadParametersError('equipment');
-    const items = await Promise.all(
-      importAccessoriesDto.map(async (createAccessoryDto) => {
-        return this.accessoryRepository.create({
-          sku: createAccessoryDto.sku,
-          name: createAccessoryDto.name,
-          price: createAccessoryDto.price,
-          equipmentId: createAccessoryDto.equipmentId,
-          quantity_in_stock: createAccessoryDto.quantity,
-        });
-      }),
+  async import(file: Express.Multer.File): Promise<[ObjectLiteral[], number]> {
+    const { list: entities }: ParsedData<Accessory> = await this.csvParser.parse(
+      Readable.from(file.buffer),
+      Accessory,
+      null,
+      null,
+      { separator: ',' },
     );
-    return await this.accessoryRepository.save(items);
+    //const equipmentIds = importAccessoriesDto.map((i) => i.equipmentId);
+    //const idsCount = await this.equipmentRepository.count({ where: { id: In(equipmentIds) } });
+    //if (idsCount !== equipmentIds.length) throw new BadParametersError('equipment');
+    // const items = await Promise.all(
+    //   importAccessoriesDto.map(async (createAccessoryDto) => {
+    //     return this.accessoryRepository.create({
+    //       sku: createAccessoryDto.sku,
+    //       name: createAccessoryDto.name,
+    //       price: createAccessoryDto.price,
+    //       equipmentId: createAccessoryDto.equipmentId,
+    //       quantity_in_stock: createAccessoryDto.quantity,
+    //     });
+    //   }),
+    // );
+    const res = await this.dataSource
+      .createQueryBuilder()
+      .insert()
+      .into(Accessory)
+      .values(entities)
+      .orUpdate(['sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'], ['id'], {
+        skipUpdateIfNoValuesChanged: true,
+      })
+      .returning('*')
+      .execute();
+    return [res.generatedMaps, res.generatedMaps.length];
+  }
+
+  async export(): Promise<Buffer> {
+    const accessories = await this.accessoryRepository.find();
+    const fields = ['id', 'sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'];
+    const json2csvParser = new json2csv.Parser({ fields });
+    const data = json2csvParser.parse(accessories);
+    return data;
   }
 
   async update(id: number, updateAccessoryDto: UpdateAccessoryDto): Promise<Accessory> {

@@ -34,12 +34,10 @@ export class AbilityFactory {
   defineAbility(user: User) {
     const { can, cannot, build } = new AbilityBuilder(Ability as AbilityClass<AppAbility>);
 
-    //console.log('AbilityFactory', user);
-
     switch (user.role) {
       case Role.Admin: {
         can(Action.Manage, 'all');
-        cannot(Action.Create, Request).because('Only clients can create requests. You are admin.');
+        cannot(Action.Create, Request).because('Только клиент может создавать заявки.');
         break;
       }
       case Role.Brigadier: {
@@ -82,16 +80,17 @@ export class AbilityFactory {
         can([Action.Update], User);
         cannot<RequestClient>(Action.Read, Request, {
           'client.userId': { $ne: user.id },
-        }).because('You are not allowed to view this request.');
-        // cannot([Action.Create, Action.Delete], User).because('You are not the admin!');
+        }).because('У вас нет прав на просмотр этой заявки.');
         cannot([Action.Update], Client, { id: { $ne: user.client?.id } }).because(
-          'You are not allowed to manage other clients.',
+          'У вас нет прав на обновление других клиентов.',
         );
         cannot([Action.Read], Client, { id: { $ne: user.client?.id } }).because(
-          'You are not allowed to view other clients.',
+          'У вас нет прав на просмотр других клиентов.',
         );
-        cannot(Action.Update, User, { id: { $ne: user.id } }).because('You are not allowed to update other users.');
-        cannot(Action.ManageAccess, User).because('You are not admin');
+        cannot(Action.Update, User, { id: { $ne: user.id } }).because(
+          'У вас нет прав на обновление других пользователей.',
+        );
+        cannot(Action.ManageAccess, User).because('Вы не администратор');
         break;
       }
     }
