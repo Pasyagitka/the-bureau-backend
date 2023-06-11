@@ -22,7 +22,6 @@ import { RequestService } from './request.service';
 import { MailService } from '../common/mail/mail.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-//TODO manage app routes
 @ApiAuth()
 @ApiTags('Requests')
 @Controller('request')
@@ -156,8 +155,6 @@ export class RequestController {
       (i) => new BrigadierRequestResponseDto(i),
     );
   }
-
-  //TODO create report (accessories; schedule)
 
   @ApiResponses({
     200: [ClientRequestResponseDto],

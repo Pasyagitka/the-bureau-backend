@@ -74,7 +74,6 @@ export class AccessoryService {
     item.equipment = equipment;
     return await this.accessoryRepository.save(item);
   }
-  //TODO return db errors
 
   async import(file: Express.Multer.File): Promise<[ObjectLiteral[], number]> {
     const { list: entities }: ParsedData<Accessory> = await this.csvParser.parse(
