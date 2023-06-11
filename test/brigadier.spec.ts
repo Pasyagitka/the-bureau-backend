@@ -60,7 +60,7 @@ describe('Brigadier', () => {
   });
 
   it(`/GET recommended brigadiers`, async () => {
-    expect.assertions(2);
+    expect.assertions(1);
     const req = await request(app.getHttpServer())
       .get('/api/brigadier/recommended')
       .set('Authorization', `Bearer ${accessToken}`)

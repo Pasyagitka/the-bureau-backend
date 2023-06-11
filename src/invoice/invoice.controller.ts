@@ -72,7 +72,7 @@ export class InvoiceController {
   })
   @ApiOperation({ summary: 'Get invoices for brigadier (paginated)' })
   @Get('brigadier/:brigadierId')
-  @CheckAbilities({ action: Action.Read, subject: Invoice }) //TODO add permissions check CASL
+  @CheckAbilities({ action: Action.Read, subject: Invoice })
   async getForBrigadier(@Param('brigadierId') brigadierId: number, @Query() query: PaginatedQuery, @Req() req) {
     const [data, total] = await this.invoiceService.getForBrigadier(brigadierId, query, req.user);
     return {
@@ -93,7 +93,7 @@ export class InvoiceController {
     const invoice = await this.invoiceService.getInvoice(id);
     res.set({
       'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'Content-Disposition': `attachment; filename="request-${id}-report.docx`,
+      'Content-Disposition': `attachment; filename="invoice-${id}-report.docx`,
     });
     return new StreamableFile(invoice);
   }

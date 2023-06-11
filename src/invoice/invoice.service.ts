@@ -64,7 +64,6 @@ export class InvoiceService {
   }
 
   async findAll(query: PaginatedQuery) {
-    //TODO add filter options
     return this.invoiceRepository.findAndCount({
       relations: { customer: true },
       order: { id: 'DESC' },

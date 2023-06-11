@@ -42,7 +42,6 @@ export class EquipmentService {
   async remove(id: number) {
     const item = await this.equipmentRepository.findOne({
       where: { id },
-      relations: ['accessories'],
     });
     if (!item) throw new NotExistsError('equipment');
     return await this.equipmentRepository.softRemove(item);
