@@ -5,22 +5,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  async sendActivationMail(to: string, activationLink: string) {
-    const link = `${process.env.API_URL}/auth/activate/${activationLink}`;
-    await this.mailerService.sendMail({
-      from: process.env.EMAIL_USERNAME,
-      to,
-      subject: `Активируйте свой аккаунт на ${process.env.API_NAME}`,
-      text: 'Спасибо за регистрацию',
-      html: `
-                      <div>
-                          <h1>Перейдите по ссылке:</h1>
-                          <a href="${link}">${link}</a>
-                      </div>
-                  `,
-    });
-  }
-
   async sendResetPasswordEmail(to: string, login: string, resetPasswordLink: string, password: string) {
     const link = `${process.env.API_URL}/auth/reset-password/${login}/${resetPasswordLink}`;
     await this.mailerService.sendMail({
@@ -29,16 +13,28 @@ export class MailService {
       subject: `Сбросить пароль ${process.env.API_NAME}`,
       text: '',
       html: `
-                    <div>
-                        <h1>Необходимо подтверидть сброс пароля</h1>
-                        <span>Ваш временный пароль: ${password}</span><br/>
-                        Перейдите по ссылке ниже для подтверждения сброса пароля. Не переходите, если не вы отправляли запрос.
-                        <a href="${link}">${link}</a>
-                    </div>
-                `,
+              <div>
+                  <h1>Необходимо подтвердить сброс пароля</h1>
+                  <span>Ваш временный пароль: ${password}</span><br/>
+                  Перейдите по ссылке ниже для подтверждения сброса пароля. Не переходите, если не вы отправляли запрос.
+                  <a href="${link}">${link}</a>
+              </div>
+           `,
     });
   }
 
+  async sendConfirmResetPasswordEmail(to: string) {
+    await this.mailerService.sendMail({
+      from: process.env.EMAIL_USERNAME,
+      to,
+      subject: `Ваш пароль на ${process.env.API_NAME} изменен`,
+      html: `
+              <div>
+                  <span>Уведомление о том, что ваш пароль изменен.</span>
+              </div>
+            `,
+    });
+  }
   async sendAccountDeactivated(to: string) {
     await this.mailerService.sendMail({
       from: process.env.EMAIL_USERNAME,
@@ -46,10 +42,10 @@ export class MailService {
       subject: `Ваш аккаунт на ${process.env.API_NAME} деактивирован`,
       text: '',
       html: `
-                <div>
-                    <span>Ваш аккаунт деактивирован. Свяжитесь с администратором</span>
-                </div>
-                `,
+            <div>
+                <span>Ваш аккаунт деактивирован. Свяжитесь с администратором</span>
+            </div>
+            `,
     });
   }
 
@@ -60,10 +56,10 @@ export class MailService {
       subject: `Ваш аккаунт на ${process.env.API_NAME} активирован`,
       text: '',
       html: `
-                <div>
-                    <span>Поздравляем! Ваш аккаунт активирован. Теперь вы можете войти</span>
-                </div>
-                `,
+            <div>
+                <span>Поздравляем! Ваш аккаунт активирован. Теперь вы можете войти</span>
+            </div>
+            `,
     });
   }
 
@@ -74,10 +70,10 @@ export class MailService {
       subject: `Статус вашей заявки на ${process.env.API_NAME} изменен`,
       text: '',
       html: `
-                <div>
-                    <span>Статус вашей заявки на монтаж на ${address} изменен на ${status}</span>
-                </div>
-                `,
+            <div>
+                <span>Статус вашей заявки на монтаж на ${address} изменен на ${status}</span>
+            </div>
+            `,
     });
   }
 
@@ -88,23 +84,10 @@ export class MailService {
       subject: `Вам назначена новая заявка на ${process.env.API_NAME}`,
       text: '',
       html: `
-                <div>
-                    <span>Вам назначена новая заявка на монтаж (${address})</span>
-                </div>
-                `,
-    });
-  }
-
-  async sendConfirmResetPasswordEmail(to: string) {
-    await this.mailerService.sendMail({
-      from: process.env.EMAIL_USERNAME,
-      to,
-      subject: `Ваш пароль на ${process.env.API_NAME} изменен`,
-      html: `
-                    <div>
-                        <span>Уведомление о том, что ваш пароль изменен.</span>
-                    </div>
-                `,
+            <div>
+                <span>Вам назначена новая заявка на монтаж (${address})</span>
+            </div>
+            `,
     });
   }
 }

@@ -21,10 +21,10 @@ export class StageService {
 
   async update(id: number, updateStageDto: UpdateStageDto): Promise<Stage> {
     const stage = await this.stageRepository.findOne({ where: { id } });
-    this.eventEmitter.emit(
-      'user.created',
-      new RegisterUserEvent({ email: 'createClientDto.email', activationLink: 'activationLink' }),
-    );
+    // this.eventEmitter.emit(
+    //   'user.created',
+    //   new RegisterUserEvent({ email: 'createClientDto.email', activationLink: 'activationLink' }),
+    // );
     if (!stage) throw new NotExistsError('stage');
     return this.stageRepository.save({ id, ...updateStageDto });
   }

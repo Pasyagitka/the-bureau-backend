@@ -13,14 +13,14 @@ export class AuthListener {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
-  @OnEvent('user.created', { async: true })
-  async handleUserCreatedEvent(event: RegisterUserEvent) {
-    try {
-      await this.mailService.sendActivationMail(event.email, event.activationLink);
-    } catch (e) {
-      this.logger.error(`Email sending error. ${e.message}`);
-    }
-  }
+  // @OnEvent('user.created', { async: true })
+  // async handleUserCreatedEvent(event: RegisterUserEvent) {
+  //   try {
+  //     await this.mailService.sendActivationMail(event.email, event.activationLink);
+  //   } catch (e) {
+  //     this.logger.error(`Email sending error. ${e.message}`);
+  //   }
+  // }
 
   @OnEvent('user.resetPassword', { async: true })
   async handleResetPasswordEvent(event: ResetPasswordEvent) {
