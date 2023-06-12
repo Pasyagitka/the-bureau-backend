@@ -202,7 +202,17 @@ export class InvoiceController {
   @Patch(':id/upload-receipt')
   @FileUpload()
   @CheckAbilities({ action: Action.Update, subject: Invoice })
-  async uploadReceipt(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req) {
+  async uploadReceipt(
+    @Param('id') id: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg|pdf)' })],
+      }),
+    )
+    file: Express.Multer.File,
+    @Req()
+    req,
+  ) {
     return await this.invoiceService.uploadReceipt(+id, file, req.user);
   }
 }

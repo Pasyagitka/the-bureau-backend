@@ -1,9 +1,9 @@
-import { Injectable, UploadedFile } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Accessory } from '../accessory/entities/accessory.entity';
 import { Brigadier } from '../brigadier/entities/brigadier.entity';
-import { Repository, In, DataSource, LessThan, MoreThan } from 'typeorm';
+import { Repository, In, DataSource, LessThan } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { InvoiceItem } from './entities/invoice-items.entity';
 import { Invoice } from './entities/invoice.entity';
@@ -211,7 +211,7 @@ export class InvoiceService {
           overwrite: true,
           public_id: id,
         })
-        .catch((e) => {
+        .catch(() => {
           throw new BadRequestException('Произошла ошибка при попытке загрузить файл. Попробуйте снова позже...');
         });
 
