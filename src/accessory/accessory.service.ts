@@ -81,39 +81,29 @@ export class AccessoryService {
       Accessory,
       null,
       null,
-      { separator: ',' },
+      {
+        separator: ',',
+        quote: '"',
+        //headers: ['sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'],
+      },
     );
-    //const equipmentIds = importAccessoriesDto.map((i) => i.equipmentId);
-    //const idsCount = await this.equipmentRepository.count({ where: { id: In(equipmentIds) } });
-    //if (idsCount !== equipmentIds.length) throw new BadParametersError('equipment');
-    // const items = await Promise.all(
-    //   importAccessoriesDto.map(async (createAccessoryDto) => {
-    //     return this.accessoryRepository.create({
-    //       sku: createAccessoryDto.sku,
-    //       name: createAccessoryDto.name,
-    //       price: createAccessoryDto.price,
-    //       equipmentId: createAccessoryDto.equipmentId,
-    //       quantity_in_stock: createAccessoryDto.quantity,
-    //     });
-    //   }),
-    // );
     const res = await this.dataSource
       .createQueryBuilder()
       .insert()
       .into(Accessory)
       .values(entities)
-      .orUpdate(['sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'], ['id'], {
+      .orUpdate(['sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'], ['sku'], {
         skipUpdateIfNoValuesChanged: true,
       })
       .returning('*')
       .execute();
-    return [res.generatedMaps, res.generatedMaps.length];
+    return [res.generatedMaps, res.raw.length];
   }
 
   async export(): Promise<Buffer> {
     const accessories = await this.accessoryRepository.find();
     const fields = ['id', 'sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'];
-    const json2csvParser = new json2csv.Parser({ fields });
+    const json2csvParser = new json2csv.Parser({ fields, withBOM: true });
     const data = json2csvParser.parse(accessories);
     return data;
   }

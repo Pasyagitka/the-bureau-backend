@@ -89,8 +89,8 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Get invoice (.docx)' })
   @Get(':id/file')
   @CheckAbilities({ action: Action.Read, subject: Invoice })
-  async getFile(@Param('id') id: number, @Res({ passthrough: true }) res: Response) {
-    const invoice = await this.invoiceService.getInvoice(id);
+  async getFile(@Param('id') id: number, @Res({ passthrough: true }) res: Response, @Req() req) {
+    const invoice = await this.invoiceService.getInvoice(id, req.user);
     res.set({
       'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'Content-Disposition': `attachment; filename="invoice-${id}-report.docx`,
@@ -106,8 +106,8 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Get invoice items' })
   @Get(':id/items')
   @CheckAbilities({ action: Action.Read, subject: Invoice })
-  async getItems(@Param('id') id: number) {
-    const invoiceItems = await this.invoiceService.getItems(id);
+  async getItems(@Param('id') id: number, @Req() req) {
+    const invoiceItems = await this.invoiceService.getItems(id, req.user);
     return invoiceItems.map((i) => new InvoiceItemsResponseDto(i));
   }
 
@@ -119,8 +119,8 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Get invoice' })
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Invoice })
-  async get(@Param('id') id: number) {
-    const invoice = await this.invoiceService.get(id);
+  async get(@Param('id') id: number, @Req() req) {
+    const invoice = await this.invoiceService.get(id, req.user);
     return new InvoiceResponseDto(invoice);
   }
 
@@ -131,8 +131,8 @@ export class InvoiceController {
   })
   @Delete(':id')
   @CheckAbilities({ action: Action.Delete, subject: Invoice })
-  async remove(@Param('id') id: string) {
-    return new InvoiceResponseDto(await this.invoiceService.remove(+id));
+  async remove(@Param('id') id: string, @Req() req) {
+    return new InvoiceResponseDto(await this.invoiceService.remove(+id, req.user));
   }
 
   @ApiResponses({
@@ -188,8 +188,9 @@ export class InvoiceController {
       }),
     )
     file: Express.Multer.File,
+    @Req() req,
   ) {
-    return await this.invoiceService.uploadScan(+id, file);
+    return await this.invoiceService.uploadScan(+id, file, req.user);
   }
 
   @ApiResponses({
@@ -201,7 +202,17 @@ export class InvoiceController {
   @Patch(':id/upload-receipt')
   @FileUpload()
   @CheckAbilities({ action: Action.Update, subject: Invoice })
-  async uploadReceipt(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req) {
+  async uploadReceipt(
+    @Param('id') id: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg|pdf)' })],
+      }),
+    )
+    file: Express.Multer.File,
+    @Req()
+    req,
+  ) {
     return await this.invoiceService.uploadReceipt(+id, file, req.user);
   }
 }
