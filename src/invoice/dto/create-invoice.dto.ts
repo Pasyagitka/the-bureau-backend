@@ -11,7 +11,7 @@ export class CreateInvoiceDto {
 
   @IsNumber()
   @IsOptional()
-  customerId?: number; //TODO add
+  customerId?: number;
 }
 
 export class AccessoryInvoiceItemDto {

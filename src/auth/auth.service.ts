@@ -39,7 +39,6 @@ export class AuthService {
     }
     if (!user.isActivated) throw new NotActivatedError(`${user.login}`);
     const isPassEquals = await bcrypt.compare(pass, user.password);
-    //console.log(pass, user.password, isPassEquals);
     if (!isPassEquals) {
       throw new WrongPasswordError();
     }
@@ -80,7 +79,6 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    //.eventEmitter.emit('user.created', new RegisterUserEvent({ email: createClientDto.email, activationLink }));
 
     this.loginWithCredentials(createClientDto);
   }
@@ -101,8 +99,6 @@ export class AuthService {
       password: hashPassword,
       activationLink,
     });
-    //this.eventEmitter.emit('user.created', new RegisterUserEvent({ email: brigadierUser.email, activationLink }));
-    //this.loginWithCredentials(brigadierUser);
     return createdBrigadier;
   }
 
@@ -140,7 +136,6 @@ export class AuthService {
     });
     const temporaryPassword = await bcrypt.hash(password, 3);
     await this.usersService.resetPasswordSend(email, link, temporaryPassword);
-    //await this.mailService.sendResetPasswordEmail(email, findUser.login, link, password);
     this.eventEmitter.emit(
       'user.resetPassword',
       new ResetPasswordEvent({ email, login: findUser.login, resetPasswordLink: link, password }),
@@ -156,7 +151,6 @@ export class AuthService {
       throw new BadResetPasswordLinkError();
     }
     await this.usersService.resetPasswordConfirm(login, findUser.temporaryPassword);
-    //await this.mailService.sendConfirmResetPasswordEmail(findUser.email);
     this.eventEmitter.emit('user.comfirmResetPassword', new ConfirmResetPasswordEvent({ email: findUser.email }));
     return true;
   }

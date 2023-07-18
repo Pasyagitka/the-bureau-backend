@@ -13,10 +13,7 @@ export class Equipment {
   @Column('text', { name: 'type' })
   type: string;
 
-  @OneToMany(() => Accessory, (accessory) => accessory.equipment, {
-    // cascade: true,
-    // onDelete: 'CASCADE',
-  })
+  @OneToMany(() => Accessory, (accessory) => accessory.equipment )
   accessories: Accessory[];
 
   @Column({
@@ -26,10 +23,7 @@ export class Equipment {
   })
   mounting: Mounting;
 
-  @OneToMany(() => RequestEquipment, (requestEquipment) => requestEquipment.equipment, {
-    // cascade: true,
-    // onDelete: 'CASCADE',
-  })
+  @OneToMany(() => RequestEquipment, (requestEquipment) => requestEquipment.equipment)
   requestEquipment: RequestEquipment[];
 
   @Exclude()

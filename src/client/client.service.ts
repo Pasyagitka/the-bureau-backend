@@ -40,21 +40,6 @@ export class ClientService {
     return client;
   }
 
-  // async getWithInfo(id: number): Promise<Client> {
-  //   return await this.clientRepository.findOne({
-  //     where: { id },
-  //     select: {
-  //       id: true,
-  //       user: { id: true, role: true },
-  //     },
-  //     loadEagerRelations: false,
-  //     loadRelationIds: {
-  //       relations: ['user'],
-  //       disableMixedMap: true,
-  //     },
-  //   });
-  // }
-
   async update(id: number, updateClientDto: UpdateClientDto, user: User): Promise<Client> {
     const client = await this.clientRepository.findOne({
       where: { id },

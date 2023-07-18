@@ -22,7 +22,6 @@ export class RequestReportController {
   })
   @FilesUpload()
   @Post()
-  //@CheckAbilities({ action: Action.Update, subject: Request })
   patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>, @Req() req) {
     return this.requestReportService.patch(requestId, files, req.user);
   }
@@ -33,7 +32,6 @@ export class RequestReportController {
     500: ErrorMessageResponseDto,
   })
   @Get()
-  //@CheckAbilities({ action: Action.Read, subject: Request })
   findAll(@Param('requestId') requestId: number, @Req() req) {
     return this.requestReportService.findAll(requestId, req.user);
   }

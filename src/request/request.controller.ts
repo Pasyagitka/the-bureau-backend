@@ -184,17 +184,6 @@ export class RequestController {
     return new StreamableFile(report);
   }
 
-  // @ApiResponses({
-  //   200: [RequestEquipmentResponseDto],
-  //   404: ErrorMessageResponseDto,
-  //   500: ErrorMessageResponseDto,
-  // })
-  // @Get(':id/equipment')
-  // @CheckAbilities({ action: Action.Read, subject: Request })
-  // async getWithEquipment(@Param('id') id: string) {
-  //   return (await this.requestService.getRequestWithEquipment(+id)).map((i) => new RequestEquipmentResponseDto(i));
-  // }
-
   @ApiResponses({
     200: RequestResponseDto,
     400: ErrorMessageResponseDto,
@@ -220,7 +209,6 @@ export class RequestController {
     return new RequestResponseDto(res);
   }
 
-  //TODO email при смене статуса
   @ApiResponses({
     200: RequestResponseDto,
     400: ErrorMessageResponseDto,

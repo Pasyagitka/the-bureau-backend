@@ -19,7 +19,6 @@ export class CreateAccessoryDto {
   equipmentId: number;
 
   @ApiProperty()
-  //@IsPositive()
   @IsDecimal()
   price: number;
 

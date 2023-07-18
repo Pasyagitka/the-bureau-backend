@@ -75,17 +75,6 @@ export class UserService {
       patronymic: createBrigadierDto.patronymic,
       contactNumber: createBrigadierDto.contactNumber,
     });
-    // const uploadResult = await this.cloudinary
-    //   .uploadImage(file, {
-    //     folder: `brigadiersAvatars/`,
-    //     overwrite: true,
-    //     resource_type: 'image',
-    //     public_id: brigadier.id,
-    //   })
-    //   .catch(() => {
-    //     throw new BadRequestException('Произошла ошибка при попытке загрузить изображение. Попробуйте снова позже...');
-    //   });
-    // brigadier.avatarUrl = uploadResult.secure_url;
 
     brigadier.user = user;
     return await this.brigadierRepository.save(brigadier);

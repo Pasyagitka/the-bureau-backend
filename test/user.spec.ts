@@ -40,7 +40,6 @@ describe('User', () => {
       .query({ limit: 10, offset: 0 });
     expect(req.status).toBe(200);
     maxUserId = req.body[req.body.length - 1].id;
-    console.log(maxUserId);
     return req;
   });
 

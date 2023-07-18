@@ -16,9 +16,7 @@ export class CreateUserDto {
   @Length(6, 50, { message: 'Длина пароля должна быть от $constraint1 до $constraint2 символов.' })
   password: string;
 
-  //@IsEnum(Role)
   role?: Role;
 
-  //@IsString()
   activationLink?: string;
 }

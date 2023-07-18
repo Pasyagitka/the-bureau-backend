@@ -13,7 +13,7 @@ export class Address {
   @Column('text', { name: 'street' })
   street: string;
 
-  @Column('text', { name: 'house', nullable: true }) //TODO remove nullable
+  @Column('text', { name: 'house', nullable: true })
   house: string;
 
   @Column('integer', { name: 'flat', nullable: true })

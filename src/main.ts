@@ -1,22 +1,13 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
+import {  NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AbilityFactory } from './ability/ability.factory';
 import { AbilitiesGuard } from './ability/guards/abilities.guard';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import * as fs from 'fs';
-import * as path from 'path';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
-  //TODO move logger creating here (reconfigure winston)
-  // const httpsOptions = {
-  //   key: fs.readFileSync(path.join('cert', 'ca.key')),
-  //   cert: fs.readFileSync(path.join('cert', 'ca.crt')),
-  // };
-  //const app = await NestFactory.create(AppModule, { httpsOptions });
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   setupApp(app);

@@ -31,20 +31,6 @@ export class ToolController {
     return new ToolResponseDto(await this.toolService.create(createToolDto));
   }
 
-  // @ApiResponses({
-  //   201: [ToolResponseDto],
-  //   400: ErrorMessageResponseDto,
-  //   404: ErrorMessageResponseDto,
-  //   500: ErrorMessageResponseDto,
-  // })
-  // @ApiOperation({ summary: 'Import tools from .json' })
-  // @CheckAbilities({ action: Action.Create, subject: Tool })
-  // @Post('/import')
-  // async import(@Body() importToolsDto: CreateToolDto[]) {
-  //   const data = await this.toolService.import(importToolsDto);
-  //   return data.map((i) => new ToolResponseDto(i));
-  // }
-
   @ApiResponses({
     200: PaginatedResponse(ToolResponseDto),
     500: ErrorMessageResponseDto,

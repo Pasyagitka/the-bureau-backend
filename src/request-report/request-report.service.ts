@@ -7,8 +7,6 @@ import { Request } from '../request/entities/request.entity';
 import { RequestReport } from './entities/request-report.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { User } from '../user/entities/user.entity';
-import { ForbiddenError } from '@casl/ability';
-import { Action } from '../ability/types';
 import { AbilityFactory } from '../ability/ability.factory';
 
 @Injectable()
@@ -28,17 +26,10 @@ export class RequestReportService {
       const request = await this.requestRepository.findOne({ where: { id: requestId } });
       if (!request) throw new NotExistsError('request');
 
-      // const ability = this.abilityFactory.defineAbility(user);
-      // ForbiddenError.from(ability).throwUnlessCan(Action.Update, request);
-      //TODO casl
-
-      //const incomingReportFiles = patchRequestReportDto.map((i) => i.file);
       const incomingReportFiles = files;
       const existingReportFiles = await (
         await transaction.getRepository(RequestReport).find({ where: { requestId } })
       ).map((x) => x.public_id);
-
-      //const filesToAdd = incomingReportFiles.filter((x) => !existingReportFiles.includes(x.toString()));
 
       const uploadedFilesResults = await Promise.all(
         incomingReportFiles.map(

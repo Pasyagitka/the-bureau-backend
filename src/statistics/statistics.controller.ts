@@ -14,7 +14,6 @@ import { BrigadierTopListResponseDto } from './dto/brigadier-top-list.response.d
 export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}
 
-  //getBrigadiers (top) with max approved requests count
   @ApiResponses({
     200: StatisticsResponseDto,
     404: ErrorMessageResponseDto,

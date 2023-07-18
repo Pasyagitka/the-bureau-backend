@@ -1,7 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ConfirmResetPasswordEvent } from '../../../auth/events/confirm-reset.event';
-import { RegisterUserEvent } from '../../../auth/events/register-user.event';
 import { ResetPasswordEvent } from '../../../auth/events/reset-password.event';
 import { MailService } from '../mail.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -12,15 +11,6 @@ export class AuthListener {
     private readonly mailService: MailService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
-
-  // @OnEvent('user.created', { async: true })
-  // async handleUserCreatedEvent(event: RegisterUserEvent) {
-  //   try {
-  //     await this.mailService.sendActivationMail(event.email, event.activationLink);
-  //   } catch (e) {
-  //     this.logger.error(`Email sending error. ${e.message}`);
-  //   }
-  // }
 
   @OnEvent('user.resetPassword', { async: true })
   async handleResetPasswordEvent(event: ResetPasswordEvent) {

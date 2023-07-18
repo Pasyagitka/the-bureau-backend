@@ -30,6 +30,6 @@ export class RequestReport {
   @JoinColumn([{ name: 'brigadierId', referencedColumnName: 'id' }])
   brigadier: Brigadier;
 
-  @Column({ nullable: true }) //todo remove nullable
+  @Column({ nullable: true })
   brigadierId: number;
 }

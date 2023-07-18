@@ -9,7 +9,7 @@ export class RequestReportResponseDto {
   url: string;
 
   @Expose()
-  requestId: number; //type
+  requestId: number;
 
   constructor(partial: Partial<RequestReportResponseDto>) {
     Object.assign(this, partial);

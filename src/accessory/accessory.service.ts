@@ -84,7 +84,6 @@ export class AccessoryService {
       {
         separator: ',',
         quote: '"',
-        //headers: ['sku', 'name', 'equipmentId', 'price', 'quantity_in_stock', 'quantity_reserved'],
       },
     );
     const res = await this.dataSource

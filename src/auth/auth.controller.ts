@@ -37,7 +37,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly brigadierService: BrigadierService) {}
 
-  //TODO add email account confirmation
   @ApiResponses({
     200: LoginResponseDto,
     500: ErrorMessageResponseDto,

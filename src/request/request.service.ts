@@ -24,8 +24,6 @@ export class RequestService {
   constructor(
     private dataSource: DataSource,
     private requestRepository: RequestRepository,
-    // @InjectRepository(Request)
-    // private requestRepository: Repository<Request>,
     @InjectRepository(RequestEquipment)
     private requestEquipmentRepository: Repository<RequestEquipment>,
     @InjectRepository(Equipment)
@@ -56,7 +54,6 @@ export class RequestService {
       )
         throw new NotExistsError(`equipment ${reqEq[i].equipment}`);
       requestEquipment.push(
-        //TODO perf
         this.requestEquipmentRepository.create({
           equipment: { id: reqEq[i].equipment },
           quantity: reqEq[i].quantity,
@@ -71,7 +68,6 @@ export class RequestService {
       },
     });
     if (!client) throw new NotExistsError('client');
-    //console.log(user, client);
 
     const request = this.requestRepository.create({
       mountingDate: createRequestDto.mountingDate,
@@ -92,8 +88,6 @@ export class RequestService {
     });
   }
 
-  //TODO check CASL
-
   async get(id: number): Promise<Request> {
     return await this.requestRepository.findOne({
       where: { id },
@@ -106,13 +100,6 @@ export class RequestService {
           equipment: true,
         },
       },
-      // select: {
-      //   client: {
-      //     user: {
-      //       email: true,
-      //     },
-      //   },
-      // },
     });
   }
 
@@ -217,7 +204,6 @@ export class RequestService {
   }
 
   async getWeeklyReportForBrigadier(id: number) {
-    //TODO check brigadierExisits
     return await this.dataSource
       .createQueryBuilder()
       .select('extract(isodow from "mountingDate")', 'day')
@@ -330,10 +316,9 @@ export class RequestService {
 
   async getFullReport(id: number): Promise<Buffer> {
     const templatePath = './assets/full-request-template.docx';
-    //const request = await this.requestRepository.getFullRequest();
     const request = await this.getRequestWithEquipment(id);
     if (!request) throw new NotExistsError('request');
-    const requestAccessories = await this.getRequestAccessories(request.id); //TODO убрать эти запросы (в репозиторий?)
+    const requestAccessories = await this.getRequestAccessories(request.id);
     const requestTools = await this.getRequestTools(request.id);
     const allEquipmentCount = request.requestEquipment.reduce((a, v) => a + v.quantity, 0);
     const fullMountingPrice =

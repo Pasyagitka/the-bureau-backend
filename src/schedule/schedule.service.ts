@@ -49,8 +49,6 @@ export class ScheduleService {
       },
     });
 
-    //console.log(schedule[0]);
-
     if (schedule.length > 0) {
       const ability = this.abilityFactory.defineAbility(user);
       ForbiddenError.from(ability).throwUnlessCan(Action.Read, schedule[0]);

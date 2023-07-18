@@ -53,18 +53,6 @@ describe('Request', () => {
       mountingPrice: expect.any(String),
     },
     requestEquipment: expect.any(Array),
-    // requestEquipment: expect.arrayContaining([
-    //   {
-    //     id: expect.any(Number),
-    //     quantity: expect.any(Number),
-    //     deletedAt: expect.any(null),
-    //     equipment: {
-    //       id: expect.any(Number),
-    //       type: expect.any(String),
-    //       mounting: expect.any(String),
-    //     },
-    //   },
-    // ]),
   };
 
   beforeAll(async () => {

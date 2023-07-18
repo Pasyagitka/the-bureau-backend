@@ -41,16 +41,6 @@ import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({ ...configService.get('database') }),
-      // dataSourceFactory: async (options) => {
-      //   const appDataSource = new DataSource(options);
-      //   try {
-      //     await appDataSource.initialize();
-      //     console.log('Data Source has been initialized!');
-      //     return appDataSource;
-      //   } catch (e) {
-      //     console.error('Error during Data Source initialization');
-      //   }
-      // },
       dataSourceFactory: async (options) => new DataSource(options).initialize(),
     }),
     MailerModule.forRootAsync({
