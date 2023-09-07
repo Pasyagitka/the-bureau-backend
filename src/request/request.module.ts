@@ -10,18 +10,32 @@ import { Stage } from '../stage/entities/stage.entity';
 import { Address } from './entities/address.entity';
 import { RequestEquipment } from './entities/request-equipment.entity';
 import { Request } from './entities/request.entity';
-import { RequestController } from './request.controller';
+import { RequestController } from './controllers/request.controller';
 import { RequestRepository } from './request.repository';
-import { RequestService } from './request.service';
+import { RequestService } from './services/request.service';
 import { RequestSubscriber } from './subscribers/request.subscriber';
+import { RequestBid } from './entities/request-bid.entity';
+import { RequestScheduleController } from './controllers/request-schedule.controller';
+import { RequestBidController } from './controllers/request-bid.controller';
+import { RequestBidService } from './services/request-bid.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Request, Address, RequestReport, Equipment, Client, RequestEquipment, Stage, Brigadier]),
+    TypeOrmModule.forFeature([
+      Request,
+      Address,
+      RequestReport,
+      Equipment,
+      Client,
+      RequestEquipment,
+      Stage,
+      Brigadier,
+      RequestBid,
+    ]),
     AbilityModule,
     ScheduleModule,
   ],
-  controllers: [RequestController],
-  providers: [RequestService, RequestSubscriber, RequestRepository],
+  controllers: [RequestController, RequestScheduleController, RequestBidController],
+  providers: [RequestService, RequestBidService, RequestSubscriber, RequestRepository],
 })
 export class RequestModule {}

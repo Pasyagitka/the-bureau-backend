@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Query, Req, UploadedFile } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { CheckAbilities } from '../ability/decorators/abilities.decorator';
 import { Action } from '../ability/types';
@@ -34,6 +34,7 @@ export class BrigadierController {
     200: [RecommendedBrigadierResponseDto],
     500: ErrorMessageResponseDto,
   })
+  @ApiOperation({ summary: 'Get brigadiers, that can be recommended for request (based on number of request)' })
   @Get('/recommended')
   @CheckAbilities({ action: Action.Read, subject: Brigadier })
   async getRecommendedBrigadiers(@Query() query: RecommendedQuery) {
@@ -47,8 +48,8 @@ export class BrigadierController {
   })
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Brigadier })
-  async get(@Param('id') id: string) {
-    return new BrigadierResponseDto(await this.brigadierService.get(+id));
+  async get(@Param('id') id: string, @Req() req: any) {
+    return new BrigadierResponseDto(await this.brigadierService.get(+id, req.user));
   }
 
   @ApiResponses({
@@ -71,6 +72,7 @@ export class BrigadierController {
   })
   @FileUpload()
   @Patch('avatar/:id')
+  @ApiOperation({ summary: "Update brigadier's avatar" })
   @CheckAbilities({ action: Action.Update, subject: Brigadier })
   async uploadAvatar(@Param('id') id: string, @UploadedFile() file: Express.Multer.File, @Req() req) {
     return await this.brigadierService.uploadAvatar(+id, file, req.user);

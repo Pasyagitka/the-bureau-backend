@@ -10,6 +10,7 @@ import { User } from '../user/entities/user.entity';
 import { RecommendedQuery } from './dto/recommended-query.dto';
 import { UpdateBrigadierDto } from './dto/update-brigadier.dto';
 import { Brigadier } from './entities/brigadier.entity';
+import { Role } from '../auth/enum/role.enum';
 
 @Injectable()
 export class BrigadierService {
@@ -28,8 +29,13 @@ export class BrigadierService {
     });
   }
 
-  async get(id: number): Promise<Brigadier> {
-    return await this.brigadierRepository.findOne({ where: { id }, relations: { user: true } });
+  async get(id: number, user: User): Promise<Brigadier> {
+    const brigadier = await this.brigadierRepository.findOne({
+      where: { id, userId: user.role === Role.Brigadier ? user.id : null },
+      relations: { user: true },
+    });
+    if (!brigadier) throw new NotExistsError('brigadier');
+    return brigadier;
   }
 
   async getAvailableForDate(query: RecommendedQuery) {
@@ -54,7 +60,9 @@ export class BrigadierService {
   }
 
   async uploadAvatar(id: number, file: Express.Multer.File, user: User) {
-    const brigadier = await this.brigadierRepository.findOne({ where: { id } });
+    const brigadier = await this.brigadierRepository.findOne({
+      where: { id },
+    });
     if (!brigadier) throw new NotExistsError('brigadier');
 
     const ability = this.abilityFactory.defineAbility(user);
@@ -76,7 +84,7 @@ export class BrigadierService {
   }
 
   async update(id: number, updateBrigadierDto: UpdateBrigadierDto, user: User): Promise<Brigadier> {
-    const brigadier = await this.get(id);
+    const brigadier = await this.get(id, user);
     if (!brigadier) throw new NotExistsError('brigadier');
 
     const ability = this.abilityFactory.defineAbility(user);

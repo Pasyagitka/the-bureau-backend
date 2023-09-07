@@ -104,6 +104,7 @@ export class AccessoryController {
   @ApiOperation({ summary: 'Get accessories available for invoice' })
   @Get('available/')
   @CheckAbilities({ action: Action.Read, subject: Accessory })
+  @ApiOperation({ summary: 'Get accessory' })
   async getAvaliableForInvoice(): Promise<AccessoryResponseDto[]> {
     return (await this.accessoryService.getAvaliableForInvoice()).map((i) => new AccessoryResponseDto(i));
   }
@@ -115,6 +116,7 @@ export class AccessoryController {
   })
   @Get(':id')
   @CheckAbilities({ action: Action.Read, subject: Accessory })
+  @ApiOperation({ summary: 'Get accessory' })
   async get(@Param('id') id: string) {
     return new AccessoryResponseDto(await this.accessoryService.get(+id));
   }

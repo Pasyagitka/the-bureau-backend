@@ -50,6 +50,8 @@ function createSwagger(app: INestApplication, basePath: string) {
     .addTag('Equipment', 'CRUD for working with equipment (enum) in storage')
     .addTag('Invoices', 'Requests for working with invoices (accessory)')
     .addTag('Requests')
+    .addTag('Request Schedule')
+    .addTag('Request Bids')
     .addTag('Request Report', 'CRUD for working with request reports (quality control)')
     .addTag('Schedules')
     .addTag('Stages', 'Requests for working with stages (enum)')

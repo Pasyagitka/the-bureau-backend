@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiResponses } from '../common/decorators/api-responses.decorator';
 import { ErrorMessageResponseDto } from '../common/dto/error-message-response.dto';
 import { ApiAuth } from '../common/decorators/auth.decorator';
@@ -22,6 +22,7 @@ export class RequestReportController {
   })
   @FilesUpload()
   @Post()
+  @ApiOperation({ summary: 'Patch request reports files: add new, remove not present in Dto' })
   patch(@Param('requestId') requestId: number, @UploadedFiles() files: Array<Express.Multer.File>, @Req() req) {
     return this.requestReportService.patch(requestId, files, req.user);
   }

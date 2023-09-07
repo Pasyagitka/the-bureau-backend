@@ -14,6 +14,8 @@ import { RequestReport } from '../../request-report/entities/request-report.enti
 import { Request } from '../../request/entities/request.entity';
 import { Schedule } from '../../schedule/entities/schedule.entity';
 import { User } from '../../user/entities/user.entity';
+import { RequestBid } from '../../request/entities/request-bid.entity';
+
 
 @Index('brigadier_pkey', ['id'], { unique: true })
 @Entity('brigadier')
@@ -54,6 +56,9 @@ export class Brigadier {
 
   @OneToMany(() => Schedule, (schedule) => schedule.brigadier, { cascade: true, onDelete: 'CASCADE' })
   schedules: Schedule[];
+
+  @OneToMany(() => RequestBid, (bid) => bid.brigadier)
+  requestBids: RequestBid[];
 
   @Exclude()
   @DeleteDateColumn({ type: 'timestamptz' })
