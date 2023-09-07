@@ -74,6 +74,7 @@ export class UserService {
       surname: createBrigadierDto.surname,
       patronymic: createBrigadierDto.patronymic,
       contactNumber: createBrigadierDto.contactNumber,
+      socialLinks: createBrigadierDto.socialLinks,
     });
 
     brigadier.user = user;

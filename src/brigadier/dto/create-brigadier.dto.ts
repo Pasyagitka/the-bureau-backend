@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsPhoneNumber, IsString, Length } from 'class-validator';
+import { IsJSON, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBrigadierDto extends CreateUserDto {
   @IsNotEmpty({ message: 'Укажите имя.' })
@@ -17,7 +18,14 @@ export class CreateBrigadierDto extends CreateUserDto {
   @Length(3, 30, { message: 'Длина отчества должна быть от $constraint1 до $constraint2 символов.' })
   patronymic: string;
 
+  @ApiProperty({ example: '375297645364' })
   @IsNotEmpty({ message: 'Укажите номер телефона.' })
   @IsPhoneNumber('BY', { message: 'Номер телефона должен быть в формате 375( )___-__-__.' })
   contactNumber: string;
+
+  @ApiProperty({ example: `{\"instagram\": \"https://www.instagram.com/\"}` })
+  @IsOptional()
+  @IsString()
+  @IsJSON()
+  socialLinks?: string;
 }

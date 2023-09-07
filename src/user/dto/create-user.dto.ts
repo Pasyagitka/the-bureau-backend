@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 import { Role } from '../../auth/enum/role.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Укажите логин.' })
@@ -7,6 +8,7 @@ export class CreateUserDto {
   @Length(3, 30, { message: 'Длина логина должна быть от $constraint1 до $constraint2 символов.' })
   login: string;
 
+  @ApiProperty({ example: 'example@mail.com' })
   @IsNotEmpty({ message: 'Укажите email.' })
   @IsEmail()
   email: string;

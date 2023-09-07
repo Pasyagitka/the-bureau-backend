@@ -22,6 +22,9 @@ export class BrigadierResponseDto {
   avatarUrl: string;
 
   @Expose()
+  socialLinks: string;
+
+  @Expose()
   @Type(() => UserResponseDto)
   user: UserResponseDto;
 

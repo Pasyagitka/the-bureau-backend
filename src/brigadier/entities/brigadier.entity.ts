@@ -16,7 +16,6 @@ import { Schedule } from '../../schedule/entities/schedule.entity';
 import { User } from '../../user/entities/user.entity';
 import { RequestBid } from '../../request/entities/request-bid.entity';
 
-
 @Index('brigadier_pkey', ['id'], { unique: true })
 @Entity('brigadier')
 export class Brigadier {
@@ -37,6 +36,9 @@ export class Brigadier {
 
   @Column('text', { name: 'avatarUrl', nullable: true })
   avatarUrl: string;
+
+  @Column({ nullable: true, type: 'json' })
+  socialLinks: string;
 
   @OneToOne(() => User, (user) => user.brigadier, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
